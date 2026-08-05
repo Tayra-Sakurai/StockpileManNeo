@@ -1,0 +1,11 @@
+/* Visual Studio Settings File */
+{
+  "languages.typescript.advanced.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": true,
+  "languages.typescript.advanced.inlayHints.includeInlayFunctionParameterTypeHints": true,
+  "languages.typescript.advanced.inlayHints.includeInlayVariableTypeHints": true,
+  "languages.typescript.advanced.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName": true,
+  "languages.typescript.advanced.inlayHints.includeInlayParameterNameHints": "all",
+  "languages.typescript.advanced.inlayHints.includeInlayPropertyDeclarationTypeHints": true,
+  "languages.typescript.advanced.inlayHints.includeInlayFunctionLikeReturnTypeHints": true,
+  "languages.typescript.advanced.inlayHints.includeInlayEnumMemberValueHints": true
+}
