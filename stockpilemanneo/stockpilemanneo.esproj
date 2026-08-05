@@ -11,6 +11,7 @@
     <TypeScriptModuleResolution>node</TypeScriptModuleResolution>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="src\components\appbase\" />
     <Folder Include="src\components\dashboard\" />
     <Folder Include="src\components\database\" />
     <Folder Include="src\components\signup\" />
