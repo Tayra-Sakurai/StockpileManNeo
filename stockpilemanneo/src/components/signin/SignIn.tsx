@@ -34,7 +34,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 const SignInContainer = styled(Stack)(({ theme }) => ({
   height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
   minHeight: '100%',
-  padding: theme.spacing(2),
+  padding: theme.spacing(0),
   [theme.breakpoints.up('sm')]: {
     padding: theme.spacing(4),
   },
@@ -66,78 +66,80 @@ export default function SignIn() {
   };
 
   return (
-    <Card variant="outlined">
-      <Typography
-        component="h1"
-        variant="h4"
-        sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-      >
-        Sign in
-      </Typography>
-      <FormContainer
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '100%',
-          gap: 2,
-        }}
-      >
-        <FormControl fullWidth>
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <TextFieldElement
-            id="email"
-            type="email"
-            name="email"
-            placeholder="your@email.com"
-            autoComplete="email"
-            autoFocus
-          />
-        </FormControl>
-        <FormControl fullWidth>
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <PasswordElement
-            name="password"
-            placeholder="••••••"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            autoFocus
-            required
-            fullWidth
-            variant="outlined"
-          />
-        </FormControl>
-        <ForgotPassword open={open} handleClose={handleClose} />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
+    <SignInContainer>
+      <Card variant="outlined">
+        <Typography
+          component="h1"
+          variant="h4"
+          sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
         >
           Sign in
-        </Button>
-        <Link
-          component="button"
-          type="button"
-          onClick={handleClickOpen}
-          variant="body2"
-          sx={{ alignSelf: 'center' }}
+        </Typography>
+        <FormContainer
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            gap: 2,
+          }}
         >
-          Forgot your password?
-        </Link>
-      </FormContainer>
-      <Divider>or</Divider>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Typography sx={{ textAlign: 'center' }}>
-          Don&apos;t have an account?{' '}
+          <FormControl fullWidth>
+            <FormLabel htmlFor="email">Email</FormLabel>
+            <TextFieldElement
+              id="email"
+              type="email"
+              name="email"
+              placeholder="your@email.com"
+              autoComplete="email"
+              autoFocus
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <PasswordElement
+              name="password"
+              placeholder="••••••"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              autoFocus
+              required
+              fullWidth
+              variant="outlined"
+            />
+          </FormControl>
+          <ForgotPassword open={open} handleClose={handleClose} />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+          >
+            Sign in
+          </Button>
           <Link
-            href="/material-ui/getting-started/templates/sign-in/"
+            component="button"
+            type="button"
+            onClick={handleClickOpen}
             variant="body2"
             sx={{ alignSelf: 'center' }}
           >
-            Sign up
+            Forgot your password?
           </Link>
-        </Typography>
-      </Box>
-    </Card>
+        </FormContainer>
+        <Divider>or</Divider>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Typography sx={{ textAlign: 'center' }}>
+            Don&apos;t have an account?{' '}
+            <Link
+              href="/material-ui/getting-started/templates/sign-in/"
+              variant="body2"
+              sx={{ alignSelf: 'center' }}
+            >
+              Sign up
+            </Link>
+          </Typography>
+        </Box>
+      </Card>
+    </SignInContainer>
   );
 }
