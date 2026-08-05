@@ -54,11 +54,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function SignIn(props: { disableCustomTheme?: boolean }) {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+export default function SignIn() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -69,120 +65,79 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     setOpen(false);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
-
-  const validateInputs = () => {
-    const email = document.getElementById('email') as HTMLInputElement;
-    const password = document.getElementById('password') as HTMLInputElement;
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-
-    return isValid;
-  };
-
   return (
-    <SignInContainer direction="column" sx={{ justifyContent: 'space-between' }}>
-      <Card variant="outlined">
-        <Typography
-          component="h1"
-          variant="h4"
-          sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+    <Card variant="outlined">
+      <Typography
+        component="h1"
+        variant="h4"
+        sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+      >
+        Sign in
+      </Typography>
+      <FormContainer
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          gap: 2,
+        }}
+      >
+        <FormControl fullWidth>
+          <FormLabel htmlFor="email">Email</FormLabel>
+          <TextFieldElement
+            id="email"
+            type="email"
+            name="email"
+            placeholder="your@email.com"
+            autoComplete="email"
+            autoFocus
+          />
+        </FormControl>
+        <FormControl fullWidth>
+          <FormLabel htmlFor="password">Password</FormLabel>
+          <PasswordElement
+            name="password"
+            placeholder="••••••"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            autoFocus
+            required
+            fullWidth
+            variant="outlined"
+          />
+        </FormControl>
+        <ForgotPassword open={open} handleClose={handleClose} />
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
         >
           Sign in
-        </Typography>
-        <FormContainer
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            gap: 2,
-          }}
+        </Button>
+        <Link
+          component="button"
+          type="button"
+          onClick={handleClickOpen}
+          variant="body2"
+          sx={{ alignSelf: 'center' }}
         >
-          <FormControl fullWidth>
-            <FormLabel htmlFor="email">Email</FormLabel>
-            <TextFieldElement
-              id="email"
-              type="email"
-              name="email"
-              placeholder="your@email.com"
-              autoComplete="email"
-              autoFocus
-            />
-          </FormControl>
-          <FormControl fullWidth>
-            <FormLabel htmlFor="password">Password</FormLabel>
-            <PasswordElement
-              name="password"
-              placeholder="••••••"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              autoFocus
-              required
-              fullWidth
-              variant="outlined"
-            />
-          </FormControl>
-          <ForgotPassword open={open} handleClose={handleClose} />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-          >
-            Sign in
-          </Button>
+          Forgot your password?
+        </Link>
+      </FormContainer>
+      <Divider>or</Divider>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography sx={{ textAlign: 'center' }}>
+          Don&apos;t have an account?{' '}
           <Link
-            component="button"
-            type="button"
-            onClick={handleClickOpen}
+            href="/material-ui/getting-started/templates/sign-in/"
             variant="body2"
             sx={{ alignSelf: 'center' }}
           >
-            Forgot your password?
+            Sign up
           </Link>
-        </FormContainer>
-        <Divider>or</Divider>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Typography sx={{ textAlign: 'center' }}>
-            Don&apos;t have an account?{' '}
-            <Link
-              href="/material-ui/getting-started/templates/sign-in/"
-              variant="body2"
-              sx={{ alignSelf: 'center' }}
-            >
-              Sign up
-            </Link>
-          </Typography>
-        </Box>
-      </Card>
-    </SignInContainer>
+        </Typography>
+      </Box>
+    </Card>
   );
 }
