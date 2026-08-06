@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.5984942">
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.5984942">
   <PropertyGroup>
     <StartupCommand>npm run dev</StartupCommand>
     <JavaScriptTestRoot>src\</JavaScriptTestRoot>
@@ -14,6 +14,7 @@
     <Folder Include="src\components\appbase\" />
     <Folder Include="src\components\dashboard\" />
     <Folder Include="src\components\datafield\" />
+    <Folder Include="src\sessionman\" />
     <Folder Include="src\components\signup\" />
     <Folder Include="src\components\signin\" />
   </ItemGroup>
