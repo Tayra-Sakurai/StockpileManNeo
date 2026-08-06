@@ -20,9 +20,9 @@ function BrandBar() {
   };
 
   return (
-    <header>
+    <header style={{ position: 'sticky', top: 0 }}>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="sticky">
+        <AppBar position="static">
           <Toolbar>
             <IconButton
               type="button"

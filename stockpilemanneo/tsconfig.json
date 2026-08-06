@@ -4,13 +4,16 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "jsx": "react-jsx",
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "checkJs": true,
+    "allowJs": true,
+    "maxNodeModuleJsDepth": 2,
+    "strict": true
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
-    "node_modules",
     ".svelte-kit",
     "build"
   ]
