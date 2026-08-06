@@ -8,9 +8,12 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
+import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from '@mui/material/styles';
 import { FormContainer, TextFieldElement, PasswordElement } from 'react-hook-form-mui';
-import ForgotPassword from './components/ForgotPassword';
+import ForgotPassword from './components/ForgotPassword.tsx';
+import supabase from '../../client.js';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -35,7 +38,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
-  //height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
   minHeight: '100%',
   padding: theme.spacing(2),
   [theme.breakpoints.up('sm')]: {
@@ -59,6 +61,9 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 
 export default function SignIn() {
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -66,6 +71,28 @@ export default function SignIn() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSignIn = async (data: { email?: string; password?: string }) => {
+    if (!data.email || !data.password) return;
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+      if (authError) {
+        setError(authError.message);
+      } else {
+        setSuccess('サインインに成功しました。');
+      }
+    } catch (err: any) {
+      setError(err?.message || 'サインイン中にエラーが発生しました。');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -76,18 +103,15 @@ export default function SignIn() {
           variant="h4"
           sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
         >
-          Sign in
+          サインイン
         </Typography>
-        <FormContainer
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            gap: 2,
-          }}
-        >
-          <FormControl fullWidth>
-            <FormLabel htmlFor="email">Email</FormLabel>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        {success && <Alert severity="success">{success}</Alert>}
+
+        <FormContainer onSuccess={handleSignIn}>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <FormLabel htmlFor="email">メールアドレス</FormLabel>
             <TextFieldElement
               id="email"
               type="email"
@@ -95,50 +119,54 @@ export default function SignIn() {
               placeholder="your@email.com"
               autoComplete="email"
               autoFocus
+              required
             />
           </FormControl>
-          <FormControl fullWidth>
-            <FormLabel htmlFor="password">Password</FormLabel>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <FormLabel htmlFor="password">パスワード</FormLabel>
             <PasswordElement
               name="password"
               placeholder="••••••"
               type="password"
               id="password"
               autoComplete="current-password"
-              autoFocus
               required
               fullWidth
               variant="outlined"
             />
           </FormControl>
-          <ForgotPassword open={open} handleClose={handleClose} />
           <Button
             type="submit"
             fullWidth
             variant="contained"
+            disabled={loading}
+            sx={{ mt: 1 }}
           >
-            Sign in
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'サインイン'}
           </Button>
-          <Link
-            component="button"
-            type="button"
-            onClick={handleClickOpen}
-            variant="body2"
-            sx={{ alignSelf: 'center' }}
-          >
-            Forgot your password?
-          </Link>
-        </FormContainer>
-        <Divider>or</Divider>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Typography sx={{ textAlign: 'center' }}>
-            Don&apos;t have an account?{' '}
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
             <Link
-              href="/material-ui/getting-started/templates/sign-in/"
+              component="button"
+              type="button"
+              onClick={handleClickOpen}
               variant="body2"
               sx={{ alignSelf: 'center' }}
             >
-              Sign up
+              パスワードをお忘れの場合
+            </Link>
+          </Box>
+        </FormContainer>
+        <ForgotPassword open={open} handleClose={handleClose} />
+        <Divider>または</Divider>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Typography sx={{ textAlign: 'center' }}>
+            アカウントを持っていない場合{' '}
+            <Link
+              href="/signup"
+              variant="body2"
+              sx={{ alignSelf: 'center' }}
+            >
+              新規登録
             </Link>
           </Typography>
         </Box>

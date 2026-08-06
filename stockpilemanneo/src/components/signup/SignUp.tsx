@@ -8,8 +8,11 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
+import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from '@mui/material/styles';
 import { FormContainer, TextFieldElement, PasswordElement } from 'react-hook-form-mui';
+import supabase from '../../client.js';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -53,8 +56,38 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function SignUp(props: { disableCustomTheme?: boolean; }) {
-  
+export default function SignUp() {
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
+
+  const handleSignUp = async (data: { name?: string; email?: string; password?: string }) => {
+    if (!data.email || !data.password) return;
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const { error: authError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            display_name: data.name,
+            name: data.name,
+          },
+        },
+      });
+      if (authError) {
+        setError(authError.message);
+      } else {
+        setSuccess('アカウント登録が完了しました。確認メールを送信した場合はメールをご確認ください。');
+      }
+    } catch (err: any) {
+      setError(err?.message || '登録中にエラーが発生しました。');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SignUpContainer direction="column" sx={{ justifyContent: 'space-between' }}>
@@ -66,10 +99,12 @@ export default function SignUp(props: { disableCustomTheme?: boolean; }) {
         >
           新規登録
         </Typography>
-        <FormContainer
-          sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}
-        >
-          <FormControl fullWidth>
+
+        {error && <Alert severity="error">{error}</Alert>}
+        {success && <Alert severity="success">{success}</Alert>}
+
+        <FormContainer onSuccess={handleSignUp}>
+          <FormControl fullWidth sx={{ mb: 2 }}>
             <FormLabel htmlFor="name">表示名</FormLabel>
             <TextFieldElement
               autoComplete="nickname"
@@ -80,7 +115,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean; }) {
               placeholder="Jon Snow"
             />
           </FormControl>
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{ mb: 2 }}>
             <FormLabel htmlFor="email">メールアドレス</FormLabel>
             <TextFieldElement
               required
@@ -93,7 +128,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean; }) {
               type="email"
             />
           </FormControl>
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{ mb: 2 }}>
             <FormLabel htmlFor="password">パスワード</FormLabel>
             <PasswordElement
               required
@@ -109,18 +144,20 @@ export default function SignUp(props: { disableCustomTheme?: boolean; }) {
             type="submit"
             fullWidth
             variant="contained"
+            disabled={loading}
+            sx={{ mt: 1 }}
           >
-            この内容で登録する
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'この内容で登録する'}
           </Button>
         </FormContainer>
         <Divider>
-          <Typography sx={{ color: 'text.secondary' }}>or</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>または</Typography>
         </Divider>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Typography sx={{ textAlign: 'center' }}>
             アカウントをお持ちの場合{' '}
             <Link
-              href="/material-ui/getting-started/templates/sign-in/"
+              href="/signin"
               variant="body2"
               sx={{ alignSelf: 'center' }}
             >
