@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import supabase from "../../client";
 import aimodel from "../../aimodules/Gemini";
+import { toScalarVector } from "../stockpile/stockpileVectors";
 
 /**
  * The category's detail display/edit component
@@ -35,7 +36,7 @@ export default function LargeCategoryDetail({ id = null }) {
             name: data.name
           };
         }}
-        onSuccess={({ name }) => {
+        onSuccess={async ({ name }) => {
           const vector = await aimodel.models.embedContent({
             model: 'gemini-embedding-2',
             contents: `title: none | text: ${name}`,
@@ -47,17 +48,17 @@ export default function LargeCategoryDetail({ id = null }) {
             await supabase
               .from('large_categories')
               .insert([
-                {
-                  name: name,
-                  vector: vector.embedding.values
-                }
-              ]);
+                  {
+                    name: name,
+                    vector: toScalarVector(vector.embedding.values)
+                  }
+                ]);
           } else {
             await supabase
               .from('large_categories')
               .update({
                 name: name,
-                vector: vector.embedding.values
+                vector: toScalarVector(vector.embedding.values)
               })
               .match({ id: id });
           }

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import supabase from "../client.js";
 
 /**
@@ -17,7 +17,7 @@ function SessionCheck() {
       const { data, error } = await supabase.auth.getSession();
       if (error)
         navigate('/signin');
-      else if (!data)
+      else if (!data?.session)
         navigate('/signin');
       else {
         navigate('/');

@@ -1,16 +1,17 @@
 import { Outlet } from "react-router-dom";
 import BottomMenu from "./BottomMenu.jsx";
 import BrandBar from "./BrandBar.jsx";
+import Box from "@mui/material/Box";
 
 function AppBaseElement() {
   return (
-    <>
+    <Box sx={{ minHeight: '100svh', display: 'flex', flexDirection: 'column' }}>
       <BrandBar />
-      <section>
+      <Box component="main" sx={{ flexGrow: 1 }}>
         <Outlet />
-      </section>
+      </Box>
       <BottomMenu />
-    </>
+    </Box>
   );
 }
 
