@@ -7,7 +7,7 @@ function AppBaseElement() {
   return (
     <Box sx={{ minHeight: '100svh', display: 'flex', flexDirection: 'column' }}>
       <BrandBar />
-      <Box component="main" sx={{ flexGrow: 1 }}>
+      <Box component="div" sx={{ flexGrow: 1 }}>
         <Outlet />
       </Box>
       <BottomMenu />
