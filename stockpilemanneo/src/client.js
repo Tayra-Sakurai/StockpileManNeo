@@ -4,7 +4,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 /**
- * @type {import("@supabase/supabase-js").SupabaseClient<any, any, "public", any, any>}
+ * @type {import("@supabase/supabase-js").SupabaseClient<import("./types/supabase.ts").Database>}
  */
 let supabase;
 

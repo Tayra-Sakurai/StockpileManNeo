@@ -1,124 +1,247 @@
-import Box from '@mui/material/Box';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import supabase from "../../client.js";
+import { useNavigate } from "react-router-dom";
+import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
+import { Button, FormControl, InputLabel, Stack } from "@mui/material";
+import SelectSmallCategories from "./selections/SelectSmallCategories.jsx";
+import SelectLocations from "./selections/SelectLocations.jsx";
+import UndoIcon from '@mui/icons-material/Undo';
+import SaveIcon from '@mui/icons-material/Save';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { useState } from "react";
+import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
 
-function formatDate(value) {
-  if (!value) return '未設定';
-  return new Intl.DateTimeFormat('ja-JP', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }).format(new Date(value));
-}
+/**
+ * The form value format.
+ * @typedef {object} ItemFormData
+ * @property {string} name The name of the item.
+ * @property {?string} description The description of the item.
+ * @property {?string} life The life of the item.
+ * @property {string} purchase_timestamp The timestamp of the purchased date.
+ * @property {import("./selections/SelectSmallCategories.jsx").SmallCategoryCandidate} small_categories The small category.
+ * @property {import("./selections/SelectLocations.jsx").LocationCandidate} locations The location.
+ */
 
-function DetailValue({ label, value }) {
-  return (
-    <Box>
-      <Typography variant="caption" color="text.secondary">
-        {label}
-      </Typography>
-      <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
-        {value || '未設定'}
-      </Typography>
-    </Box>
-  );
-}
-
-export default function ItemDetail({
-  value,
-  smallCategories = [],
-  locations = [],
-  onChange,
-  readOnly = false,
-}) {
-  const smallCategory = smallCategories.find(
-    (category) => String(category.id) === String(value.small_category_id),
-  );
-  const location = locations.find((entry) => String(entry.id) === String(value.location_id));
-
-  if (readOnly) {
-    const categoryName = smallCategory?.large_categories?.name
-      ? `${smallCategory.large_categories.name} / ${smallCategory.name}`
-      : smallCategory?.name || value.small_categories?.name;
-    return (
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
-        <DetailValue label="品名" value={value.name} />
-        <DetailValue label="分類" value={categoryName} />
-        <DetailValue label="保管場所" value={location?.name || value.locations?.name} />
-        <DetailValue label="購入日" value={formatDate(value.purchase_timestamp)} />
-        <DetailValue label="期限" value={formatDate(value.life)} />
-        <Box sx={{ gridColumn: { xs: 'auto', sm: '1 / -1' } }}>
-          <DetailValue label="メモ" value={value.description} />
-        </Box>
-      </Box>
-    );
-  }
+/**
+ * The item editor.
+ * @param {object} props The props.
+ * @param {number=} props.id The ID.
+ * @returns
+ */
+function ItemDetail({ id }) {
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
-    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr 1fr' }, gap: 2 }}>
-      <TextField
-        label="品名"
-        value={value.name ?? ''}
-        onChange={(event) => onChange({ ...value, name: event.target.value })}
-        required
-        fullWidth
-      />
-      <TextField
-        select
-        label="小カテゴリ"
-        value={value.small_category_id ?? ''}
-        onChange={(event) => onChange({ ...value, small_category_id: event.target.value })}
-        required
-        fullWidth
+    <>
+      <FormContainer
+        defaultValues={async () => {
+          if (id) {
+            const { data } = await supabase
+              .from('items')
+              .select('name, description, life, purchase_timestamp, small_categories(id, name, large_categories(id, name)), locations(id, name)')
+              .eq('id', id);
+
+            if (data) {
+              const values = data[0];
+
+              /**
+               * @type {ItemFormData}
+               */
+              const result = {
+                name: values.name,
+                description: values.description,
+                life: (values.life ? new Date(values.life).toISOString().replace(/T.*$/, '') : null),
+                purchase_timestamp: new Date(values.purchase_timestamp).toISOString().replace(/T.*$/, ''),
+                small_categories: values.small_categories,
+                locations: values.locations,
+              };
+
+              return result;
+            }
+          }
+
+          const { data: d, error } = await supabase
+            .from('small_categories')
+            .select('id, name, large_categories(id, name)');
+
+          if (error) throw error;
+          if (!d) throw new Error('An unknown error occurred');
+
+          const { data: d2, error: err } = await supabase
+            .from('locations')
+            .select('id, name');
+
+          if (err) throw err;
+          if (!d2) throw new Error('An unknown database error occurred.');
+
+          return {
+            name: '',
+            description: '',
+            life: null,
+            purchase_timestamp: new Date().toISOString().replace(/T.*$/, ''),
+            small_categories: d[0],
+            locations: d2[0],
+          };
+        }}
+        onSuccess={async ({ name, description, life, purchase_timestamp, small_categories, locations }) => {
+          /** @type{number=} */
+          let smallCategoryId;
+
+          if (!small_categories.id) {
+            if (!small_categories.large_categories.id)
+              throw new TypeError('Invalid type of small category');
+
+            const { data, error } = await supabase
+              .from('small_categories')
+              .insert({
+                large_category_id: small_categories.large_categories.id,
+                name: small_categories.name,
+                vector: await createEmbeddingVector(small_categories.name),
+              })
+              .select('id');
+
+            if (error) throw error;
+
+            if (!data) throw new Error('An unknown database error occurred.');
+
+            smallCategoryId = data[0].id;
+          }
+
+          if (id) {
+            await supabase
+              .from('items')
+              .update({
+                name,
+                description,
+                life: (life ? new Date(life).toISOString() : null),
+                purchase_timestamp: new Date(purchase_timestamp).toISOString(),
+                small_category_id: small_categories.id ?? smallCategoryId,
+                location_id: locations.id,
+              })
+              .eq('id', id);
+            navigate(-1);
+          } else {
+            if (!locations.id || !(small_categories.id ?? smallCategoryId))
+              throw new Error('The parameter is not valid');
+
+            await supabase
+              .from('items')
+              .insert({
+                name,
+                description,
+                life: (life ? new Date(life).toISOString() : null),
+                purchase_timestamp: new Date(purchase_timestamp).toISOString(),
+                small_category_id: small_categories.id ?? smallCategoryId,
+                location_id: locations.id,
+              });
+
+            navigate(-1);
+          }
+        }}
       >
-        {smallCategories.map((category) => (
-          <MenuItem key={category.id} value={String(category.id)}>
-            {category.large_categories?.name
-              ? `${category.large_categories.name} / ${category.name}`
-              : category.name}
-          </MenuItem>
-        ))}
-      </TextField>
-      <TextField
-        select
-        label="保管場所"
-        value={value.location_id ?? ''}
-        onChange={(event) => onChange({ ...value, location_id: event.target.value })}
-        required
-        fullWidth
-      >
-        {locations.map((locationOption) => (
-          <MenuItem key={locationOption.id} value={String(locationOption.id)}>
-            {locationOption.name}
-          </MenuItem>
-        ))}
-      </TextField>
-      <TextField
-        label="購入日時"
-        type="datetime-local"
-        value={value.purchase_timestamp ?? ''}
-        onChange={(event) => onChange({ ...value, purchase_timestamp: event.target.value })}
-        slotProps={{ inputLabel: { shrink: true } }}
-        fullWidth
+        <Stack
+          direction="column"
+          spacing={4}
+        >
+          <FormControl>
+            <InputLabel htmlFor="small_categories">名称</InputLabel>
+            <SelectSmallCategories
+              id="small_categories"
+              name="small_categories"
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel htmlFor="locations">保管場所</InputLabel>
+            <SelectLocations
+              name="locations"
+              id="locations"
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel htmlFor="name">商品名</InputLabel>
+            <TextFieldElement
+              id="name"
+              name="name"
+              required
+              fullWidth
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel htmlFor="purchase_timestamp">購入日</InputLabel>
+            <TextFieldElement
+              type="date"
+              name="purchase_timestamp"
+              required
+              fullWidth
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel htmlFor="life">使用期限・賞味期限など</InputLabel>
+            <TextFieldElement
+              type="date"
+              name="life"
+              id="life"
+              fullWidth
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel htmlFor="notes">備考</InputLabel>
+            <TextFieldElement
+              id="notes"
+              name="description"
+              fullWidth
+              multiline
+              rows={2}
+            />
+          </FormControl>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={{ xs: 1, sm: 2, md: 4 }}
+          >
+            <Button
+              color="primary"
+              variant="text"
+              startIcon={<UndoIcon />}
+              type="button"
+              onClick={() => navigate(-1)}
+            >
+              戻る
+            </Button>
+            <Button
+              color="success"
+              startIcon={<SaveIcon />}
+              type="submit"
+            >
+              保存
+            </Button>
+            <Button
+              color="error"
+              startIcon={<DeleteForeverIcon />}
+              type="button"
+              onClick={() => setOpen(v => !v)}
+              disabled={!id}
+            >
+              削除
+            </Button>
+          </Stack>
+        </Stack>
+      </FormContainer>
+      <RemoveConfirmDialog
+        open={open}
+        setOpen={setOpen}
+        callback={async () => {
+          if (id) {
+            await supabase
+              .from('items')
+              .delete()
+              .eq('id', id);
+            navigate(-1);
+          }
+        }}
       />
-      <TextField
-        label="期限"
-        type="datetime-local"
-        value={value.life ?? ''}
-        onChange={(event) => onChange({ ...value, life: event.target.value })}
-        slotProps={{ inputLabel: { shrink: true } }}
-        fullWidth
-      />
-      <TextField
-        label="メモ"
-        value={value.description ?? ''}
-        onChange={(event) => onChange({ ...value, description: event.target.value })}
-        multiline
-        minRows={2}
-        fullWidth
-        sx={{ gridColumn: { xs: 'auto', md: '1 / -1' } }}
-      />
-    </Box>
+    </>
   );
 }
+
+export default ItemDetail;

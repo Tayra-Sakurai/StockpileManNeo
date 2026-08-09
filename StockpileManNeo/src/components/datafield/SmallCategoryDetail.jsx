@@ -1,62 +1,171 @@
-import Box from '@mui/material/Box';
-import MenuItem from '@mui/material/MenuItem';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+/**
+ * @typedef {object} SmallCategoryFormData The small category's form data object.
+ * @property {?{
+ *   name: string,
+ *   id?: number,
+ * }=} large_categories The large category related to the small category.
+ * @property {string} name The small category name.
+ */
 
-function DetailValue({ label, value }) {
-  return (
-    <Box>
-      <Typography variant="caption" color="text.secondary">
-        {label}
-      </Typography>
-      <Typography variant="body1">{value || '未設定'}</Typography>
-    </Box>
-  );
-}
+import { useState } from "react";
+import supabase from "../../client.js";
+import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
+import { useNavigate } from "react-router-dom";
+import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
+import { Box, Button, FormControl, InputLabel, Stack } from "@mui/material";
+import SelectLargeCategories from "./selections/SelectLargeCategories.jsx";
+import UndoIcon from "@mui/icons-material/Undo";
+import SaveIcon from "@mui/icons-material/Save";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-export default function SmallCategoryDetail({
-  value,
-  largeCategories = [],
-  onChange,
-  readOnly = false,
-}) {
-  const largeCategory = largeCategories.find(
-    (category) => String(category.id) === String(value.large_category_id),
-  );
+/**
+ * Manage the small category.
+ * @param {object} props The props.
+ * @param {(number|null)=} props.id The identifier.
+ * @returns
+ */
+function SmallCategoryDetail({ id }) {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  /**
+   * @type {[
+   *   ?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate,
+   *   import("react").Dispatch.<import("react").SetStateAction.<?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate>>
+   * ]}
+   */
+  const [largeCategory, setLargeCategory] = useState(null);
 
-  if (readOnly) {
-    return (
-      <Stack spacing={1.5}>
-        <DetailValue label="小カテゴリ名" value={value.name} />
-        <DetailValue label="大カテゴリ" value={largeCategory?.name || value.large_categories?.name} />
-      </Stack>
-    );
+  /**
+   * The upsert action.
+   * @param {SmallCategoryFormData} param0
+   */
+  const upsertFunc = async ({ large_categories, name }) => {
+    if (id && large_categories?.id) {
+      await supabase
+        .from('small_categories')
+        .update({
+          large_category_id: large_categories.id,
+          name: name,
+          vector: await createEmbeddingVector(name),
+        })
+        .eq('id', id);
+      navigate(-1);
+    } else if (large_categories?.id) {
+      await supabase
+        .from('small_categories')
+        .insert({
+          name: name,
+          large_category_id: large_categories.id,
+          vector: await createEmbeddingVector(name),
+        });
+      navigate(-1);
+    }
+  };
+
+  /**
+   * Default form value determinator.
+   * @returns {Promise.<SmallCategoryFormData>}
+   */
+  const setDefaultValues = async () => {
+    if (id) {
+      const { data, error } = await supabase
+        .from('small_categories')
+        .select('name, large_categories(id, name)')
+        .eq('id', id);
+      if (error)
+        throw error;
+
+      if (data)
+        return data[0];
+    }
+
+    return {
+      name: '',
+      large_categories: null,
+    };
   }
 
   return (
-    <Stack spacing={2}>
-      <TextField
-        label="小カテゴリ名"
-        value={value.name ?? ''}
-        onChange={(event) => onChange({ ...value, name: event.target.value })}
-        required
-        fullWidth
-      />
-      <TextField
-        select
-        label="大カテゴリ"
-        value={value.large_category_id ?? ''}
-        onChange={(event) => onChange({ ...value, large_category_id: event.target.value })}
-        required
-        fullWidth
+    <>
+      <FormContainer
+        defaultValues={setDefaultValues}
+        onSuccess={upsertFunc}
       >
-        {largeCategories.map((category) => (
-          <MenuItem key={category.id} value={String(category.id)}>
-            {category.name}
-          </MenuItem>
-        ))}
-      </TextField>
-    </Stack>
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
+          <FormControl>
+            <InputLabel htmlFor="large_categories">カテゴリ</InputLabel>
+            <SelectLargeCategories
+              id="large_categories"
+              name="large_categories"
+              value={largeCategory}
+              setValue={setLargeCategory}
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel htmlFor="name">名称</InputLabel>
+            <TextFieldElement
+              id="name"
+              name="name"
+              required
+              fullWidth
+              placeholder="衣料用洗剤・醤油"
+            />
+          </FormControl>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={{ xs: 1, sm: 2, md: 4 }}
+          >
+            <Button
+              type="button"
+              color="primary"
+              variant="text"
+              startIcon={<UndoIcon />}
+              onClick={() => navigate(-1)}
+            >
+              戻る
+            </Button>
+            <Button
+              color="success"
+              type="submit"
+              startIcon={<SaveIcon />}
+            >
+              保存
+            </Button>
+            <Button
+              color="error"
+              type="button"
+              startIcon={<DeleteForeverIcon />}
+              onClick={() => setOpen(v => !v)}
+              disabled={!id}
+            >
+              削除（関連データも含めて完全に削除されます）
+            </Button>
+          </Stack>
+        </Box>
+      </FormContainer>
+      <RemoveConfirmDialog
+        open={open}
+        setOpen={setOpen}
+        callback={async () => {
+          if (id) {
+            await supabase
+              .from('small_categories')
+              .delete()
+              .eq('id', id);
+            navigate(-1);
+          }
+        }}
+      />
+    </>
   );
 }
+
+export default SmallCategoryDetail;
