@@ -29,6 +29,7 @@ function SelectLargeCategories(props) {
     const { data, error } = await supabase
       .from('large_categories')
       .select('name, id');
+    console.info(data);
     if (!data) {
       console.error(error.message ?? 'An unknown error occurred.');
       setOptions([]);
@@ -60,10 +61,7 @@ function SelectLargeCategories(props) {
           if (typeof option === 'string')
             return `${option} を追加する`;
 
-          if (option.id)
-            return option.name;
-
-          return `${option.name}を追加する`;
+          return option.name;
         },
         getOptionKey(option) {
           return typeof option === 'string' ? option : (option.id ?? 0);
@@ -111,6 +109,15 @@ function SelectLargeCategories(props) {
           }
 
           return filtered;
+        },
+        renderOption(props, option) {
+          const { key, ...otherProps } = props;
+
+          return (
+            <li key={key} {...otherProps}>
+              {option.id ? option.name : `${option.name} を追加する`}
+            </li>
+          );
         },
       }}
     />
