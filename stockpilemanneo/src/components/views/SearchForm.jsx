@@ -60,6 +60,7 @@ function SearchForm() {
               color="success"
               fullWidth
               type="submit"
+              variant="contained"
             >
               検索
             </Button>
