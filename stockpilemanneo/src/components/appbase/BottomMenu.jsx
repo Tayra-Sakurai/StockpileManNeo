@@ -46,6 +46,9 @@ function BottomMenu() {
         borderTop: 1,
         borderColor: 'divider',
         display: { xs: 'block', md: 'none' },
+        zIndex(theme) {
+          return theme.zIndex.appBar;
+        },
       }}
     >
       <BottomNavigation showLabels value={value} onChange={(event, newValue) => {

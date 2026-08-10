@@ -19,6 +19,9 @@ function SpecialActions() {
           md: 16,
         },
         right: 16,
+        zIndex(theme) {
+          return theme.zIndex.speedDial;
+        },
       }}
       icon={<SpeedDialIcon />}
     >
