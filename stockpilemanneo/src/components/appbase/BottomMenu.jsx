@@ -24,7 +24,7 @@ function BottomMenu() {
         display: { xs: 'block', md: 'none' },
       }}
     >
-      <BottomNavigation showLabels>
+      <BottomNavigation showLabels value={0}>
         <BottomNavigationAction label="概要" icon={<HomeIcon />} onClick={() => changeView('overview')} />
         <BottomNavigationAction label="在庫" icon={<Inventory2Icon />} onClick={() => changeView('items')} />
         <BottomNavigationAction label="分類" icon={<CategoryIcon />} onClick={() => changeView('taxonomy')} />
