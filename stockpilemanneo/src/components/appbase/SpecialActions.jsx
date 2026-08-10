@@ -15,7 +15,7 @@ function SpecialActions() {
       sx={{
         position: 'fixed',
         bottom: {
-          xs: 56,
+          xs: 60,
           md: 16,
         },
         right: 16,
