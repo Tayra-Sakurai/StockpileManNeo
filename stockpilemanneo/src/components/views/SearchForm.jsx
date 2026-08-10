@@ -38,7 +38,7 @@ function SearchForm() {
         }}
       >
         <Box sx={{ width: '100%', boxSizing: 'border-box' }}>
-          <Stack>
+          <Stack spacing="2" sx={{ width: '100%' }}>
             <FormControl>
               <InputLabel htmlFor="q">検索ワード</InputLabel>
               <TextFieldElement
