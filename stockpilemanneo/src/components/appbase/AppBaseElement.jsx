@@ -36,6 +36,7 @@ function AppBaseElement() {
       }}>
         <Outlet />
       </Box>
+      <SpecialActions />
       <BottomMenu />
     </Box>
   );
