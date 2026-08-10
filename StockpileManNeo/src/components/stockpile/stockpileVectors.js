@@ -83,7 +83,7 @@ export function toScalarVector(vector) {
 
 /**
  * Calculates the norm of the vector.
- * @param {Array<number>} vector The vector.
+ * @param {Array.<number>} vector The vector.
  * @returns {number} The norm.
  */
 export function calcNorm(vector) {
