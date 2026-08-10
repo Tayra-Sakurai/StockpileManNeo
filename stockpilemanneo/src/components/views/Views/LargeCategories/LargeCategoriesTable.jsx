@@ -32,7 +32,8 @@ function LargeCategoriesTable() {
     const load = async () => {
       const { data: d, error } = await supabase
         .from('large_categories')
-        .select('id, name, small_categories(items(count))');
+        .select('id, name, small_categories(items(count))')
+        .order('name', { ascending: true });
       if (error) throw error;
 
       if (d) setData(d);
