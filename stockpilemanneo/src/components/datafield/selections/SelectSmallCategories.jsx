@@ -79,9 +79,6 @@ function SelectSmallCategories({ name, id, largeCategory, setLargeCategory }) {
         id,
         value,
         async onOpen() {
-          if (options)
-            return;
-
           await loadOptions();
         },
         async onChange(event, newValue) {

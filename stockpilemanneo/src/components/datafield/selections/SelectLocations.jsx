@@ -112,7 +112,7 @@ function SelectLocations({ name, id }) {
           }
         },
         async onOpen() {
-          if (options) await loadOptions();
+          await loadOptions();
         },
       }}
     />
