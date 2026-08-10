@@ -3,12 +3,35 @@ import CategoryIcon from '@mui/icons-material/Category';
 import HomeIcon from '@mui/icons-material/Home';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import PlaceIcon from '@mui/icons-material/Place';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const DESTINATIONS = [
+  {
+    dest: '/',
+    expression: /\/(Home)?/,
+  },
+  {
+    dest: '/Search',
+    expression: /\/Search/,
+  },
+  {
+    dest: '/Views/large_categories',
+    expression: /\/Views\/(large|small)_categories/,
+  },
+  {
+    dest: '/Views/locations',
+    expression: /\/Views\/locations/,
+  },
+];
 
 function BottomMenu() {
-  const changeView = (view) => {
-    window.dispatchEvent(new CustomEvent('stockpile-view-change', { detail: view }));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const [value, setValue] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate(DESTINATIONS[value].dest);
+  }, [value, navigate]);
 
   return (
     <Paper
@@ -24,11 +47,13 @@ function BottomMenu() {
         display: { xs: 'block', md: 'none' },
       }}
     >
-      <BottomNavigation showLabels value={0}>
-        <BottomNavigationAction label="概要" icon={<HomeIcon />} onClick={() => changeView('overview')} />
-        <BottomNavigationAction label="在庫" icon={<Inventory2Icon />} onClick={() => changeView('items')} />
-        <BottomNavigationAction label="分類" icon={<CategoryIcon />} onClick={() => changeView('taxonomy')} />
-        <BottomNavigationAction label="場所" icon={<PlaceIcon />} onClick={() => changeView('locations')} />
+      <BottomNavigation showLabels value={value} onChange={(event, newValue) => {
+        setValue(newValue);
+      }}>
+        <BottomNavigationAction label="概要" icon={<HomeIcon />} />
+        <BottomNavigationAction label="検索" icon={<Inventory2Icon />} />
+        <BottomNavigationAction label="分類" icon={<CategoryIcon />} />
+        <BottomNavigationAction label="場所" icon={<PlaceIcon />} />
       </BottomNavigation>
     </Paper>
   );
