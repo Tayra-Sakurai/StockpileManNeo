@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, InputLabel, Paper, Stack } from "@mui/material";
+import { Box, Button, FormControl, FormLabel, Paper, Stack } from "@mui/material";
 import { FormContainer, MultiSelectElement, TextFieldElement } from "react-hook-form-mui";
 import { useSearchParams } from "react-router-dom";
 
@@ -40,7 +40,7 @@ function SearchForm() {
         <Box sx={{ width: '100%', boxSizing: 'border-box' }}>
           <Stack spacing="2" sx={{ width: '100%' }}>
             <FormControl>
-              <InputLabel htmlFor="q">検索ワード</InputLabel>
+              <FormLabel htmlFor="q">検索ワード</FormLabel>
               <TextFieldElement
                 name="q"
                 type="search"
