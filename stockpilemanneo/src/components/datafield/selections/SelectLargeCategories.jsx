@@ -57,13 +57,16 @@ function SelectLargeCategories(props) {
       autocompleteProps={{
         id: props.id,
         getOptionLabel(option) {
+          if (typeof option === 'string')
+            return `${option} を追加する`;
+
           if (option.id)
             return option.name;
 
           return `${option.name}を追加する`;
         },
         getOptionKey(option) {
-          return option.id ?? 0;
+          return typeof option === 'string' ? option : (option.id ?? 0);
         },
         fullWidth: true,
         selectOnFocus: true,
@@ -100,7 +103,7 @@ function SelectLargeCategories(props) {
 
           const { inputValue } = state;
 
-          if (inputValue && filtered.some(option => option.name == inputValue)) {
+          if (inputValue && !filtered.some(option => option.name == inputValue)) {
             filtered.push({
               name: inputValue,
               id: null,
