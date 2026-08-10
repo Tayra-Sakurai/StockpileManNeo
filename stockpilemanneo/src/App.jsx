@@ -7,6 +7,8 @@ import AppTheme from './components/signin/theme/AppTheme.tsx';
 import UserViewContext from './sessionman/UserViewContext.jsx';
 import { useEffect, useState } from 'react';
 import supabase from './client.js';
+import AppBaseElement from './components/appbase/AppBaseElement.jsx';
+import SearchPage from './components/views/SearchPage.jsx';
 
 function App() {
   const [searchParams] = useSearchParams();
@@ -31,6 +33,9 @@ function App() {
       <UserViewContext.Provider value={userData}>
         <AppTheme>
           <Routes>
+            <Route path="/" element={<AppBaseElement />}>
+              <Route path="Search" element={<SearchPage />} />
+            </Route>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/auth/callback" element={<SessionCheck />} />
