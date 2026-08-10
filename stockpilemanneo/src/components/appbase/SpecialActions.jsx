@@ -14,7 +14,10 @@ function SpecialActions() {
       ariaLabel="追加"
       sx={{
         position: 'fixed',
-        bottom: 16,
+        bottom: {
+          xs: 48,
+          md: 16,
+        },
         right: 16,
       }}
       icon={<SpeedDialIcon />}

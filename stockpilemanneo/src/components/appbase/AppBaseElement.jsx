@@ -30,9 +30,11 @@ function AppBaseElement() {
       <UserViewContext.Provider value={userData}>
         <BrandBar />
       </UserViewContext.Provider>
-      <Box component="div" sx={{ flexGrow: 1 }}>
+      <Box component="div" sx={{
+        flexGrow: 1,
+        zIndex: 1,
+      }}>
         <Outlet />
-        <SpecialActions />
       </Box>
       <BottomMenu />
     </Box>
