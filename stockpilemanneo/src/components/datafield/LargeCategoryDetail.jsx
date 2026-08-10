@@ -1,6 +1,6 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import supabase from "../../client.js";
-import { Box, Button, FormControl, InputLabel } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, Stack } from "@mui/material";
 import { useState } from "react";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
 import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
@@ -83,52 +83,51 @@ function LargeCategoryDetail({ id = null }) {
       <Box
         sx={{
           width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2
         }}
       >
-        <FormControl>
-          <InputLabel htmlFor="name">カテゴリ名</InputLabel>
-          <TextFieldElement
-            id="name"
-            name="name"
-            required
-            placeholder="例）洗剤，調味料など"
-            fullWidth
-            autoFocus
-          />
-        </FormControl>
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            gap: 4,
-          }}
-        >
-          <Button
-            type="button"
-            variant="text"
-            color="primary"
+        <Stack spacing="2">
+          <FormControl>
+            <InputLabel htmlFor="name">カテゴリ名</InputLabel>
+            <TextFieldElement
+              id="name"
+              name="name"
+              required
+              placeholder="例）洗剤，調味料など"
+              fullWidth
+              autoFocus
+            />
+          </FormControl>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 4,
+            }}
           >
-            戻る
-          </Button>
-          <Button
-            type="submit"
-            color="success"
-          >
-            保存
-          </Button>
-          <Button
-            type="button"
-            color="error"
-            disabled={!id}
-            onClick={openDialog}
-          >
-            カテゴリを削除（関連項目も含めて削除されます）
-          </Button>
-        </Box>
+            <Button
+              type="button"
+              variant="text"
+              color="primary"
+            >
+              戻る
+            </Button>
+            <Button
+              type="submit"
+              color="success"
+            >
+              保存
+            </Button>
+            <Button
+              type="button"
+              color="error"
+              disabled={!id}
+              onClick={openDialog}
+            >
+              カテゴリを削除（関連項目も含めて削除されます）
+            </Button>
+          </Box>
+        </Stack>
       </Box>
       <RemoveConfirmDialog open={open} setOpen={setOpen} callback={categoryRemoveAction} />
     </FormContainer>
