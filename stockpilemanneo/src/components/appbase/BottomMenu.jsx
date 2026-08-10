@@ -1,7 +1,7 @@
 import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 import CategoryIcon from '@mui/icons-material/Category';
 import HomeIcon from '@mui/icons-material/Home';
-import Inventory2Icon from '@mui/icons-material/Inventory2';
+import SearchIcon from '@mui/icons-material/Search';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -26,11 +26,12 @@ const DESTINATIONS = [
 ];
 
 function BottomMenu() {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(-1);
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate(DESTINATIONS[value].dest);
+    if (value >= 0)
+      navigate(DESTINATIONS[value].dest);
   }, [value, navigate]);
 
   return (
@@ -51,7 +52,7 @@ function BottomMenu() {
         setValue(newValue);
       }}>
         <BottomNavigationAction label="概要" icon={<HomeIcon />} />
-        <BottomNavigationAction label="検索" icon={<Inventory2Icon />} />
+        <BottomNavigationAction label="検索" icon={<SearchIcon />} />
         <BottomNavigationAction label="分類" icon={<CategoryIcon />} />
         <BottomNavigationAction label="場所" icon={<PlaceIcon />} />
       </BottomNavigation>
