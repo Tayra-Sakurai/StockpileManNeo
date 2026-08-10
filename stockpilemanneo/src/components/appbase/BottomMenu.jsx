@@ -3,7 +3,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 import PlaceIcon from '@mui/icons-material/Place';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const DESTINATIONS = [
@@ -29,11 +29,6 @@ function BottomMenu() {
   const [value, setValue] = useState(-1);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (value >= 0)
-      navigate(DESTINATIONS[value].dest);
-  }, [value, navigate]);
-
   return (
     <Paper
       component="nav"
@@ -52,6 +47,7 @@ function BottomMenu() {
       }}
     >
       <BottomNavigation showLabels value={value} onChange={(event, newValue) => {
+        navigate(DESTINATIONS[newValue].dest);
         setValue(newValue);
       }}>
         <BottomNavigationAction label="概要" icon={<HomeIcon />} />
