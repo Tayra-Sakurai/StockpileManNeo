@@ -91,10 +91,7 @@ function SelectLargeCategories(props) {
           }
         },
         async onOpen() {
-          if (options)
-            return;
-          else
-            await getLargeCategories();
+          await getLargeCategories();
         },
         filterOptions(options, state) {
           const filtered = filter(options, state);
