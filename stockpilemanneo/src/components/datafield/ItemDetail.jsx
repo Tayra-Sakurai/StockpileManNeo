@@ -10,6 +10,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useState } from "react";
 import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
+import SelectLargeCategories from "./selections/SelectLargeCategories.jsx";
 
 /**
  * The form value format.
@@ -20,6 +21,7 @@ import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
  * @property {string} purchase_timestamp The timestamp of the purchased date.
  * @property {import("./selections/SelectSmallCategories.jsx").SmallCategoryCandidate} small_categories The small category.
  * @property {import("./selections/SelectLocations.jsx").LocationCandidate} locations The location.
+ * @property {?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate} largeCategory The large category.
  */
 
 /**
@@ -31,6 +33,14 @@ import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
 function ItemDetail({ id }) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+
+  /**
+   * @type {[
+   *   ?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate,
+   *   import("react").Dispatch.<import("react").SetStateAction.<?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate>>
+   * ]}
+   */
+  const [largeCategory, setLargeCategory] = useState(null);
 
   return (
     <>
@@ -55,6 +65,7 @@ function ItemDetail({ id }) {
                 purchase_timestamp: new Date(values.purchase_timestamp).toISOString().replace(/T.*$/, ''),
                 small_categories: values.small_categories,
                 locations: values.locations,
+                largeCategory: values.small_categories.large_categories,
               };
 
               return result;
@@ -82,6 +93,7 @@ function ItemDetail({ id }) {
             purchase_timestamp: new Date().toISOString().replace(/T.*$/, ''),
             small_categories: d[0],
             locations: d2[0],
+            largeCategory: d[0].large_categories,
           };
         }}
         onSuccess={async ({ name, description, life, purchase_timestamp, small_categories, locations }) => {
@@ -145,10 +157,21 @@ function ItemDetail({ id }) {
           spacing={4}
         >
           <FormControl>
+            <FormLabel htmlFor="largeCategory">分類</FormLabel>
+            <SelectLargeCategories
+              name="largeCategory"
+              id="largeCategory"
+              setValue={setLargeCategory}
+              value={largeCategory}
+            />
+          </FormControl>
+          <FormControl>
             <FormLabel htmlFor="small_categories">名称</FormLabel>
             <SelectSmallCategories
               id="small_categories"
               name="small_categories"
+              largeCategory={largeCategory}
+              setLargeCategory={setLargeCategory}
             />
           </FormControl>
           <FormControl>

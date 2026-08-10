@@ -22,8 +22,8 @@ const filter = createFilterOptions();
  * @param {object} props The props.
  * @param {string} props.name The name of this element.
  * @param {string=} props.id The id.
- * @param {import("./SelectLargeCategories.jsx").LargeCategoryCandidate=} props.largeCategory The large category.
- * @param {import("react").Dispatch.<import("react").SetStateAction.<{ name: string, id?: number }>>=} props.setLargeCategory The large category setter.
+ * @param {?import("./SelectLargeCategories.jsx").LargeCategoryCandidate=} props.largeCategory The large category.
+ * @param {import("react").Dispatch.<import("react").SetStateAction.<?{ name: string, id?: number }>>=} props.setLargeCategory The large category setter.
  * @returns
  */
 function SelectSmallCategories({ name, id, largeCategory, setLargeCategory }) {
