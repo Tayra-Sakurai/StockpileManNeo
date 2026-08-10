@@ -1,4 +1,6 @@
-import { TableCell, TableRow } from "@mui/material";
+import { Button, TableCell, TableRow } from "@mui/material";
+import { Link } from "react-router-dom";
+import EditIcon from '@mui/icons-material/Edit';
 
 /**
  * The large category table view row.
@@ -27,6 +29,18 @@ function LargeCategoryViewRow({ id, name, small_categories }) {
       <TableCell align="right">{id}</TableCell>
       <TableCell align="left">{name}</TableCell>
       <TableCell align="right">{itemCount}</TableCell>
+      <TableCell>
+        <Button
+          variant="contained"
+          color="primary"
+          type="button"
+          component={Link}
+          to={`/Edit/large_categories/${id}`}
+          startIcon={<EditIcon />}
+        >
+          編集
+        </Button>
+      </TableCell>
     </TableRow>
   );
 }

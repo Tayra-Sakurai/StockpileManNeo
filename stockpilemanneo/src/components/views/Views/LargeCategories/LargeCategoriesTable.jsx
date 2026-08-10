@@ -49,6 +49,7 @@ function LargeCategoriesTable() {
             <TableCell>番号</TableCell>
             <TableCell>カテゴリ名</TableCell>
             <TableCell>品目数</TableCell>
+            <TableCell>操作</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
