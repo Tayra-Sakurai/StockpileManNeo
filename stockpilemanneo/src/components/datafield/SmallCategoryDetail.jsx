@@ -13,7 +13,7 @@ import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
 import { useNavigate } from "react-router-dom";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
-import { Box, Button, FormControl, InputLabel, Stack } from "@mui/material";
+import { Box, Button, FormControl, FormLabel, Stack } from "@mui/material";
 import SelectLargeCategories from "./selections/SelectLargeCategories.jsx";
 import UndoIcon from "@mui/icons-material/Undo";
 import SaveIcon from "@mui/icons-material/Save";
@@ -101,7 +101,7 @@ function SmallCategoryDetail({ id }) {
           }}
         >
           <FormControl>
-            <InputLabel htmlFor="large_categories">カテゴリ</InputLabel>
+            <FormLabel htmlFor="large_categories">カテゴリ</FormLabel>
             <SelectLargeCategories
               id="large_categories"
               name="large_categories"
@@ -110,7 +110,7 @@ function SmallCategoryDetail({ id }) {
             />
           </FormControl>
           <FormControl>
-            <InputLabel htmlFor="name">名称</InputLabel>
+            <FormLabel htmlFor="name">名称</FormLabel>
             <TextFieldElement
               id="name"
               name="name"

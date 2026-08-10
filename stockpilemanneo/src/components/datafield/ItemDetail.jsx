@@ -2,7 +2,7 @@ import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import supabase from "../../client.js";
 import { useNavigate } from "react-router-dom";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
-import { Button, FormControl, InputLabel, Stack } from "@mui/material";
+import { Button, FormControl, FormLabel, Stack } from "@mui/material";
 import SelectSmallCategories from "./selections/SelectSmallCategories.jsx";
 import SelectLocations from "./selections/SelectLocations.jsx";
 import UndoIcon from '@mui/icons-material/Undo';
@@ -145,21 +145,21 @@ function ItemDetail({ id }) {
           spacing={4}
         >
           <FormControl>
-            <InputLabel htmlFor="small_categories">名称</InputLabel>
+            <FormLabel htmlFor="small_categories">名称</FormLabel>
             <SelectSmallCategories
               id="small_categories"
               name="small_categories"
             />
           </FormControl>
           <FormControl>
-            <InputLabel htmlFor="locations">保管場所</InputLabel>
+            <FormLabel htmlFor="locations">保管場所</FormLabel>
             <SelectLocations
               name="locations"
               id="locations"
             />
           </FormControl>
           <FormControl>
-            <InputLabel htmlFor="name">商品名</InputLabel>
+            <FormLabel htmlFor="name">商品名</FormLabel>
             <TextFieldElement
               id="name"
               name="name"
@@ -168,7 +168,7 @@ function ItemDetail({ id }) {
             />
           </FormControl>
           <FormControl>
-            <InputLabel htmlFor="purchase_timestamp">購入日</InputLabel>
+            <FormLabel htmlFor="purchase_timestamp">購入日</FormLabel>
             <TextFieldElement
               type="date"
               name="purchase_timestamp"
@@ -177,7 +177,7 @@ function ItemDetail({ id }) {
             />
           </FormControl>
           <FormControl>
-            <InputLabel htmlFor="life">使用期限・賞味期限など</InputLabel>
+            <FormLabel htmlFor="life">使用期限・賞味期限など</FormLabel>
             <TextFieldElement
               type="date"
               name="life"
@@ -186,7 +186,7 @@ function ItemDetail({ id }) {
             />
           </FormControl>
           <FormControl>
-            <InputLabel htmlFor="notes">備考</InputLabel>
+            <FormLabel htmlFor="notes">備考</FormLabel>
             <TextFieldElement
               id="notes"
               name="description"

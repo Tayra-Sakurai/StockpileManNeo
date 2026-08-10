@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, InputLabel, Stack } from "@mui/material";
+import { Box, Button, FormControl, FormLabel, Stack } from "@mui/material";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import UndoIcon from "@mui/icons-material/Undo";
 import SaveIcon from "@mui/icons-material/Save";
@@ -69,7 +69,7 @@ function LocationDetail({ id = null }) {
           }}
         >
           <FormControl>
-            <InputLabel htmlFor="name">保管場所の名前</InputLabel>
+            <FormLabel htmlFor="name">保管場所の名前</FormLabel>
             <TextFieldElement
               id="name"
               name="name"

@@ -1,6 +1,6 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import supabase from "../../client.js";
-import { Box, Button, FormControl, InputLabel, Stack } from "@mui/material";
+import { Box, Button, FormControl, FormLabel, Stack } from "@mui/material";
 import { useState } from "react";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
 import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
@@ -87,7 +87,7 @@ function LargeCategoryDetail({ id = null }) {
       >
         <Stack spacing="2">
           <FormControl>
-            <InputLabel htmlFor="name">カテゴリ名</InputLabel>
+            <FormLabel htmlFor="name">カテゴリ名</FormLabel>
             <TextFieldElement
               id="name"
               name="name"
