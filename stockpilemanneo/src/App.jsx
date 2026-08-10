@@ -11,37 +11,18 @@ import AppBaseElement from './components/appbase/AppBaseElement.jsx';
 import SearchPage from './components/views/SearchPage.jsx';
 
 function App() {
-  const [searchParams] = useSearchParams();
-  /**
-   * @type {[
-   *   (import("@supabase/supabase-js").User|null),
-   *   import("react").Dispatch<import("react").SetStateAction<(import("@supabase/supabase-js").User|null)>>
-   * ]}
-   */
-  const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    const userSet = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUserData(user);
-    };
-    userSet();
-  }, [searchParams]);
-
   return (
     <BrowserRouter>
-      <UserViewContext.Provider value={userData}>
-        <AppTheme>
-          <Routes>
-            <Route path="/" element={<AppBaseElement />}>
-              <Route path="Search" element={<SearchPage />} />
-            </Route>
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/auth/callback" element={<SessionCheck />} />
-          </Routes>
-        </AppTheme>
-      </UserViewContext.Provider>
+      <AppTheme>
+        <Routes>
+          <Route path="/" element={<AppBaseElement />}>
+            <Route path="Search" element={<SearchPage />} />
+          </Route>
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/auth/callback" element={<SessionCheck />} />
+        </Routes>
+      </AppTheme>
     </BrowserRouter>
   );
 }
