@@ -16,12 +16,12 @@ const DESTINATIONS = [
     expression: /\/Search/,
   },
   {
-    dest: '/Views/large_categories',
-    expression: /\/Views\/(large|small)_categories/,
+    dest: '/View/large_categories',
+    expression: /\/View\/(large|small)_categories/,
   },
   {
-    dest: '/Views/locations',
-    expression: /\/Views\/locations/,
+    dest: '/View/locations',
+    expression: /\/View\/locations/,
   },
 ];
 
