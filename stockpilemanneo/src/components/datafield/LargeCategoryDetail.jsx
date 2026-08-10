@@ -115,6 +115,7 @@ function LargeCategoryDetail({ id = null }) {
             <Button
               type="submit"
               color="success"
+              variant="contained"
             >
               保存
             </Button>
@@ -123,6 +124,7 @@ function LargeCategoryDetail({ id = null }) {
               color="error"
               disabled={!id}
               onClick={openDialog}
+              variant="contained"
             >
               カテゴリを削除（関連項目も含めて削除されます）
             </Button>

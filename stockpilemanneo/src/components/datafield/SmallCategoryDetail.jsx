@@ -136,6 +136,7 @@ function SmallCategoryDetail({ id }) {
               color="success"
               type="submit"
               startIcon={<SaveIcon />}
+              variant="contained"
             >
               保存
             </Button>
@@ -145,6 +146,7 @@ function SmallCategoryDetail({ id }) {
               startIcon={<DeleteForeverIcon />}
               onClick={() => setOpen(v => !v)}
               disabled={!id}
+              variant="contained"
             >
               削除（関連データも含めて完全に削除されます）
             </Button>

@@ -93,6 +93,7 @@ function LocationDetail({ id = null }) {
               type="submit"
               startIcon={<SaveIcon />}
               color="success"
+              variant="contained"
             >
               保存
             </Button>
@@ -100,6 +101,7 @@ function LocationDetail({ id = null }) {
               type="button"
               startIcon={<DeleteForeverIcon />}
               onClick={() => setOpen(v => !v)}
+              variant="contained"
             >
               削除
             </Button>

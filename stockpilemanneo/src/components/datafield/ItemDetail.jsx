@@ -212,6 +212,7 @@ function ItemDetail({ id }) {
               color="success"
               startIcon={<SaveIcon />}
               type="submit"
+              variant="contained"
             >
               保存
             </Button>
@@ -221,6 +222,7 @@ function ItemDetail({ id }) {
               type="button"
               onClick={() => setOpen(v => !v)}
               disabled={!id}
+              variant="contained"
             >
               削除
             </Button>
