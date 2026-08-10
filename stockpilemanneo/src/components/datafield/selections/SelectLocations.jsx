@@ -53,6 +53,7 @@ function SelectLocations({ name, id }) {
       name={name}
       options={options}
       loading={loading}
+      required
       autocompleteProps={{
         id,
         value,
