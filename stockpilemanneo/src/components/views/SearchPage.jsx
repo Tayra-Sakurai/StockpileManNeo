@@ -4,7 +4,7 @@ import SearchResults from "./SearchResults.jsx";
 
 function SearchPage() {
   return (
-    <Card sx={{ width: '100%' }}>
+    <Card sx={{ width: '100%', margin: 0, boxSizing: 'border-box' }}>
       <CardContent>
         <SearchForm />
         <SearchResults />
