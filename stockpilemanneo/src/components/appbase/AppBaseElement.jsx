@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
 import supabase from "../../client.js";
 import UserViewContext from "../../sessionman/UserViewContext.jsx";
+import SpecialActions from "./SpecialActions.jsx";
 
 function AppBaseElement() {
   const [searchParams] = useSearchParams();
@@ -31,6 +32,7 @@ function AppBaseElement() {
       </UserViewContext.Provider>
       <Box component="div" sx={{ flexGrow: 1 }}>
         <Outlet />
+        <SpecialActions />
       </Box>
       <BottomMenu />
     </Box>
