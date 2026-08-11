@@ -93,7 +93,7 @@ function BrandBar() {
                   }}
                   keepMounted
                 >
-                  <MenuItem onClick={handleCloseMenu}>ようこそ，{userData.email}</MenuItem>
+                  <MenuItem onClick={handleCloseMenu}>ようこそ，{userData.user_metadata.display_name ?? userData.email}さん</MenuItem>
                   <MenuItem onClick={signOut}>
                     <ListItemIcon>
                       <LogoutIcon />
