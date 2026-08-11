@@ -60,7 +60,7 @@ function SmallCategoriesView() {
   }, [code]);
 
   return (
-    <Card sx={{ width: '100%' }}>
+    <Card sx={{ width: '100%', boxSizing: 'border-box', overflow: 'scroll' }}>
       <Stack spacing={2}>
         <Typography component="h2" variant="h2">名称の一覧</Typography>
         <Box
