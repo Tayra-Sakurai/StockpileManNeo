@@ -26,13 +26,13 @@ function ItemCard({ number }) {
     const loadData = async () => {
       const { data, error } = await supabase
         .from('items')
-        .select('name, life, description, locations(name), small_categories(id, name, large_categories(id, name))')
+        .select('name, life, description, locations!inner(name), small_categories!inner(id, name, large_categories!inner(id, name))')
         .eq('id', number);
 
       if (error) throw error;
       if (data) {
         setTitle(data[0].name);
-        setLife(data[0].life ? new Date(entry.life).toLocaleDateString() : '');
+        setLife(data[0].life ? new Date(data[0].life).toLocaleDateString() : '');
         setNotes(data[0].description || '');
         setLocation(data[0].locations.name);
         setSmallCategory(data[0].small_categories.name);
