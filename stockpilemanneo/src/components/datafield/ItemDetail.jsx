@@ -2,7 +2,7 @@ import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import supabase from "../../client.js";
 import { useNavigate } from "react-router-dom";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
-import { Button, FormControl, FormLabel, Stack } from "@mui/material";
+import { Alert, AlertTitle, Button, FormControl, FormLabel, Link, Stack } from "@mui/material";
 import SelectSmallCategories from "./selections/SelectSmallCategories.jsx";
 import SelectLocations from "./selections/SelectLocations.jsx";
 import UndoIcon from '@mui/icons-material/Undo';
@@ -32,6 +32,13 @@ import SelectLargeCategories from "./selections/SelectLargeCategories.jsx";
  */
 function ItemDetail({ id }) {
   const [open, setOpen] = useState(false);
+  /**
+   * @type {[
+   *   ?import("react").JSX.Element,
+   *   import("react").Dispatch.<import("react").SetStateAction.<?import("react").JSX.Element>>
+   * ]}
+   */
+  const [errorAlert, setErrorAlert] = useState(null);
   const navigate = useNavigate();
 
   /**
@@ -97,58 +104,70 @@ function ItemDetail({ id }) {
           };
         }}
         onSuccess={async ({ name, description, life, purchase_timestamp, small_categories, locations }) => {
-          /** @type{number=} */
-          let smallCategoryId;
+          try {
+            /** @type{number=} */
+            let smallCategoryId;
 
-          if (!small_categories.id) {
-            if (!small_categories.large_categories.id)
-              throw new TypeError('Invalid type of small category');
+            if (!small_categories.id) {
+              if (!small_categories.large_categories.id)
+                throw new TypeError('Invalid type of small category');
 
-            const { data, error } = await supabase
-              .from('small_categories')
-              .insert({
-                large_category_id: small_categories.large_categories.id,
-                name: small_categories.name,
-                vector: await createEmbeddingVector(small_categories.name),
-              })
-              .select('id');
+              const { data, error } = await supabase
+                .from('small_categories')
+                .insert({
+                  large_category_id: small_categories.large_categories.id,
+                  name: small_categories.name,
+                  vector: await createEmbeddingVector(small_categories.name),
+                })
+                .select('id');
 
-            if (error) throw error;
+              if (error) throw error;
 
-            if (!data) throw new Error('An unknown database error occurred.');
+              if (!data) throw new Error('An unknown database error occurred.');
 
-            smallCategoryId = data[0].id;
-          }
+              smallCategoryId = data[0].id;
+            }
 
-          if (id) {
-            await supabase
-              .from('items')
-              .update({
-                name,
-                description,
-                life: (life ? new Date(life).toISOString() : null),
-                purchase_timestamp: new Date(purchase_timestamp).toISOString(),
-                small_category_id: small_categories.id ?? smallCategoryId,
-                location_id: locations.id,
-              })
-              .eq('id', id);
-            navigate(-1);
-          } else {
-            if (!locations.id || !(small_categories.id ?? smallCategoryId))
-              throw new Error('The parameter is not valid');
+            if (id) {
+              await supabase
+                .from('items')
+                .update({
+                  name,
+                  description,
+                  life: (life ? new Date(life).toISOString() : null),
+                  purchase_timestamp: new Date(purchase_timestamp).toISOString(),
+                  small_category_id: small_categories.id ?? smallCategoryId,
+                  location_id: locations.id,
+                })
+                .eq('id', id);
+              navigate(-1);
+            } else {
+              if (!locations.id || !(small_categories.id ?? smallCategoryId))
+                throw new Error('The parameter is not valid');
 
-            await supabase
-              .from('items')
-              .insert({
-                name,
-                description,
-                life: (life ? new Date(life).toISOString() : null),
-                purchase_timestamp: new Date(purchase_timestamp).toISOString(),
-                small_category_id: small_categories.id ?? smallCategoryId,
-                location_id: locations.id,
-              });
+              await supabase
+                .from('items')
+                .insert({
+                  name,
+                  description,
+                  life: (life ? new Date(life).toISOString() : null),
+                  purchase_timestamp: new Date(purchase_timestamp).toISOString(),
+                  small_category_id: small_categories.id ?? smallCategoryId,
+                  location_id: locations.id,
+                });
 
-            navigate(-1);
+              navigate(-1);
+            }
+          } catch (err) {
+            console.error(err);
+            setErrorAlert(
+              (
+                <Alert severity="error">
+                  <AlertTitle>エラーが発生しました</AlertTitle>
+                  データベースの処理に失敗しました．<Link href="https://github.com/Tayra-Sakurai/StockpileManNeo/issues">GitHub</Link>にてお知らせください．
+                </Alert>
+              )
+            );
           }
         }}
       >
@@ -156,6 +175,7 @@ function ItemDetail({ id }) {
           direction="column"
           spacing={4}
         >
+          {errorAlert}
           <FormControl>
             <FormLabel htmlFor="largeCategory">分類</FormLabel>
             <SelectLargeCategories
