@@ -67,7 +67,7 @@ function SearchResults() {
       }
 
       results.sort((a, b) => b.matchRate - a.matchRate);
-      const filtered = results.filter(({ matchRate }) => matchRate > 0.5);
+      const filtered = results.filter(({ matchRate }) => matchRate > 0.25);
 
       setSearchResults(filtered);
     };
