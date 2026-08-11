@@ -55,7 +55,8 @@ function SearchResults() {
 
         const { data, error } = await supabase
           .from(table)
-          .select('id, vector');
+          .select('id, vector')
+          .order('name', { ascending: true });
 
         if (error) throw error;
         for (const entity of data)
@@ -67,7 +68,7 @@ function SearchResults() {
       }
 
       results.sort((a, b) => b.matchRate - a.matchRate);
-      const filtered = results.filter(({ matchRate }) => matchRate > 0.25);
+      const filtered = searchVector.every(value => value == 0) ? results : results.filter(({ matchRate }) => matchRate > 0.25);
 
       setSearchResults(filtered);
     };
