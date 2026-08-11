@@ -1,6 +1,9 @@
+import { Avatar } from "@mui/material";
 import supabase from "../../../client.js";
 import CommonCard from "./CommonCard.jsx";
 import { useEffect, useState } from "react";
+import { deepPurple } from "@mui/material/colors";
+import CategoryIcon from "@mui/icons-material/Category";
 
 /**
  * The large category displayer.
@@ -31,6 +34,12 @@ function LargeCategoryCard({ number }) {
       title={title}
       table="large_categories"
       itemId={number}
+      titleLink={`/View/small_categories/large_categories/${number}`}
+      avatar={
+        <Avatar sx={{ bgcolor: deepPurple[500] }}>
+          <CategoryIcon />
+        </Avatar>
+      }
     />
   );
 }

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import supabase from "../../../client.js";
 import CommonCard from "./CommonCard.jsx";
-import { Breadcrumbs, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material";
+import { Avatar, Breadcrumbs, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { indigo } from "@mui/material/colors";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
 
 /**
  * The item card.
@@ -51,11 +53,17 @@ function ItemCard({ number }) {
       title={title}
       type="品目"
       table="items"
+      titleLink={`/Edit/items/${number}`}
+      avatar={
+        <Avatar sx={{ bgcolor: indigo[500] }}>
+          <Inventory2Icon />
+        </Avatar>
+      }
     >
       <>
         <Breadcrumbs>
           <Link
-            to={`Edit/large_categories/${largeCategoryId}`}
+            to={`/View/small_categories/large_categories/${largeCategoryId}`}
             component={RouterLink}
             color="inherit"
           >
@@ -64,7 +72,7 @@ function ItemCard({ number }) {
           <Link
             component={RouterLink}
             color="inherit"
-            to={`/Edit/small_categories/${smallCategoryId}`}
+            to={`/View/items/small_categories/${smallCategoryId}`}
           >
             {smallCategory}
           </Link>

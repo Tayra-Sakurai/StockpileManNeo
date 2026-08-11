@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import CommonCard from "./CommonCard.jsx";
 import supabase from "../../../client.js";
+import { Avatar } from "@mui/material";
+import { red } from "@mui/material/colors";
+import LocationPinIcon from "@mui/icons-material/LocationPin";
 
 /**
  * The location card.
@@ -31,6 +34,12 @@ function LocationCard({ number }) {
       table="locations"
       type="保管場所"
       title={title}
+      titleLink={`/Views/items/locations/${number}`}
+      avatar={
+        <Avatar sx={{ bgcolor: red[500] }}>
+          <LocationPinIcon />
+        </Avatar>
+      }
     />
   );
 }
