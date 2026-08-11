@@ -23,9 +23,10 @@ function normalizeVector(values) {
 /**
  * Creates the embedding vector.
  * @param {string} text The text to be embedded.
+ * @param {string=} title The title if needed.
  * @returns {Promise<Array<number>>}
  */
-export async function createEmbeddingVector(text) {
+export async function createEmbeddingVector(text, title) {
   if (!import.meta.env.VITE_GEMINI_API_KEY || !text?.trim()) {
     return ZERO_VECTOR;
   }
@@ -33,7 +34,7 @@ export async function createEmbeddingVector(text) {
   try {
     const response = await aimodel.models.embedContent({
       model: 'gemini-embedding-2',
-      contents: `title: none | text: ${text}`,
+      contents: `title: ${title || 'none'} | text: ${text}`,
       config: {
         outputDimensionality: VECTOR_DIMENSIONS,
       },

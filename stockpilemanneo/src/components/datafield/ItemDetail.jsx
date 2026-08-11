@@ -42,6 +42,19 @@ function ItemDetail({ id }) {
   const navigate = useNavigate();
 
   /**
+   * The vector getting function.
+   * @param {string} name The name.
+   * @param {?string=} desc The description.
+   * @returns
+   */
+  const getVector = async (name, desc) => {
+    if (desc)
+      return await createEmbeddingVector(desc, name);
+
+    return await createEmbeddingVector(name);
+  };
+
+  /**
    * @type {[
    *   ?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate,
    *   import("react").Dispatch.<import("react").SetStateAction.<?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate>>
@@ -138,6 +151,7 @@ function ItemDetail({ id }) {
                   purchase_timestamp: new Date(purchase_timestamp).toISOString(),
                   small_category_id: small_categories.id ?? smallCategoryId,
                   location_id: locations.id,
+                  vector: await getVector(name, description),
                 })
                 .eq('id', id);
               navigate(-1);
@@ -154,6 +168,7 @@ function ItemDetail({ id }) {
                   purchase_timestamp: new Date(purchase_timestamp).toISOString(),
                   small_category_id: small_categories.id ?? smallCategoryId,
                   location_id: locations.id,
+                  vector: await getVector(name, description),
                 });
 
               navigate(-1);
