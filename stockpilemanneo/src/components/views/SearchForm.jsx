@@ -31,7 +31,7 @@ function SearchForm() {
       <FormContainer
         defaultValues={{
           q: searchParams.get('q') || '',
-          tables: searchParams.getAll('tables') || values.map(value => value.value),
+          tables: searchParams.getAll('tables').length > 0 ? searchParams.getAll('tables') : values.map(value => value.value),
         }}
         onSuccess={(data) => {
           setSearchParams(data);

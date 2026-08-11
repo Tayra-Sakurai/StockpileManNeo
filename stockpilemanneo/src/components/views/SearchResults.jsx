@@ -50,7 +50,7 @@ function SearchResults() {
       const results = [];
 
       for (const table of TABLES) {
-        if (!searchParams.getAll('tables').some(val => val == table))
+        if (!searchParams.getAll('tables').some(val => val == table) && searchParams.getAll('tables').length > 0)
           continue;
 
         const { data, error } = await supabase
