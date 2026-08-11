@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 import { useState } from "react";
 import supabase from "../../../../client.js";
 import ItemRow from "./ItemRow.jsx";
+import itemCompare from "../../../../sortmodules/ItemSorter.js";
 
 /**
  * The item diplay data object.
@@ -35,8 +36,8 @@ function ItemsTable({ items }) {
     .then(
       ({ data: d, error }) => {
         if (error) throw error;
-        if (d)
-          setData(d);
+        if (d.length > 0)
+          setData(d.toSorted(itemCompare));
       },
       (error) => {
         console.error(error);

@@ -2,8 +2,10 @@ import { Box, Chip, Paper, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import supabase from "../../../../client.js";
-import LocationPinIcon from "@mui/icons-material/LocationPin"
+import LocationPinIcon from "@mui/icons-material/LocationPin";
+import ClassIcon from "@mui/icons-material/Class";
 import ItemsTable from "./ItemsTable.jsx";
+import itemCompare from "../../../../sortmodules/ItemSorter.js";
 
 /**
  * The table displaying data.
@@ -19,9 +21,13 @@ import ItemsTable from "./ItemsTable.jsx";
 const il = {
   locations: {
     label: '保管場所',
-    icon: <LocationPinIcon />
-  }
-}
+    icon: <LocationPinIcon />,
+  },
+  small_categories: {
+    label: '名称',
+    icon: <ClassIcon />,
+  },
+};
 
 /**
  * The view of the items.
@@ -44,18 +50,18 @@ function ItemsView() {
       if (((table == 'locations') || (table == 'small_categories')) && code) {
         ({ data, error } = await supabase
           .from(table)
-          .select('items!inner(id)')
+          .select('items!inner(id, name, life)')
           .eq('id', parseInt(code))
         );
 
-        if (data) setItems(data[0].items.map(item => item.id));
+        if (data) setItems(data[0].items.toSorted(itemCompare).map(item => item.id));
       } else {
         ({ data, error } = await supabase
           .from('items')
-          .select('id')
+          .select('id, name, life')
         );
 
-        if (data) setItems(data.map(item => item.id));
+        if (data) setItems(data.toSorted(itemCompare).map(item => item.id));
       }
       if (error) throw error;
     };
