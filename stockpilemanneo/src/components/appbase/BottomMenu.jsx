@@ -35,7 +35,7 @@ function BottomMenu() {
       elevation={0}
       sx={{
         position: 'sticky',
-        bottom: 0,
+        bottom: 'env(safe-area-inset-bottom)',
         left: 0,
         right: 0,
         borderTop: 1,
