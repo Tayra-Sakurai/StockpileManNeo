@@ -4,6 +4,7 @@ import { Box, Button, FormControl, FormLabel, Stack } from "@mui/material";
 import { useState } from "react";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
 import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
+import { useNavigate } from "react-router-dom";
 
 /**
  * The detail view component for details of categories.
@@ -13,6 +14,7 @@ import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
  */
 function LargeCategoryDetail({ id = null }) {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const searchOrCreateLargeCategoryAsync = async () => {
     if (id == null) {
@@ -49,6 +51,8 @@ function LargeCategoryDetail({ id = null }) {
       .from('large_categories')
       .delete()
       .eq('id', id);
+
+    navigate(-1);
   };
 
   /**
@@ -73,6 +77,8 @@ function LargeCategoryDetail({ id = null }) {
           name: name,
           vector: vector,
         });
+
+    navigate(-1);
   };
 
   return (
@@ -109,6 +115,7 @@ function LargeCategoryDetail({ id = null }) {
               type="button"
               variant="text"
               color="primary"
+              onClick={() => navigate(-1)}
             >
               戻る
             </Button>

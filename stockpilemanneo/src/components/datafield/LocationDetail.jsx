@@ -86,6 +86,7 @@ function LocationDetail({ id = null }) {
               startIcon={<UndoIcon />}
               color="primary"
               variant="text"
+              onClick={() => navigate(-1)}
             >
               戻る
             </Button>
