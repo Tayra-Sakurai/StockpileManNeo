@@ -19,6 +19,7 @@ import ItemDetail from './components/datafield/ItemDetail.jsx';
 import LargeCategoriesView from './components/views/Views/LargeCategories/LargeCategoriesView.jsx';
 import LocationsView from './components/views/Views/Locations/LocationsView.jsx';
 import ItemsView from './components/views/Views/Items/ItemsView.jsx';
+import SmallCategoriesView from './components/views/Views/SmallCategories/SmallCategoriesView.jsx';
 
 function App() {
   return (
@@ -44,6 +45,8 @@ function App() {
             <Route path="View/locations" element={<LocationsView />} />
             <Route path="View/items/:table/:code" element={<ItemsView />} />
             <Route path="View/items" element={<ItemsView />} />
+            <Route path="View/small_categories" element={<SmallCategoriesView />} />
+            <Route path="View/small_categories/large_categories/:code" element={<SmallCategoriesView />} />
           </Route>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
