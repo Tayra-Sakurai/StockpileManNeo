@@ -34,7 +34,7 @@ function LocationCard({ number }) {
       table="locations"
       type="保管場所"
       title={title}
-      titleLink={`/Views/items/locations/${number}`}
+      titleLink={`/View/items/locations/${number}`}
       avatar={
         <Avatar sx={{ bgcolor: red[500] }}>
           <LocationPinIcon />
