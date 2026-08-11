@@ -26,7 +26,7 @@ function AppBaseElement() {
   }, [searchParams]);
 
   return (
-    <Box sx={{ minHeight: '100svh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ minHeight: '100svh', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <UserViewContext.Provider value={userData}>
         <BrandBar />
       </UserViewContext.Provider>
