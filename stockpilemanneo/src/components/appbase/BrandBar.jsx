@@ -19,6 +19,8 @@ import supabase from '../../client.js';
 import UserViewContext from '../../sessionman/UserViewContext.jsx';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import LoginIcon from '@mui/icons-material/Login';
+import CategoryIcon from '@mui/icons-material/Category';
+import LocationPinIcon from '@mui/icons-material/LocationPin';
 
 function BrandBar() {
   const [open, setOpen] = useState(false);
@@ -64,7 +66,7 @@ function BrandBar() {
             </IconButton>
             <Inventory2Icon color="primary" sx={{ mr: 1 }} />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              StockpileManNeo
+              StockpileMan&nbsp;neo
             </Typography>
             {userData ? (
               <div>
@@ -118,7 +120,31 @@ function BrandBar() {
               <ListItemText primary="ホーム在庫" secondary="在庫、分類、保管場所を管理" />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: { sm: 'none' } }}>
+          <ListItem disablePadding>
+            <ListItemButton component={RouterLink} to="/View/items" onClick={() => setOpen(false)}>
+              <ListItemIcon>
+                <Inventory2Icon />
+              </ListItemIcon>
+              <ListItemText primary="在庫一覧" secondary="在庫の一覧を表示します" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton component={RouterLink} to="/View/large_categories" onClick={() => setOpen(false)}>
+              <ListItemIcon>
+                <CategoryIcon />
+              </ListItemIcon>
+              <ListItemText primary="分類別一覧" secondary="分類別に在庫数を確認します" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton component={RouterLink} to="/View/locations" onClick={() => setOpen(false)}>
+              <ListItemIcon>
+                <LocationPinIcon />
+              </ListItemIcon>
+              <ListItemText primary="保管場所一覧" secondary="保管場所ごとの在庫状況を確認できます" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding sx={{ display: { xs: 'none', sm: 'none' } }}>
             <ListItemButton onClick={signOut}>
               <ListItemIcon>
                 <LogoutIcon />
