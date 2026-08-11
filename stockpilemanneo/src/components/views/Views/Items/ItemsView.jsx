@@ -61,7 +61,7 @@ function ItemsView() {
     };
 
     loadItems();
-  }, [table]);
+  }, [table, code]);
 
   return (
     <Paper sx={{ width: '100%', boxSizing: 'border-box' }}>
@@ -75,6 +75,7 @@ function ItemsView() {
             alignItems: 'stretch',
             flexGrow: 0,
             flexShrink: 0,
+            justifyContent: 'start',
           }}
         >
           {(table && code) ? (<Chip icon={il[table].icon} label={`${il[table]?.label ?? table}: ${code}`} />) : null}

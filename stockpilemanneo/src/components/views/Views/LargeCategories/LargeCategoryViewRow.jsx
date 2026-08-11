@@ -1,4 +1,4 @@
-import { Button, TableCell, TableRow } from "@mui/material";
+import { Button, Link as MuiLink, TableCell, TableRow } from "@mui/material";
 import { Link } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -28,7 +28,11 @@ function LargeCategoryViewRow({ id, name, small_categories }) {
     <TableRow>
       <TableCell align="right">{id}</TableCell>
       <TableCell align="left">{name}</TableCell>
-      <TableCell align="right">{itemCount}</TableCell>
+      <TableCell align="right">
+        <MuiLink component={Link} to={`/View/small_categories/large_categories/${id}`}>
+          {itemCount}
+        </MuiLink>
+      </TableCell>
       <TableCell>
         <Button
           variant="contained"
