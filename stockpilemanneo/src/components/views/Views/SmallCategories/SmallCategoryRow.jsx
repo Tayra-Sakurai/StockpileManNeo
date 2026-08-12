@@ -1,5 +1,6 @@
-import { Link, TableCell, TableRow } from "@mui/material";
+import { Button, Link, TableCell, TableRow } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
 
 /**
  * The small category viewer row.
@@ -29,6 +30,15 @@ function SmallCategoryRow({ itemId, name, large_categories, items }) {
         <Link component={RouterLink} to={`/View/items/small_categories/${itemId}`}>
           {items[0].count}
         </Link>
+      </TableCell>
+      <TableCell>
+        <Button
+          component={RouterLink}
+          to={`/Edit/small_categories/${itemId}`}
+          startIcon={<EditIcon />}
+        >
+          編集
+        </Button>
       </TableCell>
     </TableRow>
   );

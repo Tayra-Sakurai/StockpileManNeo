@@ -27,6 +27,7 @@ function SmallCategoriesTable({ smallCategories }) {
             <TableCell>名称</TableCell>
             <TableCell>分類</TableCell>
             <TableCell align="right">品目数</TableCell>
+            <TableCell>操作</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
