@@ -5,6 +5,9 @@ import { useState } from "react";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
 import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
 import { useNavigate } from "react-router-dom";
+import UndoIcon from "@mui/icons-material/Undo";
+import SaveIcon from "@mui/icons-material/Save";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 /**
  * The detail view component for details of categories.
@@ -107,7 +110,11 @@ function LargeCategoryDetail({ id = null }) {
             sx={{
               width: '100%',
               display: 'flex',
-              flexDirection: 'row',
+              flexDirection: {
+                xs: 'column',
+                sm: 'column',
+                md: 'row',
+              },
               gap: 4,
             }}
           >
@@ -116,6 +123,7 @@ function LargeCategoryDetail({ id = null }) {
               variant="text"
               color="primary"
               onClick={() => navigate(-1)}
+              startIcon={<UndoIcon />}
             >
               戻る
             </Button>
@@ -123,6 +131,7 @@ function LargeCategoryDetail({ id = null }) {
               type="submit"
               color="success"
               variant="contained"
+              startIcon={<SaveIcon />}
             >
               保存
             </Button>
@@ -132,6 +141,7 @@ function LargeCategoryDetail({ id = null }) {
               disabled={!id}
               onClick={openDialog}
               variant="contained"
+              startIcon={<DeleteForeverIcon />}
             >
               カテゴリを削除（関連項目も含めて削除されます）
             </Button>

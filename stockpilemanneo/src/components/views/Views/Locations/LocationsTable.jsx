@@ -37,7 +37,7 @@ function LocationsTable() {
 
   return (
     <TableContainer sx={{ width: '100%' }}>
-      <Table>
+      <Table sx={{ width: 'max-content', }}>
         <TableHead>
           <TableCell>番号</TableCell>
           <TableCell>名称</TableCell>

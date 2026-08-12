@@ -20,7 +20,7 @@ import SmallCategoryRow from "./SmallCategoryRow.jsx";
 function SmallCategoriesTable({ smallCategories }) {
   return (
     <TableContainer sx={{ width: '100%', overflow: 'scroll', margin: 0 }}>
-      <Table>
+      <Table sx={{ width: 'max-content', }}>
         <TableHead>
           <TableRow>
             <TableCell>番号</TableCell>

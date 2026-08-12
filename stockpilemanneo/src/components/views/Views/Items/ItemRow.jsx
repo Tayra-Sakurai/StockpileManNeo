@@ -20,9 +20,9 @@ function ItemRow({ id, name, life, small_categories, locations }) {
   return (
     <TableRow>
       <TableCell>{id}</TableCell>
+      <TableCell>{small_categories.name}</TableCell>
       <TableCell>{name}</TableCell>
       <TableCell>{dueDateVal}</TableCell>
-      <TableCell>{small_categories.name}</TableCell>
       <TableCell>{locations.name}</TableCell>
       <TableCell>
         <Button

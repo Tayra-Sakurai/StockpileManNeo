@@ -44,7 +44,7 @@ function LargeCategoriesTable() {
 
   return (
     <TableContainer sx={{ width: '100%' }}>
-      <Table>
+      <Table sx={{ width: 'max-content', }}>
         <TableHead>
           <TableRow>
             <TableCell>番号</TableCell>
