@@ -30,7 +30,10 @@ function LocationsTable() {
       .select('id, name, items(count)');
 
     if (error) throw error;
-    if (data) setLocations(data);
+    if (data) {
+      data.sort((a, b) => a.name.localeCompare(b.name));
+      setLocations(data);
+    }
   };
 
   loadData();
