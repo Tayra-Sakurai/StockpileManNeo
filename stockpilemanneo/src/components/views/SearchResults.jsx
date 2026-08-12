@@ -7,17 +7,7 @@ import ItemCard from "../datafield/cards/ItemCard.jsx";
 import LocationCard from "../datafield/cards/LocationCard.jsx";
 import LargeCategoryCard from "../datafield/cards/LargeCategoryCard.jsx";
 import SmallCategoryCard from "../datafield/cards/SmallCategoryCard.jsx";
-
-/**
- * @type {Array.<"large_categories"|"small_categories"|"locations"|"items">}
- * @constant
- */
-const TABLES = [
-  'large_categories',
-  'small_categories',
-  'locations',
-  'items',
-];
+import itemCompare from "../../sortmodules/ItemSorter.js";
 
 /**
  * The search result display object.
@@ -26,6 +16,18 @@ const TABLES = [
  * @property {"large_categories" | "small_categories" | "locations" | "items"} table The table name.
  * @property {number} matchRate The matching rate.
  */
+
+/**
+ * Search result calculator.
+ * @param {number[]} srch The query vector.
+ * @param {number[]} doc The document vector.
+ * @param {string} text The document text.
+ * @returns {Promise<[number, ?number[]]>}
+ */
+async function getMatchRate(srch, doc, text) {
+  const vector = (doc.length && doc.every(elm => !!elm)) ? doc : await createEmbeddingVector(text);
+  return [calcInnerProduct(srch, vector), ((doc.length && doc.every(elm => !!elm)) ? null : vector)];
+}
 
 /**
  * The search result displayer.
@@ -52,40 +54,152 @@ function SearchResults() {
       /** @type {Array.<ResultMark>} */
       const results = [];
 
-      for (const table of TABLES) {
-        if (!searchParams.getAll('tables').some(val => val == table) && searchParams.getAll('tables').length > 0)
-          continue;
+      /**
+       * Shows if the remaining table should retrieve the values.
+       * @type {boolean}
+       */
+      let doNotGoFlag = false;
 
+      const searchingTables = searchParams.getAll('tables');
+
+      if (searchingTables.length === 0 || searchingTables.indexOf('large_categories') >= 0) {
         const { data, error: err } = await supabase
-          .from(table)
-          .select('id, name, vector')
-          .order('name', { ascending: true });
+          .from('large_categories')
+          .select('id, name, vector');
 
         if (err) {
           setError(err.message);
-          break;
+          return;
         }
-        for (const entity of data) {
-          const vector = (entity.vector.length && !entity.vector.every(elm => !elm)) ? entity.vector : await createEmbeddingVector(entity.name);
+
+        data.sort((a, b) => a.name.localeCompare(b.name));
+
+        for (const { id, name, vector } of data) {
+          const [matchRate, v] = await getMatchRate(searchVector, vector, name);
+          if (v) {
+            await supabase
+              .from('large_categories')
+              .update({
+                vector: v,
+              })
+              .eq('id', id);
+
+            setError('値が変更されました．');
+          }
 
           results.push({
-            id: entity.id,
-            table,
-            matchRate: calcInnerProduct(vector, searchVector),
+            id,
+            matchRate,
+            table: 'large_categories',
           });
+        }
+      }
 
-          if ((entity.vector.length == 0 || entity.vector.every(elm => !elm)) && vector.every(elm => !!elm)) {
-            setError('自動的に項目の一部が変更されました');
+      if (searchingTables.length === 0 || searchingTables.indexOf('small_categories') >= 0) {
+        const { data, error: err } = await supabase
+          .from('small_categories')
+          .select('id, name, vector, large_categories!inner(name, vector)');
 
-            await supabase
-              .from(table)
-              .update({
-                vector,
-              })
-              .eq('id', entity.id);
-          } else if (vector.every(elm => !elm)) {
-            setError('項目の検索インデックスへの登録に失敗しました．');
-            break;
+        if (err) {
+          setError(err.message);
+          doNotGoFlag = true;
+        }
+
+        if (data) {
+          data.sort((a, b) => a.name.localeCompare(b.name));
+
+          for (const { id, name, vector, large_categories } of data) {
+            const [m1, v] = await getMatchRate(searchVector, vector, name);
+            const [m2] = await getMatchRate(searchVector, large_categories.vector, large_categories.name);
+
+            if (v) {
+              setError('自動的にインデックスが作成されました．');
+              await supabase
+                .from('small_categories')
+                .update({
+                  vector: v,
+                })
+                .eq('id', id);
+            }
+
+            results.push({
+              id,
+              matchRate: Math.max(m1, m2),
+              table: 'small_categories',
+            });
+          }
+        }
+      }
+
+      if (!doNotGoFlag && (searchingTables.length === 0 || searchingTables.indexOf('locations') >= 0)) {
+        const { data, error: err } = await supabase
+          .from('locations')
+          .select('id, name, vector');
+
+        if (err) {
+          setError(err.message);
+          doNotGoFlag = true;
+        }
+
+        if (data) {
+          data.sort((a, b) => a.name.localeCompare(b.name));
+
+          for (const { id, name, vector } of data) {
+            const [matchRate, v] = await getMatchRate(searchVector, vector, name);
+
+            if (v) {
+              setError('自動的にインデックスが作成されました．');
+              await supabase
+                .from('locations')
+                .update({
+                  vector: v,
+                });
+            }
+
+            results.push({
+              id,
+              table: 'locations',
+              matchRate,
+            });
+          }
+        }
+      }
+
+      if (!doNotGoFlag && (searchingTables.length === 0 || searchingTables.indexOf('items') >= 0)) {
+        const { data, error: err } = await supabase
+          .from('items')
+          .select('id, name, vector, life, small_categories!inner(vector, name, large_categories!inner(name, vector)), locations!inner(name, vector)');
+
+        if (err) {
+          setError(err.message);
+          doNotGoFlag = true;
+        }
+
+        if (data) {
+          data.sort(itemCompare);
+
+          for (const { id, name, vector, small_categories, locations } of data) {
+            const [m1, v] = await getMatchRate(searchVector, vector, name);
+
+            if (v) {
+              setError('自動的にインデックスが作成されました．');
+              await supabase
+                .from('items')
+                .update({
+                  vector: v,
+                })
+                .eq('id', id);
+            }
+
+            const [m2] = await getMatchRate(searchVector, small_categories.vector, small_categories.name);
+            const [m3] = await getMatchRate(searchVector, small_categories.large_categories.vector, small_categories.large_categories.name);
+            const [m4] = await getMatchRate(searchVector, locations.vector, locations.name);
+
+            results.push({
+              id,
+              table: 'items',
+              matchRate: Math.max(m1, m2, m3, m4),
+            });
           }
         }
       }
