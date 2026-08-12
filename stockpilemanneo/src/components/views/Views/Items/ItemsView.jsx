@@ -70,7 +70,7 @@ function ItemsView() {
   }, [table, code]);
 
   return (
-    <Paper sx={{ width: '100%', boxSizing: 'border-box' }}>
+    <Paper sx={{ width: '100%', boxSizing: 'border-box', height: '100%' }}>
       <Stack spacing={2}>
         <Typography component="h2" variant="h2">在庫一覧</Typography>
         <Box
