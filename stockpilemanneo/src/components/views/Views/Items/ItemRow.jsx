@@ -37,7 +37,7 @@ function ItemRow({ id, name, life, small_categories, locations }) {
             size="small"
             onClick={() => setOpen(val => !val)}
           >
-            {open ? ((dueDate && dueDate < warningDate) ? <WarningAmberIcon color="warning" /> : <KeyboardArrowUpIcon />) : <KeyboardArrowDownIcon />}
+            {open ? <KeyboardArrowUpIcon /> : ((dueDate && dueDate < warningDate) ? <WarningAmberIcon color="warning" /> : <KeyboardArrowDownIcon />)}
           </IconButton>
         </TableCell>
         <TableCell>
