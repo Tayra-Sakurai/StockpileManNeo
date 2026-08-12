@@ -1,6 +1,11 @@
-import { Button, Link, TableCell, TableRow } from "@mui/material";
+import { Alert, Box, Button, Collapse, IconButton, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
+import { useState } from "react";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+
+const WARNING_PERIOD = 30;
 
 /**
  * The item display table row.
@@ -14,36 +19,90 @@ import EditIcon from "@mui/icons-material/Edit";
  */
 function ItemRow({ id, name, life, small_categories, locations }) {
   const dueDate = life ? new Date(life) : null;
+  const [open, setOpen] = useState(false);
+
+  const warningDate = new Date();
+  warningDate.setDate(warningDate.getDate() + WARNING_PERIOD);
 
   const dueDateVal = dueDate?.toLocaleDateString() ?? 'なし';
 
   return (
-    <TableRow>
-      <TableCell>{id}</TableCell>
-      <TableCell>
-        <Link component={RouterLink} to={`/View/items/small_categories/${small_categories.id}`}>
-          {small_categories.name}
-        </Link>
-      </TableCell>
-      <TableCell>{name}</TableCell>
-      <TableCell>{dueDateVal}</TableCell>
-      <TableCell>
-        <Link component={RouterLink} to={`/View/items/locations/${locations.id}`}>
-          {locations.name}
-        </Link>
-      </TableCell>
-      <TableCell>
-        <Button
-          component={RouterLink}
-          to={`/Edit/items/${id}`}
-          variant="contained"
-          color="primary"
-          startIcon={<EditIcon />}
-        >
-          編集
-        </Button>
-      </TableCell>
-    </TableRow>
+    <>
+      <TableRow sx={{ '& > .MuiCell-root': { borderBottom: 'unset' } }}>
+        <TableCell>
+          <IconButton
+            aria-label="expand detail"
+            type="button"
+            size="small"
+            onClick={() => setOpen(val => !val)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell>
+          <Link component={RouterLink} to={`/View/items/small_categories/${small_categories.id}`}>
+            {small_categories.name}
+          </Link>
+        </TableCell>
+        <TableCell>
+          <Link component={RouterLink} to={`/View/items/locations/${locations.id}`}>
+            {locations.name}
+          </Link>
+        </TableCell>
+        <TableCell>
+          <Button
+            component={RouterLink}
+            to={`/Edit/items/${id}`}
+            variant="contained"
+            color="primary"
+            startIcon={<EditIcon />}
+          >
+            編集
+          </Button>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingTop: 0, paddingBottom: 0 }} colSpan={4}>
+          <Collapse
+            in={open}
+            timeout="auto"
+            unmountOnExit
+          >
+            <Box sx={{ margin: 1 }}>
+              {(dueDate && dueDate < warningDate) ?
+                <Alert severity="warning">期限が間近です</Alert> :
+                null
+              }
+              <Typography component="div" variant="h6" gutterBottom>詳細</Typography>
+              <TableContainer sx={{ maxWidth: '100%' }}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>項目</TableCell>
+                      <TableCell>内容</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell component="th" scope="row">番号</TableCell>
+                      <TableCell>{id}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell component="th" scope="row">期限</TableCell>
+                      <TableCell>{dueDateVal}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell component="th" scope="row">商品名</TableCell>
+                      <TableCell>{name}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
   );
 }
 

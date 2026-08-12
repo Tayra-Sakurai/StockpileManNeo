@@ -45,13 +45,11 @@ function ItemsTable({ items }) {
 
   return (
     <TableContainer sx={{ width: '100%', height: '100%', boxSizing: 'border-box' }}>
-      <Table sx={{ width: 'max-content' }}>
+      <Table sx={{ width: 'fit-content' }}>
         <TableHead>
           <TableRow>
-            <TableCell>番号</TableCell>
+            <TableCell />
             <TableCell>名称</TableCell>
-            <TableCell>商品名</TableCell>
-            <TableCell>期限</TableCell>
             <TableCell>保管場所</TableCell>
             <TableCell>操作</TableCell>
           </TableRow>
