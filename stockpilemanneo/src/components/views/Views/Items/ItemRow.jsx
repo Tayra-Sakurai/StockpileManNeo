@@ -4,6 +4,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 const WARNING_PERIOD = 30;
 
@@ -36,7 +37,7 @@ function ItemRow({ id, name, life, small_categories, locations }) {
             size="small"
             onClick={() => setOpen(val => !val)}
           >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            {open ? ((dueDate && dueDate < warningDate) ? <WarningAmberIcon color="warning" /> : <KeyboardArrowUpIcon />) : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
         <TableCell>
