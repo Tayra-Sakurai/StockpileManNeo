@@ -1,8 +1,8 @@
-import { Paper, Stack } from "@mui/material";
+import { Alert, Paper, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import supabase from "../../client.js";
-import { calcInnerProduct, createSearchVector } from "../stockpile/stockpileVectors.js";
+import { calcInnerProduct, createEmbeddingVector, createSearchVector } from "../stockpile/stockpileVectors.js";
 import ItemCard from "../datafield/cards/ItemCard.jsx";
 import LocationCard from "../datafield/cards/LocationCard.jsx";
 import LargeCategoryCard from "../datafield/cards/LargeCategoryCard.jsx";
@@ -42,8 +42,11 @@ function SearchResults() {
    */
   const [searchResults, setSearchResults] = useState([]);
 
+  const [error, setError] = useState('');
+
   useEffect(() => {
     const load = async () => {
+      setError('');
       const searchVector = await createSearchVector(searchParams.get('q') ?? '');
 
       /** @type {Array.<ResultMark>} */
@@ -55,16 +58,20 @@ function SearchResults() {
 
         const { data, error } = await supabase
           .from(table)
-          .select('id, vector')
+          .select('id, name, vector')
           .order('name', { ascending: true });
 
         if (error) throw error;
-        for (const entity of data)
+        for (const entity of data) {
           results.push({
             id: entity.id,
             table,
-            matchRate: calcInnerProduct(entity.vector, searchVector),
+            matchRate: calcInnerProduct((entity.vector.length ? entity.vector : await createEmbeddingVector(entity.name)), searchVector),
           });
+
+          if (entity.vector.length == 0)
+            setError('検索用のベクトルに不具合があります．編集画面で「保存」をクリックしてベクトルを設定してください．');
+        }
       }
 
       results.sort((a, b) => b.matchRate - a.matchRate);
@@ -82,6 +89,7 @@ function SearchResults() {
       sx={{ width: '100%' }}
     >
       <Stack spacing={2}>
+        {error ? <Alert variant="standard" severity="error">{error}</Alert> : null}
         {searchResults.map(({ id, table }) => {
           switch (table) {
             case 'items':
