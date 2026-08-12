@@ -45,7 +45,7 @@ function ItemsTable({ items }) {
 
   return (
     <TableContainer sx={{ width: '100%' }}>
-      <Table sx={{ width: 'fit-content(100%)' }}>
+      <Table sx={{ width: 'max-content' }}>
         <TableHead>
           <TableRow>
             <TableCell>番号</TableCell>
