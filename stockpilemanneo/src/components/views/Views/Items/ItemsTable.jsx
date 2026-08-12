@@ -45,7 +45,7 @@ function ItemsTable({ items }) {
 
   return (
     <TableContainer sx={{ width: '100%', height: '100%', boxSizing: 'border-box' }}>
-      <Table stickyHeader sx={{ width: 'max-content' }}>
+      <Table sx={{ width: 'max-content' }}>
         <TableHead>
           <TableRow>
             <TableCell>番号</TableCell>
