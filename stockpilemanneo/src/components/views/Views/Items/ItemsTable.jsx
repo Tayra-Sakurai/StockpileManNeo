@@ -45,7 +45,7 @@ function ItemsTable({ items }) {
 
   return (
     <TableContainer sx={{ width: '100%', height: '100%', boxSizing: 'border-box' }}>
-      <Table sx={{ width: 'fit-content' }}>
+      <Table sx={{ width: 'fit-content(100%)' }}>
         <TableHead>
           <TableRow>
             <TableCell />

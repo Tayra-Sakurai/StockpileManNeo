@@ -1,6 +1,6 @@
 import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 import CategoryIcon from '@mui/icons-material/Category';
-import HomeIcon from '@mui/icons-material/Home';
+import Inventory2Icon from '@mui/icons-material/Inventory2';
 import SearchIcon from '@mui/icons-material/Search';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useEffect, useState } from "react";
@@ -8,16 +8,16 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 
 const DESTINATIONS = [
   {
-    label: '概要',
-    to: '/',
-    expression: /^\/(Home)?$/,
-    icon: < HomeIcon />,
-  },
-  {
     label: '検索',
     to: '/Search',
-    expression: /^\/Search$/,
+    expression: /^\/(Search)?$/,
     icon: <SearchIcon />,
+  },
+  {
+    label: '項目',
+    to: '/View/items',
+    expression: /^\/View\/items(\/(small_categories|locations)\/\d+)?$/,
+    icon: <Inventory2Icon />,
   },
   {
     label: '分類',
