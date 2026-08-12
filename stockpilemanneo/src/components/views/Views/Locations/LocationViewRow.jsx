@@ -1,6 +1,5 @@
-import { Button, TableCell, TableRow } from "@mui/material";
+import { Button, Link, TableCell, TableRow } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import EditIcon from '@mui/icons-material/Edit';
 
 /**
@@ -18,17 +17,12 @@ function LocationViewRow({ id, name, items }) {
     <TableRow>
       <TableCell>{id}</TableCell>
       <TableCell>{name}</TableCell>
-      <TableCell align="right">{items[0].count}</TableCell>
+      <TableCell align="right">
+        <Link component={RouterLink} to={`/View/items/locations/${id}`}>
+          {items[0].count}
+        </Link>
+      </TableCell>
       <TableCell>
-        <Button
-          component={RouterLink}
-          to={`/View/items/locations/${id}`}
-          variant="contained"
-          color="info"
-          startIcon={<LibraryBooksIcon />}
-        >
-          品目を確認する
-        </Button>
         <Button
           component={RouterLink}
           to={`/Edit/locations/${id}`}
@@ -36,7 +30,7 @@ function LocationViewRow({ id, name, items }) {
           color="primary"
           startIcon={<EditIcon />}
         >
-          内容を編集する
+          編集
         </Button>
       </TableCell>
     </TableRow>

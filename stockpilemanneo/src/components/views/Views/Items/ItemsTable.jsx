@@ -53,6 +53,7 @@ function ItemsTable({ items }) {
             <TableCell>期限</TableCell>
             <TableCell>名称</TableCell>
             <TableCell>保管場所</TableCell>
+            <TableCell>操作</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
