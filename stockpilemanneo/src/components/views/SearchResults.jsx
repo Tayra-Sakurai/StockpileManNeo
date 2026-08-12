@@ -56,14 +56,17 @@ function SearchResults() {
         if (!searchParams.getAll('tables').some(val => val == table) && searchParams.getAll('tables').length > 0)
           continue;
 
-        const { data, error } = await supabase
+        const { data, error: err } = await supabase
           .from(table)
           .select('id, name, vector')
           .order('name', { ascending: true });
 
-        if (error) throw error;
+        if (err) {
+          setError(err.message);
+          break;
+        }
         for (const entity of data) {
-          const vector = entity.vector.length ? entity.vector : await createEmbeddingVector(entity.name);
+          const vector = (entity.vector.length && !entity.vector.every(elm => !elm)) ? entity.vector : await createEmbeddingVector(entity.name);
 
           results.push({
             id: entity.id,
@@ -71,7 +74,7 @@ function SearchResults() {
             matchRate: calcInnerProduct(vector, searchVector),
           });
 
-          if (entity.vector.length == 0) {
+          if ((entity.vector.length == 0 || entity.vector.every(elm => !elm)) && vector.every(elm => !!elm)) {
             setError('自動的に項目の一部が変更されました');
 
             await supabase
@@ -80,12 +83,15 @@ function SearchResults() {
                 vector,
               })
               .eq('id', entity.id);
+          } else if (vector.every(elm => !elm)) {
+            setError('項目の検索インデックスへの登録に失敗しました．');
+            break;
           }
         }
       }
 
       results.sort((a, b) => b.matchRate - a.matchRate);
-      const filtered = searchVector.every(value => value == 0) ? results : results.filter(({ matchRate }) => matchRate > 0.25);
+      const filtered = searchVector.every(value => value == 0) ? results : results.filter(({ matchRate }) => matchRate > 0.5);
 
       setSearchResults(filtered);
     };
