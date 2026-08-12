@@ -63,14 +63,24 @@ function SearchResults() {
 
         if (error) throw error;
         for (const entity of data) {
+          const vector = entity.vector.length ? entity.vector : await createEmbeddingVector(entity.name);
+
           results.push({
             id: entity.id,
             table,
-            matchRate: calcInnerProduct((entity.vector.length ? entity.vector : await createEmbeddingVector(entity.name)), searchVector),
+            matchRate: calcInnerProduct(vector, searchVector),
           });
 
-          if (entity.vector.length == 0)
-            setError('検索用のベクトルに不具合があります．編集画面で「保存」をクリックしてベクトルを設定してください．');
+          if (entity.vector.length == 0) {
+            setError('自動的に項目の一部が変更されました');
+
+            await supabase
+              .from(table)
+              .update({
+                vector,
+              })
+              .eq('id', entity.id);
+          }
         }
       }
 
