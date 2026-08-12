@@ -70,7 +70,6 @@ function SelectLargeCategories(props) {
         selectOnFocus: true,
         clearOnBlur: true,
         handleHomeEndKeys: true,
-        freeSolo: true,
         value: props.value,
         async onChange(event, newValue) {
           if (typeof newValue === 'string')

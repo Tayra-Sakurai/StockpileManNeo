@@ -164,7 +164,6 @@ function SelectSmallCategories({ name, id, largeCategory, setLargeCategory }) {
 
           return option.name;
         },
-        freeSolo: true,
         handleHomeEndKeys: true,
         selectOnFocus: true,
         clearOnBlur: true,
