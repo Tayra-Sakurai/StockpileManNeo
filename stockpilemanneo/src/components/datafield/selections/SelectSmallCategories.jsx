@@ -49,7 +49,7 @@ function SelectSmallCategories({ name, id, largeCategory, setLargeCategory }) {
     if (!largeCategory || setLargeCategory) {
       const { data, error } = await supabase
         .from('small_categories')
-        .select('id, name, large_categories(id, name)')
+        .select('id, name, large_categories!inner(id, name)')
         .order('large_categories.name', { ascending: true });
 
       if (error) throw error;
@@ -58,9 +58,9 @@ function SelectSmallCategories({ name, id, largeCategory, setLargeCategory }) {
     } else if (largeCategory.id) {
       const { data, error } = await supabase
         .from('small_categories')
-        .select('id, name, large_categories(id, name)')
+        .select('id, name, large_categories!inner(id, name)')
         .eq('large_category_id', largeCategory.id)
-        .order('large_categories.name', { ascending: true });
+        .order('name', { ascending: true });
 
       if (error) throw error;
 
