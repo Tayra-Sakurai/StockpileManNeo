@@ -6,8 +6,8 @@
  * @returns {number}
  */
 export default function itemCompare(itemA, itemB) {
-  if (!itemA.life && itemB.life) return -1;
-  if (itemA.life && !itemB.life) return 1;
+  if (!itemA.life && itemB.life) return 1;
+  if (itemA.life && !itemB.life) return -1;
 
   if (itemA.life && itemB.life) {
     try {
