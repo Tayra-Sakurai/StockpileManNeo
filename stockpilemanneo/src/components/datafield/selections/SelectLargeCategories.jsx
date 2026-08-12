@@ -88,6 +88,8 @@ function SelectLargeCategories(props) {
             await getLargeCategories();
             if (data && data[0])
               props.setValue(data[0]);
+          } else {
+            props.setValue(newValue);
           }
         },
         async onOpen() {

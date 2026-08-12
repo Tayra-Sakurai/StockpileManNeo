@@ -75,9 +75,7 @@ function SelectLocations({ name, id }) {
           return filtered;
         },
         getOptionLabel(option) {
-          if (option.id) return option.name;
-
-          return `${option.name}を追加`;
+          return option.name;
         },
         async onChange(event, newValue) {
           if (typeof newValue === 'string') {
@@ -114,6 +112,13 @@ function SelectLocations({ name, id }) {
         },
         async onOpen() {
           await loadOptions();
+        },
+        renderOption({ key, ...otherProps }, option) {
+          return (
+            <li key={key} {...otherProps}>
+              {option.id ? option.name : `${option.name}を追加`}
+            </li>
+          );
         },
       }}
     />
