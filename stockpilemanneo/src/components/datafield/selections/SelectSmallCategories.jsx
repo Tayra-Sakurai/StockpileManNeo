@@ -49,22 +49,24 @@ function SelectSmallCategories({ name, id, largeCategory, setLargeCategory }) {
     if (!largeCategory || setLargeCategory) {
       const { data, error } = await supabase
         .from('small_categories')
-        .select('id, name, large_categories!inner(id, name)')
-        .order('large_categories.name', { ascending: true });
+        .select('id, name, large_categories!inner(id, name)');
 
       if (error) throw error;
 
-      if (data) setOptions(data);
+      if (data.length) {
+        data.sort((a, b) => a.name.localeCompare(b.name));
+        data.sort((a, b) => a.large_categories.name.localeCompare(b.large_categories.name));
+        setOptions(data);
+      }
     } else if (largeCategory.id) {
       const { data, error } = await supabase
         .from('small_categories')
         .select('id, name, large_categories!inner(id, name)')
-        .eq('large_category_id', largeCategory.id)
-        .order('name', { ascending: true });
+        .eq('large_category_id', largeCategory.id);
 
       if (error) throw error;
 
-      if (data) setOptions(data);
+      if (data) setOptions(data.toSorted((a, b) => a.name.localeCompare(b.name)));
     } else {
       setOptions([]);
     }
