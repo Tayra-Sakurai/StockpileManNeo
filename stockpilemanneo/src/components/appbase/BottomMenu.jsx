@@ -10,25 +10,25 @@ const DESTINATIONS = [
   {
     label: '概要',
     to: '/',
-    expression: /\/(Home)?/,
+    expression: /^\/(Home)?$/,
     icon: < HomeIcon />,
   },
   {
     label: '検索',
     to: '/Search',
-    expression: /\/Search/,
+    expression: /^\/Search$/,
     icon: <SearchIcon />,
   },
   {
     label: '分類',
     to: '/View/large_categories',
-    expression: /\/View\/(large|small)_categories/,
+    expression: /^\/View\/(large|small)_categories/,
     icon: <CategoryIcon />,
   },
   {
     label: '場所',
     to: '/View/locations',
-    expression: /\/View\/locations/,
+    expression: /^\/View\/locations(\/\d+)?$/,
     icon: <PlaceIcon />,
   },
 ];
