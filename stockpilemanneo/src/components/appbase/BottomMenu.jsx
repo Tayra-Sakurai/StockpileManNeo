@@ -3,31 +3,48 @@ import CategoryIcon from '@mui/icons-material/Category';
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 import PlaceIcon from '@mui/icons-material/Place';
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 
 const DESTINATIONS = [
   {
-    dest: '/',
+    label: '概要',
+    to: '/',
     expression: /\/(Home)?/,
+    icon: < HomeIcon />,
   },
   {
-    dest: '/Search',
+    label: '検索',
+    to: '/Search',
     expression: /\/Search/,
+    icon: <SearchIcon />,
   },
   {
-    dest: '/View/large_categories',
+    label: '分類',
+    to: '/View/large_categories',
     expression: /\/View\/(large|small)_categories/,
+    icon: <CategoryIcon />,
   },
   {
-    dest: '/View/locations',
+    label: '場所',
+    to: '/View/locations',
     expression: /\/View\/locations/,
+    icon: <PlaceIcon />,
   },
 ];
 
 function BottomMenu() {
   const [value, setValue] = useState(-1);
-  const navigate = useNavigate();
+  const path = useLocation();
+
+  useEffect(() => {
+    const valueMover = async () => {
+      const match = DESTINATIONS.findIndex(({ expression }) => expression.exec(path.pathname));
+      setValue(match);
+    };
+
+    valueMover();
+  }, [path]);
 
   return (
     <Paper
@@ -46,14 +63,10 @@ function BottomMenu() {
         },
       }}
     >
-      <BottomNavigation showLabels value={value} onChange={(event, newValue) => {
-        navigate(DESTINATIONS[newValue].dest);
-        setValue(newValue);
-      }}>
-        <BottomNavigationAction label="概要" icon={<HomeIcon />} />
-        <BottomNavigationAction label="検索" icon={<SearchIcon />} />
-        <BottomNavigationAction label="分類" icon={<CategoryIcon />} />
-        <BottomNavigationAction label="場所" icon={<PlaceIcon />} />
+      <BottomNavigation showLabels value={value} onChange={(event, newValue) => setValue(newValue)}>
+        {DESTINATIONS.map(({ expression, ...props }) => (
+          <BottomNavigationAction component={RouterLink} {...props} />
+        ))}
       </BottomNavigation>
     </Paper>
   );
