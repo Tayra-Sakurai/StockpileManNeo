@@ -14,7 +14,6 @@
     <Folder Include="src\components\dashboard\" />
     <Folder Include="src\aimodules\" />
     <Folder Include="src\components\signup\" />
-    <Folder Include="src\components\signin\" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

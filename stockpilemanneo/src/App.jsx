@@ -20,6 +20,7 @@ import LargeCategoriesView from './components/views/Views/LargeCategories/LargeC
 import LocationsView from './components/views/Views/Locations/LocationsView.jsx';
 import ItemsView from './components/views/Views/Items/ItemsView.jsx';
 import SmallCategoriesView from './components/views/Views/SmallCategories/SmallCategoriesView.jsx';
+import PasswordReset from './components/signin/PasswordReset.tsx';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/auth/callback" element={<SessionCheck />} />
+          <Route path="/reset-password" element={<PasswordReset />} />
         </Routes>
       </AppTheme>
     </BrowserRouter>
