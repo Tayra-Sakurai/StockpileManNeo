@@ -10,8 +10,8 @@ import itemCompare from "../../../../sortmodules/ItemSorter.js";
  * @property {number} id The id.
  * @property {string} name The name of the item.
  * @property {?string} life The life.
- * @property {{name: string}} small_categories The small category.
- * @property {{name: string}} locations The location.
+ * @property {{name: string, id: number}} small_categories The small category.
+ * @property {{name: string, id: number}} locations The location.
  */
 
 /**
@@ -31,7 +31,7 @@ function ItemsTable({ items }) {
 
   supabase
     .from('items')
-    .select('id, name, description, life, locations!inner(name), small_categories(name)')
+    .select('id, name, description, life, locations!inner(name, id), small_categories(name, id)')
     .in('id', items)
     .then(
       ({ data: d, error }) => {
