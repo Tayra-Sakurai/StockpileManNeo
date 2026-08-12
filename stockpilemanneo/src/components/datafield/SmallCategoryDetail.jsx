@@ -76,7 +76,7 @@ function SmallCategoryDetail({ id }) {
       if (error)
         throw error;
 
-      if (data)
+      if (data.length)
         return data[0];
     }
 
