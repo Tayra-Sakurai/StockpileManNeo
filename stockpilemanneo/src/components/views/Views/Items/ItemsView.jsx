@@ -1,10 +1,14 @@
-import { Box, Chip, Paper, Stack, Typography } from "@mui/material";
+import { Box, Chip, Collapse, IconButton, Paper, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import supabase from "../../../../client.js";
 import LocationPinIcon from "@mui/icons-material/LocationPin";
 import ClassIcon from "@mui/icons-material/Class";
 import ItemsTable from "./ItemsTable.jsx";
+import { calcInnerProduct, createSearchVector } from "../../../stockpile/stockpileVectors.js";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import ItemFilterForm from "./ItemFilterForm.jsx";
 
 /**
  * The table displaying data.
@@ -40,6 +44,8 @@ const il = {
  * @returns
  */
 function ItemsView() {
+  const [searchParams] = useSearchParams();
+
   /**
    * @type {[
    *   number[],
@@ -57,17 +63,29 @@ function ItemsView() {
   const [chips, setChips] = useState([]);
 
   const { table, code } = useParams();
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     const loadItems = async () => {
-      if (table && code) {
-        const tables = table.split(',');
-        const codes = code.split(',');
-        setItems([]);
+      setChips([]);
+      const q = searchParams.get('q');
+      const d1 = searchParams.get('d1');
+      const d2 = searchParams.get('d2');
 
-        if (tables.length == codes.length) {
-          for (let i = 0; i < tables.length; i++) {
-            const [tbl, cd] = [tables[i], codes[i]];
+      let { data, error } = await supabase
+        .from('items')
+        .select('id, life, vector, locations!inner(id), small_categories!inner(id)');
+
+      if (error) throw error;
+      if (!data) throw Error('Unknown SQL error.');
+
+      const tables = table?.split(',');
+      const codes = code?.split(',');
+
+      if (tables && codes && (tables.length === codes.length)) {
+        for (let i = 0; i < tables.length; i++) {
+          const [tbl, cd] = [tables[i], codes[i]];
+          if ((tbl === 'locations') || (tbl === 'small_categories')) {
             setChips(values => {
               values.push({
                 tableCode: cd,
@@ -75,36 +93,71 @@ function ItemsView() {
               });
               return values;
             });
-
-            if ((tbl == 'small_categories') || (tbl === 'locations')) {
-              const { data, error } = await supabase
-                .from(tbl)
-                .select('items!inner(id)')
-                .eq('id', parseInt(cd));
-
-              if (error) throw error;
-              if (data[0]) setItems(vals => vals.concat(data[0].items.map(value => value.id)));
-            }
+            data = data.filter(value => value[tbl].id == parseInt(cd));
           }
-          return;
         }
       }
 
-      const { data: d, error: e } = await supabase
-        .from('items')
-        .select('id');
+      if (q) {
+        const qVec = await createSearchVector(q);
+        data = data.filter(({ vector }) => calcInnerProduct(vector, qVec) > 0.5);
+      }
 
-      if (e) throw e;
-      setItems(d.map(value => value.id));
+      if (d1) {
+        const d1Date = new Date(d1);
+        data = data.filter(({ life }) => !life || new Date(life) >= d1Date);
+      }
+
+      if (d2) {
+        const d2Date = new Date(d2);
+        data = data.filter(({ life }) => life && new Date(life) <= d2Date);
+      }
+
+      setItems(data.map(({ id }) => id));
     };
 
     loadItems();
-  }, [table, code]);
+  }, [table, code, searchParams]);
 
   return (
     <Paper sx={{ width: '100%', boxSizing: 'border-box', height: '100%' }}>
-      <Stack spacing={2}>
+      <Stack spacing={4}>
         <Typography component="h2" variant="h2">在庫一覧</Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            direction: 'row',
+            gap: 2,
+          }}
+          onClick={() => setOpen(open => !open)}
+        >
+          <IconButton
+            type="button"
+            aria-controls="filter-form"
+            sx={{
+              flexGrow: 0,
+            }}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+          <Typography
+            variant="h3"
+            component="h3"
+            sx={{
+              flexGrow: 1,
+              textAlign: 'left',
+            }}
+          >
+            絞り込み
+          </Typography>
+        </Box>
+        <Collapse
+          in={open}
+          aria-expanded={open}
+          id="filter-form"
+        >
+          <ItemFilterForm />
+        </Collapse>
         <Box
           sx={{
             display: 'flex',
