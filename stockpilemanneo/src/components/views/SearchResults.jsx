@@ -48,7 +48,7 @@ function SearchResults() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const load = async function*() {
+    const load = async function() {
       setError('');
       const searchVector = await createSearchVector(searchParams.get('q') ?? '');
 
@@ -86,6 +86,7 @@ function SearchResults() {
               .eq('id', id);
 
             setError('値が変更されました．');
+            await asynchronousTimer(10);
           }
 
           results.push({
@@ -93,10 +94,6 @@ function SearchResults() {
             matchRate,
             table: 'large_categories',
           });
-
-          setSearchResults(results.toSorted((a, b) => b.matchRate - a.matchRate).filter(({ matchRate }) => matchRate > 0.5));
-          await asynchronousTimer(100);
-          yield results;
         }
       }
 
@@ -125,6 +122,7 @@ function SearchResults() {
                   vector: v,
                 })
                 .eq('id', id);
+              await asynchronousTimer(10);
             }
 
             results.push({
@@ -132,9 +130,6 @@ function SearchResults() {
               matchRate: (m1 + m2) / 2,
               table: 'small_categories',
             });
-
-            setSearchResults(results.toSorted((a, b) => b.matchRate - a.matchRate).filter(({ matchRate }) => matchRate > 0.5));
-            yield results;
           }
         }
       }
@@ -162,6 +157,7 @@ function SearchResults() {
                 .update({
                   vector: v,
                 });
+              await asynchronousTimer(10);
             }
 
             results.push({
@@ -169,9 +165,6 @@ function SearchResults() {
               table: 'locations',
               matchRate,
             });
-
-            setSearchResults(results.toSorted((a, b) => b.matchRate - a.matchRate).filter(({ matchRate }) => matchRate > 0.5));
-            yield results;
           }
         }
       }
@@ -199,6 +192,7 @@ function SearchResults() {
                   vector: v,
                 })
                 .eq('id', id);
+              await asynchronousTimer(10);
             }
 
             const [m2] = await getMatchRate(searchVector, small_categories.vector, small_categories.name);
@@ -210,9 +204,6 @@ function SearchResults() {
               table: 'items',
               matchRate: (m1 + m2 + m3 + m4) / 4,
             });
-
-            setSearchResults(results.toSorted((a, b) => b.matchRate - a.matchRate).filter(({ matchRate }) => matchRate > 0.5));
-            yield results;
           }
         }
       }
@@ -221,24 +212,9 @@ function SearchResults() {
       const filtered = searchVector.every(value => value == 0) ? results : results.filter(({ matchRate }) => matchRate > 0.5);
 
       setSearchResults(filtered);
-
-      return results;
     };
 
-    const gen = load();
-    const interval = setInterval(
-      () => {
-        gen
-          .next()
-          .then(
-            ({ done }) => {
-              if (done) {
-                clearInterval(interval);
-              }
-            }
-          );
-      }, 100
-    );
+    load();
   }, [searchParams]);
 
   return (
@@ -269,8 +245,8 @@ function SearchResults() {
             <Card variant="outlined">
               <CardContent>
                 <Grid container spacing={2} columns={12}>
-                  <Grid size="auto">
-                    <Skeleton variant="circular" width={40} height={40} />
+                  <Grid size={2}>
+                    <Skeleton variant="circular" />
                   </Grid>
                   <Grid size="grow">
                     <Stack spacing={2}>
@@ -278,8 +254,8 @@ function SearchResults() {
                       <Skeleton />
                     </Stack>
                   </Grid>
-                  <Grid size="auto">
-                    <Skeleton variant="rounded" width={40} height={40} />
+                  <Grid size={2}>
+                    <Skeleton variant="rounded" />
                   </Grid>
                 </Grid>
               </CardContent>
