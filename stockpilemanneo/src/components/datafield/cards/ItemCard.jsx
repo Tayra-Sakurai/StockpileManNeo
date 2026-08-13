@@ -96,12 +96,14 @@ function ItemCard({ number }) {
           sx={{ width: '100%', bgcolor: 'background.paper' }}
         >
           <ListItem>
-            <ListItemIcon>
-              <AccessTimeIcon />
-            </ListItemIcon>
-            <ListItemText>
-              {life || 'なし'}
-            </ListItemText>
+            <ListItemButton>
+              <ListItemIcon>
+                <AccessTimeIcon />
+              </ListItemIcon>
+              <ListItemText>
+                {life || 'なし'}
+              </ListItemText>
+            </ListItemButton>
           </ListItem>
           <ListItem>
             <ListItemButton component={RouterLink} to={`/View/items/locations/${locationId}`}>
