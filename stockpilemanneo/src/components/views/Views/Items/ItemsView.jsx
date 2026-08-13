@@ -71,6 +71,7 @@ function ItemsView() {
       const q = searchParams.get('q');
       const d1 = searchParams.get('d1');
       const d2 = searchParams.get('d2');
+      const hasD = searchParams.get('hasd');
 
       let { data, error } = await supabase
         .from('items')
@@ -103,12 +104,12 @@ function ItemsView() {
         data = data.filter(({ vector }) => calcInnerProduct(vector, qVec) > 0.5);
       }
 
-      if (d1) {
+      if (hasD && d1) {
         const d1Date = new Date(d1);
         data = data.filter(({ life }) => !life || new Date(life) >= d1Date);
       }
 
-      if (d2) {
+      if (hasD && d2) {
         const d2Date = new Date(d2);
         data = data.filter(({ life }) => life && new Date(life) <= d2Date);
       }

@@ -1,5 +1,5 @@
 import { Button, FormControl, FormLabel, Stack } from "@mui/material";
-import { TextFieldElement, useForm, useWatch } from "react-hook-form-mui";
+import { SwitchElement, TextFieldElement, useForm, useWatch } from "react-hook-form-mui";
 import { useSearchParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -10,12 +10,13 @@ function ItemFilterForm() {
       q: searchParams.get('q') ?? '',
       d1: searchParams.get('d1') ?? new Date().toISOString().replace(/T.*$/, ''),
       d2: searchParams.get('d2') ?? new Date().toISOString().replace(/T.*$/, ''),
+      hasd: searchParams.get('hasd'),
     },
   });
 
-  const [dmin, dmax] = useWatch({
+  const [dmin, dmax, hasD] = useWatch({
     control,
-    name: ['d1', 'd2'],
+    name: ['d1', 'd2', 'hasd'],
   });
 
   return (
@@ -36,6 +37,7 @@ function ItemFilterForm() {
             control={control}
           />
         </FormControl>
+        <SwitchElement name="hasd" label="期間でフィルター" value="filterByPeriod" />
         <FormControl>
           <FormLabel htmlFor="d1">期限（始まり）</FormLabel>
           <TextFieldElement
@@ -49,6 +51,7 @@ function ItemFilterForm() {
             }}
             fullWidth
             control={control}
+            disabled={!!hasD}
           />
         </FormControl>
         <FormControl>
@@ -64,6 +67,7 @@ function ItemFilterForm() {
             type="date"
             fullWidth
             control={control}
+            disabled={!!hasD}
           />
         </FormControl>
         <Button
