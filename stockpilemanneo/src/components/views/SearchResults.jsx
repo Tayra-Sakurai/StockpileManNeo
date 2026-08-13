@@ -1,4 +1,4 @@
-import { Alert, Paper, Stack } from "@mui/material";
+import { Alert, Card, CardContent, CardHeader, Grid, Paper, Skeleton, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import supabase from "../../client.js";
@@ -248,20 +248,47 @@ function SearchResults() {
     >
       <Stack spacing={2}>
         {error ? <Alert variant="standard" severity="error">{error}</Alert> : null}
-        {searchResults.map(({ id, table }) => {
-          switch (table) {
-            case 'items':
-              return (
-                <ItemCard number={id} />
-              );
-            case 'locations':
-              return (<LocationCard number={id} />);
-            case 'large_categories':
-              return <LargeCategoryCard number={id} />;
-            case 'small_categories':
-              return <SmallCategoryCard number={id} />;
-          }
-        })}
+        {searchResults.length ?
+          (
+            searchResults.map(({ id, table }) => {
+              switch (table) {
+                case 'items':
+                  return (
+                    <ItemCard number={id} />
+                  );
+                case 'locations':
+                  return (<LocationCard number={id} />);
+                case 'large_categories':
+                  return <LargeCategoryCard number={id} />;
+                case 'small_categories':
+                  return <SmallCategoryCard number={id} />;
+              }
+            })
+          ) :
+          (
+            <Card variant="outlined">
+              <CardContent>
+                <Grid container spacing={2} columns={12}>
+                  <Grid size="auto">
+                    <Skeleton variant="circular" width={32} height={32} />
+                  </Grid>
+                  <Grid size="grow">
+                    <Stack spacing={2}>
+                      <Skeleton />
+                      <Skeleton />
+                    </Stack>
+                  </Grid>
+                  <Grid size="auto">
+                    <Skeleton variant="rounded" width={32} height={32} />
+                  </Grid>
+                </Grid>
+              </CardContent>
+              <CardContent>
+                <Skeleton variant="rounded" height={40} />
+              </CardContent>
+            </Card>
+          )
+        }
       </Stack>
     </Paper>
   );
