@@ -37,7 +37,7 @@ function ItemFilterForm() {
             control={control}
           />
         </FormControl>
-        <SwitchElement name="hasd" label="期間でフィルター" value="filterByPeriod" />
+        <SwitchElement name="hasd" label="期間でフィルター" value="filterByPeriod" control={control} />
         <FormControl>
           <FormLabel htmlFor="d1">期限（始まり）</FormLabel>
           <TextFieldElement
