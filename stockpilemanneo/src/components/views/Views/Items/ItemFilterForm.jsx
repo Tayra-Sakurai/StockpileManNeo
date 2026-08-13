@@ -51,7 +51,7 @@ function ItemFilterForm() {
             }}
             fullWidth
             control={control}
-            disabled={!!hasD}
+            disabled={!hasD}
           />
         </FormControl>
         <FormControl>
@@ -67,7 +67,7 @@ function ItemFilterForm() {
             type="date"
             fullWidth
             control={control}
-            disabled={!!hasD}
+            disabled={!hasD}
           />
         </FormControl>
         <Button
