@@ -270,7 +270,7 @@ function SearchResults() {
               <CardContent>
                 <Grid container spacing={2} columns={12}>
                   <Grid size="auto">
-                    <Skeleton variant="circular" width={32} height={32} />
+                    <Skeleton variant="circular" width={40} height={40} />
                   </Grid>
                   <Grid size="grow">
                     <Stack spacing={2}>
@@ -279,7 +279,7 @@ function SearchResults() {
                     </Stack>
                   </Grid>
                   <Grid size="auto">
-                    <Skeleton variant="rounded" width={32} height={32} />
+                    <Skeleton variant="rounded" width={40} height={40} />
                   </Grid>
                 </Grid>
               </CardContent>
