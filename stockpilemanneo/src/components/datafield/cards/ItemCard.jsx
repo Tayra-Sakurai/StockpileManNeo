@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import supabase from "../../../client.js";
 import CommonCard from "./CommonCard.jsx";
-import { Avatar, Breadcrumbs, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material";
+import { Avatar, Breadcrumbs, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -23,12 +23,13 @@ function ItemCard({ number }) {
   const [largeCategory, setLargeCategory] = useState('');
   const [smallCategoryId, setSmallCategoryId] = useState(0);
   const [largeCategoryId, setLargeCategoryId] = useState(0);
+  const [locationId, setLocationId] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
       const { data, error } = await supabase
         .from('items')
-        .select('name, life, description, locations!inner(name), small_categories!inner(id, name, large_categories!inner(id, name))')
+        .select('name, life, description, locations!inner(id, name), small_categories!inner(id, name, large_categories!inner(id, name))')
         .eq('id', number);
 
       if (error) throw error;
@@ -41,6 +42,7 @@ function ItemCard({ number }) {
         setLargeCategory(data[0].small_categories.large_categories.name);
         setSmallCategoryId(data[0].small_categories.id);
         setLargeCategoryId(data[0].small_categories.large_categories.id);
+        setLocationId(data[0].locations.id);
       }
     };
 
@@ -86,6 +88,7 @@ function ItemCard({ number }) {
         </Breadcrumbs>
         <Typography
           variant="body2"
+          component="div"
         >
           {notes}
         </Typography>
@@ -101,12 +104,14 @@ function ItemCard({ number }) {
             </ListItemText>
           </ListItem>
           <ListItem>
-            <ListItemIcon>
-              <LocationOnIcon />
-            </ListItemIcon>
-            <ListItemText>
-              {location}
-            </ListItemText>
+            <ListItemButton component={RouterLink} to={`/View/items/locations/${locationId}`}>
+              <ListItemIcon>
+                <LocationOnIcon />
+              </ListItemIcon>
+              <ListItemText>
+                {location}
+              </ListItemText>
+            </ListItemButton>
           </ListItem>
         </List>
       </>
