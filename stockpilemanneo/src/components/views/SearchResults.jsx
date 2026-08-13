@@ -124,7 +124,7 @@ function SearchResults() {
 
             results.push({
               id,
-              matchRate: Math.max(m1, m2),
+              matchRate: (m1 + m2) / 2,
               table: 'small_categories',
             });
           }
@@ -198,7 +198,7 @@ function SearchResults() {
             results.push({
               id,
               table: 'items',
-              matchRate: Math.max(m1, m2, m3, m4),
+              matchRate: (m1 + m2 + m3 + m4) / 4,
             });
           }
         }
