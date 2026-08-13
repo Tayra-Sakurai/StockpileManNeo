@@ -58,7 +58,7 @@ function BottomMenu() {
         borderTop: 1,
         borderColor: 'divider',
         display: { xs: 'block', md: 'none' },
-        paddingBottom: 'env(safe-area-inst-bottom)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
         zIndex(theme) {
           return theme.zIndex.appBar;
         },
