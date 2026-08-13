@@ -71,7 +71,7 @@ function ItemsView() {
       const q = searchParams.get('q');
       const d1 = searchParams.get('d1');
       const d2 = searchParams.get('d2');
-      const hasD = searchParams.get('hasd');
+      const hasD = !(searchParams.get('hasd') == 'null' || !searchParams.get('hasd'));
 
       let { data, error } = await supabase
         .from('items')
