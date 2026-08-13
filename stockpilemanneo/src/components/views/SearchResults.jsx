@@ -18,6 +18,32 @@ import asynchronousTimer from "../../timers/AsynchronousTimer.js";
  * @property {number} matchRate The matching rate.
  */
 
+function LoadingCard() {
+  return (
+    <Card variant="outlined">
+      <CardContent>
+        <Grid container spacing={2} columns={12}>
+          <Grid size="auto">
+            <Skeleton variant="circular" width={56} height={56} />
+          </Grid>
+          <Grid size="grow">
+            <Stack spacing={2}>
+              <Skeleton />
+              <Skeleton />
+            </Stack>
+          </Grid>
+          <Grid size="auto">
+            <Skeleton variant="rounded" width={56} height={56} />
+          </Grid>
+        </Grid>
+      </CardContent>
+      <CardContent>
+        <Skeleton variant="rounded" height={40} />
+      </CardContent>
+    </Card>
+  );
+}
+
 /**
  * Search result calculator.
  * @param {number[]} srch The query vector.
@@ -242,27 +268,11 @@ function SearchResults() {
             })
           ) :
           (
-            <Card variant="outlined">
-              <CardContent>
-                <Grid container spacing={2} columns={12}>
-                  <Grid size="auto">
-                    <Skeleton variant="circular" width={56} height={56} />
-                  </Grid>
-                  <Grid size="grow">
-                    <Stack spacing={2}>
-                      <Skeleton />
-                      <Skeleton />
-                    </Stack>
-                  </Grid>
-                  <Grid size="auto">
-                    <Skeleton variant="rounded" width={56} height={56} />
-                  </Grid>
-                </Grid>
-              </CardContent>
-              <CardContent>
-                <Skeleton variant="rounded" height={40} />
-              </CardContent>
-            </Card>
+            <>
+              <LoadingCard />
+              <LoadingCard />
+              <LoadingCard />
+            </>
           )
         }
       </Stack>
