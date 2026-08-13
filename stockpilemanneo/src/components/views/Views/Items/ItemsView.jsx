@@ -5,13 +5,19 @@ import supabase from "../../../../client.js";
 import LocationPinIcon from "@mui/icons-material/LocationPin";
 import ClassIcon from "@mui/icons-material/Class";
 import ItemsTable from "./ItemsTable.jsx";
-import itemCompare from "../../../../sortmodules/ItemSorter.js";
 
 /**
  * The table displaying data.
  * @typedef {object} TableData
  * @property {string} label The label.
  * @property {import("react").JSX.Element} icon The icon.
+ */
+
+/**
+ * The filter display object.
+ * @typedef {object} ChipData
+ * @property {string} tableName The table name.
+ * @property {string} tableCode The code in the table.
  */
 
 /**
@@ -42,28 +48,54 @@ function ItemsView() {
    */
   const [items, setItems] = useState([]);
 
+  /**
+   * @type {[
+   *   ChipData[],
+   *   import("react").Dispatch.<import("react").SetStateAction.<ChipData[]>>
+   * ]}
+   */
+  const [chips, setChips] = useState([]);
+
   const { table, code } = useParams();
 
   useEffect(() => {
     const loadItems = async () => {
-      let data, error;
-      if (((table == 'locations') || (table == 'small_categories')) && code) {
-        ({ data, error } = await supabase
-          .from(table)
-          .select('items!inner(id, name, life)')
-          .eq('id', parseInt(code))
-        );
+      if (table && code) {
+        const tables = table.split(',');
+        const codes = code.split(',');
+        setItems([]);
 
-        if (data) setItems(data[0].items.toSorted(itemCompare).map(item => item.id));
-      } else {
-        ({ data, error } = await supabase
-          .from('items')
-          .select('id, name, life')
-        );
+        if (tables.length == codes.length) {
+          for (let i = 0; i < tables.length; i++) {
+            const [tbl, cd] = [tables[i], codes[i]];
+            setChips(values => {
+              values.push({
+                tableCode: cd,
+                tableName: tbl,
+              });
+              return values;
+            });
 
-        if (data) setItems(data.toSorted(itemCompare).map(item => item.id));
+            if ((tbl == 'small_categories') || (tbl === 'locations')) {
+              const { data, error } = await supabase
+                .from(tbl)
+                .select('items!inner(id)')
+                .eq('id', parseInt(cd));
+
+              if (error) throw error;
+              if (data[0]) setItems(vals => vals.concat(data[0].items.map(value => value.id)));
+            }
+          }
+          return;
+        }
       }
-      if (error) throw error;
+
+      const { data: d, error: e } = await supabase
+        .from('items')
+        .select('id');
+
+      if (e) throw e;
+      setItems(d.map(value => value.id));
     };
 
     loadItems();
@@ -84,7 +116,7 @@ function ItemsView() {
             justifyContent: 'start',
           }}
         >
-          {(table && code) ? (<Chip icon={il[table].icon} label={`${il[table]?.label ?? table}: ${code}`} />) : null}
+          {chips.map(({ tableName, tableCode }) => <Chip label={`${il[tableName].label}: ${tableCode}`} icon={il[tableName].icon} />)}
         </Box>
         <ItemsTable items={items} />
       </Stack>
