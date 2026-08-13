@@ -15,8 +15,8 @@ function SpecialActions() {
       sx={{
         position: 'fixed',
         bottom: {
-          xs: 60,
-          md: 16,
+          xs: 'calc(env(safe-area-inset-bottom) + 60)',
+          md: 'calc(env(safe-area-inset-bottom) + 16)',
         },
         right: 16,
         zIndex(theme) {
