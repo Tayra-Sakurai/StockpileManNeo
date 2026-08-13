@@ -8,6 +8,7 @@ import LocationCard from "../datafield/cards/LocationCard.jsx";
 import LargeCategoryCard from "../datafield/cards/LargeCategoryCard.jsx";
 import SmallCategoryCard from "../datafield/cards/SmallCategoryCard.jsx";
 import itemCompare from "../../sortmodules/ItemSorter.js";
+import asynchronousTimer from "../../timers/AsynchronousTimer.js";
 
 /**
  * The search result display object.
@@ -92,6 +93,9 @@ function SearchResults() {
             matchRate,
             table: 'large_categories',
           });
+
+          setSearchResults(results.toSorted((a, b) => b.matchRate - a.matchRate).filter(({ matchRate }) => matchRate > 0.5));
+          await asynchronousTimer(100);
         }
       }
 
@@ -127,6 +131,9 @@ function SearchResults() {
               matchRate: (m1 + m2) / 2,
               table: 'small_categories',
             });
+
+            setSearchResults(results.toSorted((a, b) => b.matchRate - a.matchRate).filter(({ matchRate }) => matchRate > 0.5));
+            await asynchronousTimer(100);
           }
         }
       }
@@ -161,6 +168,9 @@ function SearchResults() {
               table: 'locations',
               matchRate,
             });
+
+            setSearchResults(results.toSorted((a, b) => b.matchRate - a.matchRate).filter(({ matchRate }) => matchRate > 0.5));
+            await asynchronousTimer(100);
           }
         }
       }
@@ -172,7 +182,6 @@ function SearchResults() {
 
         if (err) {
           setError(err.message);
-          doNotGoFlag = true;
         }
 
         if (data) {
@@ -200,6 +209,9 @@ function SearchResults() {
               table: 'items',
               matchRate: (m1 + m2 + m3 + m4) / 4,
             });
+
+            setSearchResults(results.toSorted((a, b) => b.matchRate - a.matchRate).filter(({ matchRate }) => matchRate > 0.5));
+            await asynchronousTimer(100);
           }
         }
       }
