@@ -48,7 +48,7 @@ function SearchResults() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const load = async () => {
+    const load = async function*() {
       setError('');
       const searchVector = await createSearchVector(searchParams.get('q') ?? '');
 
@@ -96,6 +96,7 @@ function SearchResults() {
 
           setSearchResults(results.toSorted((a, b) => b.matchRate - a.matchRate).filter(({ matchRate }) => matchRate > 0.5));
           await asynchronousTimer(100);
+          yield results;
         }
       }
 
@@ -133,7 +134,7 @@ function SearchResults() {
             });
 
             setSearchResults(results.toSorted((a, b) => b.matchRate - a.matchRate).filter(({ matchRate }) => matchRate > 0.5));
-            await asynchronousTimer(100);
+            yield results;
           }
         }
       }
@@ -170,7 +171,7 @@ function SearchResults() {
             });
 
             setSearchResults(results.toSorted((a, b) => b.matchRate - a.matchRate).filter(({ matchRate }) => matchRate > 0.5));
-            await asynchronousTimer(100);
+            yield results;
           }
         }
       }
@@ -211,7 +212,7 @@ function SearchResults() {
             });
 
             setSearchResults(results.toSorted((a, b) => b.matchRate - a.matchRate).filter(({ matchRate }) => matchRate > 0.5));
-            await asynchronousTimer(100);
+            yield results;
           }
         }
       }
@@ -220,9 +221,24 @@ function SearchResults() {
       const filtered = searchVector.every(value => value == 0) ? results : results.filter(({ matchRate }) => matchRate > 0.5);
 
       setSearchResults(filtered);
+
+      return results;
     };
 
-    load();
+    const gen = load();
+    const interval = setInterval(
+      () => {
+        gen
+          .next()
+          .then(
+            ({ done }) => {
+              if (done) {
+                clearInterval(interval);
+              }
+            }
+          );
+      }, 100
+    );
   }, [searchParams]);
 
   return (
