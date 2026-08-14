@@ -8,7 +8,7 @@ export default async function getBarcode(file) {
     try {
       const formatsOptions = ['ean_13', 'ean_8', 'upc_a', 'upc_e'];
       /** @type {Array.<string>} */
-      const supportedFormats = BarcodeDetector.getSupportedFormats();
+      const supportedFormats = await BarcodeDetector.getSupportedFormats();
       const formats = formatsOptions.filter(value => supportedFormats.includes(value));
       const barcodeDetector = new BarcodeDetector({
         formats,
