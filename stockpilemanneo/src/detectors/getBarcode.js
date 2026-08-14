@@ -10,6 +10,9 @@ export default async function getBarcode(file) {
       /** @type {Array.<string>} */
       const supportedFormats = await BarcodeDetector.getSupportedFormats();
       const formats = formatsOptions.filter(value => supportedFormats.includes(value));
+      if (formats.length == 0) {
+        return `対応するフォーマットがありませんでした．対応フォーマットは${supportedFormats.join(', ')}です．`;
+      }
       const barcodeDetector = new BarcodeDetector({
         formats,
       });
