@@ -11,6 +11,7 @@
  */
 async function onMessageReceive(event) {
   if ('BarcodeDetector' in globalThis) {
+    postMessage(await BarcodeDetector.getSupportedFormats());
     const barcodeDetector = new BarcodeDetector({
       formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e'],
     });

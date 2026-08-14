@@ -121,6 +121,8 @@ function ItemDetail({ id }) {
         setValues({
           barcode: event.data,
         });
+    } else if (event.data instanceof Array) {
+      setInfo(`対応しているバーコード形式は${event.data.join(', ')}です．`);
     } else {
       setErr('このデバイスではバーコードの読み取りに対応していません．');
     }
