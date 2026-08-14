@@ -5,11 +5,15 @@
  * @license AGPL-3.0-or-later
  */
 
+console.log('Hello.');
+postMessage('Hello UI.');
+
 /**
  * Message handling system.
  * @param {MessageEvent<File>} event The event.
  */
 async function onMessageReceive(event) {
+  console.info('Worker has received the message.');
   if ('BarcodeDetector' in globalThis) {
     postMessage(await BarcodeDetector.getSupportedFormats());
     const barcodeDetector = new BarcodeDetector({

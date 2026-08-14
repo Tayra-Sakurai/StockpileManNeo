@@ -106,6 +106,11 @@ function ItemDetail({ id }) {
     name: ['barcode', 'useLife'],
   });
   detectWorker.onmessage = async event => {
+    if (event.data === 'Hello UI.') {
+      console.log('The UI thread has gotten the message from the worker.');
+      return;
+    }
+
     if (typeof event.data === 'string') {
       const { data } = await supabase
         .from('barcode_data')
