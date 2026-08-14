@@ -14,9 +14,11 @@ const filter = createFilterOptions();
 
 /**
  * Large category selector.
+ * @template T
  * @param {object} props The props.
  * @param {string} props.name The name.
  * @param {string=} props.id The identifier.
+ * @param {import("react-hook-form").Control<T>=} props.control The control of the element.
  * @param {?LargeCategoryCandidate} props.value The value of the element.
  * @param {import("react").Dispatch.<import("react").SetStateAction.<?LargeCategoryCandidate>>} props.setValue The value setter.
  * @returns

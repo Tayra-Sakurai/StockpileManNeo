@@ -1,58 +1,29 @@
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import { useForm, useWatch } from "react-hook-form";
 import supabase from "../../client.js";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Alert, Button, FormControl, FormLabel, Stack } from "@mui/material";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
-import { Alert, AlertTitle, Button, FormControl, FormLabel, Link, Stack } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { SwitchElement, TextFieldElement } from "react-hook-form-mui";
+import SelectLargeCategories from "./selections/SelectLargeCategories.jsx";
+import TaskIcon from "@mui/icons-material/Task";
 import SelectSmallCategories from "./selections/SelectSmallCategories.jsx";
 import SelectLocations from "./selections/SelectLocations.jsx";
-import UndoIcon from '@mui/icons-material/Undo';
-import SaveIcon from '@mui/icons-material/Save';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useState } from "react";
+import UndoIcon from "@mui/icons-material/Undo";
+import SaveIcon from "@mui/icons-material/Save";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
-import SelectLargeCategories from "./selections/SelectLargeCategories.jsx";
 
 /**
- * The form value format.
- * @typedef {object} ItemFormData
- * @property {string} name The name of the item.
- * @property {?string} description The description of the item.
- * @property {?string} life The life of the item.
- * @property {string} purchase_timestamp The timestamp of the purchased date.
- * @property {import("./selections/SelectSmallCategories.jsx").SmallCategoryCandidate} small_categories The small category.
- * @property {import("./selections/SelectLocations.jsx").LocationCandidate} locations The location.
- * @property {?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate} largeCategory The large category.
- */
-
-/**
- * The item editor.
+ * The item detail editor.
  * @param {object} props The props.
- * @param {number=} props.id The ID.
+ * @param {number} props.id The item's id.
  * @returns
  */
 function ItemDetail({ id }) {
-  const [open, setOpen] = useState(false);
-  /**
-   * @type {[
-   *   ?import("react").JSX.Element,
-   *   import("react").Dispatch.<import("react").SetStateAction.<?import("react").JSX.Element>>
-   * ]}
-   */
-  const [errorAlert, setErrorAlert] = useState(null);
+  const [err, setErr] = useState('');
   const navigate = useNavigate();
-
-  /**
-   * The vector getting function.
-   * @param {string} name The name.
-   * @param {?string=} desc The description.
-   * @returns
-   */
-  const getVector = async (name, desc) => {
-    if (desc)
-      return await createEmbeddingVector(desc, name);
-
-    return await createEmbeddingVector(name);
-  };
+  const [open, setOpen] = useState(false);
 
   /**
    * @type {[
@@ -62,151 +33,209 @@ function ItemDetail({ id }) {
    */
   const [largeCategory, setLargeCategory] = useState(null);
 
+  const detectWorker = new Worker(new URL('../../detectors/BarcodeDetection.js', import.meta.url));
+
+  const { control, handleSubmit, setValue, setValues } = useForm({
+    async defaultValues() {
+      if (!id)
+        // Returns empty table.
+        return {
+          barcode: '',
+          name: '',
+          description: '',
+          life: '',
+          purchase_date: new Date().toISOString().replace(/T.*$/, ''),
+          small_categories: null,
+          largeCategory: null,
+          locations: null,
+          useLife: null,
+        };
+
+      const { data, error } = await supabase
+        .from('items')
+        .select('name, description, life, purchase_timestamp, locations!inner(id, name), small_categories!inner(id, name, large_categories!inner(id, name)), barcode_data(jan_code)')
+        .eq('id', id);
+
+      if (error) {
+        // Returns the empty form.
+        setErr(error.message);
+        return {
+          barcode: '',
+          name: '',
+          description: '',
+          life: '',
+          purchase_date: new Date().toISOString().replace(/T.*$/, ''),
+          small_categories: null,
+          largeCategory: null,
+          locations: null,
+          useLife: null
+        };
+      }
+
+      if (data[0]) {
+        return {
+          name: data[0].name,
+          description: data[0].description,
+          barcode: data[0].barcode_data?.jan_code,
+          life: data[0].life ? data[0].life.replace(/T.*$/, '') : '',
+          purchase_date: data[0].purchase_timestamp.replace(/T.*$/, ''),
+          small_categories: data[0].small_categories,
+          largeCategory: data[0].small_categories.large_categories,
+          locations: data[0].locations,
+          useLife: 'Use life',
+        };
+      }
+
+      return {
+        barcode: '',
+        name: '',
+        description: '',
+        life: '',
+        purchase_date: new Date().toISOString().replace(/T.*$/, ''),
+        small_categories: null,
+        largeCategory: null,
+        locations: null,
+        useLife: null,
+      };
+    },
+  });
+
+  const [barcodeText, lifeSw] = useWatch({
+    control,
+    name: ['barcode', 'useLife'],
+  });
+  detectWorker.onmessage = async event => {
+    if (typeof event.data === 'string') {
+      const { data } = await supabase
+        .from('barcode_data')
+        .select('jan_code, name')
+        .eq('jan_code', event.data);
+
+      if (data?.[0])
+        setValues({
+          barcode: event.data,
+          name: data[0].name,
+        });
+      else
+        setValues({
+          barcode: event.data,
+        });
+    }
+  };
+
   return (
     <>
-      <FormContainer
-        defaultValues={async () => {
-          if (id) {
+      {err ? <Alert severity="error">{err}</Alert> : null}
+      <form
+        onSubmit={handleSubmit(async formData => {
+          let barcode_id = null;
+
+          // Upsert the barcode data table if needed.
+          if (formData.barcode) {
             const { data } = await supabase
+              .from('barcode_data')
+              .upsert({
+                jan_code: formData.barcode,
+                name: formData.name,
+              }, {
+                onConflict: 'jan_code',
+              })
+              .select('id');
+
+            if (data?.[0]) barcode_id = data[0].id;
+          }
+
+          if (id)
+            await supabase
               .from('items')
-              .select('name, description, life, purchase_timestamp, small_categories(id, name, large_categories(id, name)), locations(id, name)')
+              .update({
+                name: formData.name,
+                barcode_id,
+                description: formData.description,
+                small_category_id: formData.small_categories?.id,
+                location_id: formData.locations?.id,
+                life: formData.life ? new Date(formData.life).toISOString() : null,
+                purchase_timestamp: new Date(formData.purchase_date).toISOString(),
+                vector: await createEmbeddingVector(formData.name),
+              })
               .eq('id', id);
+          else
+            await supabase
+              .from('items')
+              .insert({
+                vector: await createEmbeddingVector(formData.name),
+                name: formData.name,
+                description: formData.description,
+                small_category_id: formData.small_categories?.id ?? 0,
+                location_id: formData.locations?.id ?? 0,
+                life: formData.life ? new Date(formData.life).toISOString() : null,
+                purchase_timestamp: new Date(formData.purchase_date).toISOString(),
+                barcode_id,
+              });
 
-            if (data) {
-              const values = data[0];
-
-              /**
-               * @type {ItemFormData}
-               */
-              const result = {
-                name: values.name,
-                description: values.description,
-                life: (values.life ? new Date(values.life).toISOString().replace(/T.*$/, '') : null),
-                purchase_timestamp: new Date(values.purchase_timestamp).toISOString().replace(/T.*$/, ''),
-                small_categories: values.small_categories,
-                locations: values.locations,
-                largeCategory: values.small_categories.large_categories,
-              };
-
-              return result;
-            }
-          }
-
-          const { data: d, error } = await supabase
-            .from('small_categories')
-            .select('id, name, large_categories(id, name)');
-
-          if (error) throw error;
-          if (!d) throw new Error('An unknown error occurred');
-
-          const { data: d2, error: err } = await supabase
-            .from('locations')
-            .select('id, name');
-
-          if (err) throw err;
-          if (!d2) throw new Error('An unknown database error occurred.');
-
-          return {
-            name: '',
-            description: '',
-            life: null,
-            purchase_timestamp: new Date().toISOString().replace(/T.*$/, ''),
-            small_categories: d[0],
-            locations: d2[0],
-            largeCategory: d[0].large_categories,
-          };
-        }}
-        onSuccess={async ({ name, description, life, purchase_timestamp, small_categories, locations }) => {
-          try {
-            /** @type{number=} */
-            let smallCategoryId;
-
-            if (!small_categories.id) {
-              if (!small_categories.large_categories.id)
-                throw new TypeError('Invalid type of small category');
-
-              const { data, error } = await supabase
-                .from('small_categories')
-                .insert({
-                  large_category_id: small_categories.large_categories.id,
-                  name: small_categories.name,
-                  vector: await createEmbeddingVector(small_categories.name),
-                })
-                .select('id');
-
-              if (error) throw error;
-
-              if (!data) throw new Error('An unknown database error occurred.');
-
-              smallCategoryId = data[0].id;
-            }
-
-            if (id) {
-              await supabase
-                .from('items')
-                .update({
-                  name,
-                  description,
-                  life: (life ? new Date(life).toISOString() : null),
-                  purchase_timestamp: new Date(purchase_timestamp).toISOString(),
-                  small_category_id: small_categories.id ?? smallCategoryId,
-                  location_id: locations.id,
-                  vector: await getVector(name, description),
-                })
-                .eq('id', id);
-              navigate(-1);
-            } else {
-              if (!locations.id || !(small_categories.id ?? smallCategoryId))
-                throw new Error('The parameter is not valid');
-
-              await supabase
-                .from('items')
-                .insert({
-                  name,
-                  description,
-                  life: (life ? new Date(life).toISOString() : null),
-                  purchase_timestamp: new Date(purchase_timestamp).toISOString(),
-                  small_category_id: small_categories.id ?? smallCategoryId,
-                  location_id: locations.id,
-                  vector: await getVector(name, description),
-                });
-
-              navigate(-1);
-            }
-          } catch (err) {
-            console.error(err);
-            setErrorAlert(
-              (
-                <Alert severity="error">
-                  <AlertTitle>エラーが発生しました</AlertTitle>
-                  データベースの処理に失敗しました．<Link href="https://github.com/Tayra-Sakurai/StockpileManNeo/issues">GitHub</Link>にてお知らせください．
-                </Alert>
-              )
-            );
-          }
-        }}
+          navigate(-1);
+        })}
       >
-        <Stack
-          direction="column"
-          spacing={4}
-        >
-          {errorAlert}
+        <Stack spacing={2}>
+          <FormControl>
+            <FormLabel htmlFor="barcode">バーコード画像をアップロード</FormLabel>
+            <TextFieldElement
+              name="barcode"
+              fullWidth
+              control={control}
+              placeholder="こちらに直接入力することもできます"
+            />
+            <input
+              id="barcode"
+              type="file"
+              style={{ display: 'none' }}
+              onChange={event => {
+                if (event.currentTarget.files?.[0]) {
+                  detectWorker.postMessage(event.currentTarget.files[0]);
+                  setValue('barcode', '');
+                }
+              }}
+            />
+          </FormControl>
+          <Button
+            type="button"
+            variant="contained"
+            color="secondary"
+            startIcon={<TaskIcon />}
+            onClick={async () => {
+              if (!barcodeText)
+                return;
+
+              const { data } = await supabase
+                .from('barcode_data')
+                .select('id, name')
+                .eq('jan_code', barcodeText);
+
+              if (data?.[0]) {
+                setValue('name', data[0].name);
+              }
+            }}
+          >
+            バーコード情報を利用して自動入力
+          </Button>
           <FormControl>
             <FormLabel htmlFor="largeCategory">分類</FormLabel>
             <SelectLargeCategories
               name="largeCategory"
               id="largeCategory"
-              setValue={setLargeCategory}
               value={largeCategory}
+              setValue={setLargeCategory}
+              control={control}
             />
           </FormControl>
           <FormControl>
             <FormLabel htmlFor="small_categories">名称</FormLabel>
             <SelectSmallCategories
-              id="small_categories"
               name="small_categories"
+              id="small_categories"
               largeCategory={largeCategory}
               setLargeCategory={setLargeCategory}
+              control={control}
             />
           </FormControl>
           <FormControl>
@@ -214,79 +243,74 @@ function ItemDetail({ id }) {
             <SelectLocations
               name="locations"
               id="locations"
+              control={control}
             />
           </FormControl>
           <FormControl>
             <FormLabel htmlFor="name">商品名</FormLabel>
             <TextFieldElement
-              id="name"
+              control={control}
               name="name"
+              id="name"
               required
               fullWidth
             />
           </FormControl>
           <FormControl>
-            <FormLabel htmlFor="purchase_timestamp">購入日</FormLabel>
+            <FormLabel htmlFor="purchase_date">購入日</FormLabel>
             <TextFieldElement
               type="date"
-              name="purchase_timestamp"
               required
+              name="purchase_date"
+              id="purchase_date"
+              control={control}
               fullWidth
             />
           </FormControl>
+          <SwitchElement
+            name="useLife"
+            label="期限を設定する．"
+            control={control}
+          />
           <FormControl>
-            <FormLabel htmlFor="life">使用期限・賞味期限など</FormLabel>
+            <FormLabel htmlFor="life">期限</FormLabel>
             <TextFieldElement
-              type="date"
-              name="life"
               id="life"
+              name="life"
+              disabled={!lifeSw}
               fullWidth
+              type="date"
             />
           </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="notes">備考</FormLabel>
-            <TextFieldElement
-              id="notes"
-              name="description"
-              fullWidth
-              multiline
-              rows={2}
-            />
-          </FormControl>
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={{ xs: 1, sm: 2, md: 4 }}
+          <Button
+            color="primary"
+            variant="contained"
+            startIcon={<UndoIcon />}
+            type="button"
+            onClick={() => navigate(-1)}
           >
-            <Button
-              color="primary"
-              variant="text"
-              startIcon={<UndoIcon />}
-              type="button"
-              onClick={() => navigate(-1)}
-            >
-              戻る
-            </Button>
-            <Button
-              color="success"
-              startIcon={<SaveIcon />}
-              type="submit"
-              variant="contained"
-            >
-              保存
-            </Button>
-            <Button
-              color="error"
-              startIcon={<DeleteForeverIcon />}
-              type="button"
-              onClick={() => setOpen(v => !v)}
-              disabled={!id}
-              variant="contained"
-            >
-              削除
-            </Button>
-          </Stack>
+            戻る
+          </Button>
+          <Button
+            color="success"
+            variant="contained"
+            startIcon={<SaveIcon />}
+            type="submit"
+          >
+            保存
+          </Button>
+          <Button
+            type="button"
+            variant="contained"
+            color="error"
+            disabled={!id}
+            startIcon={<DeleteForeverIcon />}
+            onClick={() => setOpen(true)}
+          >
+            削除
+          </Button>
         </Stack>
-      </FormContainer>
+      </form>
       <RemoveConfirmDialog
         open={open}
         setOpen={setOpen}

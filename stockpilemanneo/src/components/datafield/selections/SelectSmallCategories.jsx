@@ -19,14 +19,16 @@ const filter = createFilterOptions();
 
 /**
  * The small category selector.
+ * @template T
  * @param {object} props The props.
  * @param {string} props.name The name of this element.
  * @param {string=} props.id The id.
  * @param {?import("./SelectLargeCategories.jsx").LargeCategoryCandidate=} props.largeCategory The large category.
  * @param {import("react").Dispatch.<import("react").SetStateAction.<?{ name: string, id?: number }>>=} props.setLargeCategory The large category setter.
+ * @param {import("react-hook-form").Control<T>=} props.control The control of the element.
  * @returns
  */
-function SelectSmallCategories({ name, id, largeCategory, setLargeCategory }) {
+function SelectSmallCategories({ name, id, largeCategory, setLargeCategory, control }) {
   /**
    * @type {[
    *   Array.<SmallCategoryCandidate>,
@@ -79,6 +81,7 @@ function SelectSmallCategories({ name, id, largeCategory, setLargeCategory }) {
       name={name}
       options={options}
       loading={loading}
+      control={control}
       autocompleteProps={{
         id,
         value,

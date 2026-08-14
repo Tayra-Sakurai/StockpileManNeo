@@ -17,12 +17,14 @@ const filter = createFilterOptions();
 
 /**
  * The location selector.
+ * @template T
  * @param {object} props The props.
  * @param {string} props.name The name.
  * @param {string=} props.id The id.
+ * @param {import("react-hook-form").Control<T>=} props.control The control of the element.
  * @returns
  */
-function SelectLocations({ name, id }) {
+function SelectLocations({ name, id, control }) {
   /**
    * @type {[
    *   ?LocationCandidate,
@@ -54,6 +56,7 @@ function SelectLocations({ name, id }) {
       options={options}
       loading={loading}
       required
+      control={control}
       autocompleteProps={{
         id,
         value,
