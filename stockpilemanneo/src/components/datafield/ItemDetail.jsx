@@ -280,6 +280,7 @@ function ItemDetail({ id }) {
               disabled={!lifeSw}
               fullWidth
               type="date"
+              control={control}
             />
           </FormControl>
           <Button
