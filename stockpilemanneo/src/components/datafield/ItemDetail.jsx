@@ -58,6 +58,8 @@ function ItemDetail({ id }) {
       barcode: result,
       name: data[0].name,
     });
+
+    setInfo('');
   };
 
   const { control, handleSubmit, setValue, setValues } = useForm({
