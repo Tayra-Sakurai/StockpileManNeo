@@ -34,7 +34,7 @@ async function onMessageReceive(event) {
     }
   } catch (error) {
     if (error instanceof Error) {
-      postMessage(error.message);
+      postMessage(error.toString());
     } else {
       postMessage(error?.toString());
     }

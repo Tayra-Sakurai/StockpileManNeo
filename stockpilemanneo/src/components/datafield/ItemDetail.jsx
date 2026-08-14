@@ -113,7 +113,9 @@ function ItemDetail({ id }) {
 
     if (typeof event.data === 'string') {
       if (/\D/.exec(event.data)) {
-        setInfo(event.data);
+        setInfo('');
+        setErr(event.data);
+        return;
       }
       const { data } = await supabase
         .from('barcode_data')
