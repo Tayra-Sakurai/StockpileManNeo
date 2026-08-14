@@ -23,6 +23,8 @@ async function onMessageReceive(event) {
      */
     const [{ rawValue }] = await barcodeDetector.detect(imageBitmap);
     postMessage(rawValue);
+  } else {
+    postMessage(null);
   }
 }
 

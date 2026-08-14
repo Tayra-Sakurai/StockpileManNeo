@@ -22,6 +22,7 @@ import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
  */
 function ItemDetail({ id }) {
   const [err, setErr] = useState('');
+  const [info, setInfo] = useState('');
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
@@ -120,12 +121,15 @@ function ItemDetail({ id }) {
         setValues({
           barcode: event.data,
         });
+    } else {
+      setErr('このデバイスではバーコードの読み取りに対応していません．');
     }
   };
 
   return (
     <>
       {err ? <Alert severity="error">{err}</Alert> : null}
+      {info ? <Alert severity="info">{info}</Alert> : null}
       <form
         onSubmit={handleSubmit(async formData => {
           let barcode_id = null;
@@ -193,6 +197,7 @@ function ItemDetail({ id }) {
                 if (event.currentTarget.files?.[0]) {
                   detectWorker.postMessage(event.currentTarget.files[0]);
                   setValue('barcode', '');
+                  setInfo('バーコードの読み取りが開始されました．');
                 }
               }}
             />
