@@ -13,6 +13,7 @@ import UndoIcon from "@mui/icons-material/Undo";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
+import getBarcode from "../../detectors/getBarcode.js";
 
 /**
  * The item detail editor.
@@ -34,7 +35,28 @@ function ItemDetail({ id }) {
    */
   const [largeCategory, setLargeCategory] = useState(null);
 
-  const detectWorker = new Worker(new URL('../../detectors/BarcodeDetection.js', import.meta.url));
+  /**
+   * File processing function.
+   * @param {File} file
+   */
+  const autoFillFunc = async file => {
+    const result = await getBarcode(file);
+
+    if (!result || /\D/.exec(result)) {
+      setErr(result);
+      return;
+    }
+
+    const { data } = await supabase
+      .from('barcode_data')
+      .select('name')
+      .eq('jan_code', result);
+
+    if (data?.[0]) setValues({
+      barcode: result,
+      name: data[0].name,
+    });
+  };
 
   const { control, handleSubmit, setValue, setValues } = useForm({
     async defaultValues() {
@@ -105,38 +127,6 @@ function ItemDetail({ id }) {
     control,
     name: ['barcode', 'useLife'],
   });
-  detectWorker.onmessage = async event => {
-    if (event.data === 'Hello UI.') {
-      console.log('The UI thread has gotten the message from the worker.');
-      return;
-    }
-
-    if (typeof event.data === 'string') {
-      if (/\D/.exec(event.data)) {
-        setInfo('');
-        setErr(event.data);
-        return;
-      }
-      const { data } = await supabase
-        .from('barcode_data')
-        .select('jan_code, name')
-        .eq('jan_code', event.data);
-
-      if (data?.[0])
-        setValues({
-          barcode: event.data,
-          name: data[0].name,
-        });
-      else
-        setValues({
-          barcode: event.data,
-        });
-    } else if (event.data instanceof Array) {
-      setInfo(`対応しているバーコード形式は${event.data.join(', ')}です．`);
-    } else {
-      setErr('このデバイスではバーコードの読み取りに対応していません．');
-    }
-  };
 
   return (
     <>
@@ -205,11 +195,11 @@ function ItemDetail({ id }) {
               id="barcode"
               type="file"
               style={{ display: 'none' }}
-              onChange={event => {
+              onChange={async event => {
                 if (event.currentTarget.files?.[0]) {
-                  detectWorker.postMessage(event.currentTarget.files[0]);
                   setValue('barcode', '');
                   setInfo('バーコードの読み取りが開始されました．');
+                  await autoFillFunc(event.currentTarget.files[0]);
                 }
               }}
             />
