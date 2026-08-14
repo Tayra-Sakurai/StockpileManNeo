@@ -1,6 +1,6 @@
 import { useForm, useWatch } from "react-hook-form";
 import supabase from "../../client.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, Container, FormControl, FormLabel, Stack } from "@mui/material";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
 import { useNavigate } from "react-router-dom";
@@ -46,23 +46,15 @@ function ItemDetail({ id }) {
 
     if (!result || /\D/.exec(result)) {
       setErr(result);
+      setInfo('バーコードの読み取りに失敗しました．');
       return;
     }
 
-    const { data } = await supabase
-      .from('barcode_data')
-      .select('name')
-      .eq('jan_code', result);
-
-    if (data?.[0]) setValues({
-      barcode: result,
-      name: data[0].name,
-    });
-
-    setInfo('');
+    setValue('barcode', result);
+    setInfo('バーコードの読み取りが完了しました．');
   };
 
-  const { control, handleSubmit, setValue, setValues } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     async defaultValues() {
       if (!id)
         // Returns empty table.
@@ -291,6 +283,7 @@ function ItemDetail({ id }) {
             name="useLife"
             label="期限を設定する．"
             control={control}
+            value="Use life"
           />
           <FormControl>
             <FormLabel htmlFor="life">期限</FormLabel>
