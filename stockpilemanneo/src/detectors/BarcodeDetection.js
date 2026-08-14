@@ -14,22 +14,31 @@ postMessage('Hello UI.');
  */
 async function onMessageReceive(event) {
   console.info('Worker has received the message.');
-  if ('BarcodeDetector' in globalThis) {
-    postMessage(await BarcodeDetector.getSupportedFormats());
-    const barcodeDetector = new BarcodeDetector({
-      formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e'],
-    });
-    const imageBitmap = await createImageBitmap(event.data);
-    /**
-     * @type {{
-     *   rawValue: string,
-     *   [x: string]: any,
-     * }[]}
-     */
-    const [{ rawValue }] = await barcodeDetector.detect(imageBitmap);
-    postMessage(rawValue);
-  } else {
-    postMessage(null);
+  try {
+    if ('BarcodeDetector' in globalThis) {
+      postMessage(await BarcodeDetector.getSupportedFormats());
+      const barcodeDetector = new BarcodeDetector({
+        formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e'],
+      });
+      const imageBitmap = await createImageBitmap(event.data);
+      /**
+       * @type {{
+       *   rawValue: string,
+       *   [x: string]: any,
+       * }[]}
+       */
+      const [{ rawValue }] = await barcodeDetector.detect(imageBitmap);
+      postMessage(rawValue);
+    } else {
+      postMessage(null);
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      postMessage(error.message);
+    } else {
+      postMessage(error?.toString());
+    }
+    return;
   }
 }
 

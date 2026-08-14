@@ -112,6 +112,9 @@ function ItemDetail({ id }) {
     }
 
     if (typeof event.data === 'string') {
+      if (/\D/.exec(event.data)) {
+        setInfo(event.data);
+      }
       const { data } = await supabase
         .from('barcode_data')
         .select('jan_code, name')
