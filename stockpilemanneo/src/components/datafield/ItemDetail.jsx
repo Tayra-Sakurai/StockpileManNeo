@@ -1,7 +1,7 @@
 import { useForm, useWatch } from "react-hook-form";
 import supabase from "../../client.js";
 import { useState } from "react";
-import { Alert, Button, FormControl, FormLabel, Stack } from "@mui/material";
+import { Alert, Button, Container, FormControl, FormLabel, Stack } from "@mui/material";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
 import { useNavigate } from "react-router-dom";
 import { SwitchElement, TextFieldElement } from "react-hook-form-mui";
@@ -26,6 +26,8 @@ function ItemDetail({ id }) {
   const [info, setInfo] = useState('');
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+
+  const [image, setImage] = useState('');
 
   /**
    * @type {[
@@ -200,10 +202,19 @@ function ItemDetail({ id }) {
                   setValue('barcode', '');
                   setInfo('バーコードの読み取りが開始されました．');
                   await autoFillFunc(event.currentTarget.files[0]);
+                  const reader = new FileReader();
+                  reader.addEventListener('load', () => {
+                    if (typeof reader.result === 'string')
+                      setImage(reader.result);
+                  });
+                  reader.readAsDataURL(event.currentTarget.files[0]);
                 }
               }}
             />
           </FormControl>
+          <Container>
+            <img src={image} />
+          </Container>
           <Button
             type="button"
             variant="contained"

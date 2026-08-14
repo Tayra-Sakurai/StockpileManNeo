@@ -17,7 +17,7 @@ export default async function getBarcode(file) {
         formats,
       });
       /**
-       * @type {{
+       * @type {?{
        *   rawValue: string,
        *   format: string,
        *   boundingBox: DOMRectReadOnly,
