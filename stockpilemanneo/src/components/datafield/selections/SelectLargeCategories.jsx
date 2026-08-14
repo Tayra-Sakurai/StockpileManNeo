@@ -14,17 +14,15 @@ const filter = createFilterOptions();
 
 /**
  * Large category selector.
- * @template T
+ * @template {import("react-hook-form").FieldValues} T
  * @param {object} props The props.
- * @param {string} props.name The name.
+ * @param {import("react-hook-form").Path<T>} props.name The name.
  * @param {string=} props.id The identifier.
  * @param {import("react-hook-form").Control<T>=} props.control The control of the element.
- * @param {?LargeCategoryCandidate} props.value The value of the element.
- * @param {import("react").Dispatch.<import("react").SetStateAction.<?LargeCategoryCandidate>>} props.setValue The value setter.
  * @returns
  */
 function SelectLargeCategories(props) {
-  const autoCompleteElementProps = props;
+  const { ...autoCompleteElementProps } = props;
 
   const getLargeCategories = async () => {
     setLoading(true);
@@ -58,11 +56,7 @@ function SelectLargeCategories(props) {
       loading={loading}
       required
       autocompleteProps={{
-        id: props.id,
         getOptionLabel(option) {
-          if (typeof option === 'string')
-            return `${option} を追加する`;
-
           return option.name;
         },
         getOptionKey(option) {
@@ -72,25 +66,17 @@ function SelectLargeCategories(props) {
         selectOnFocus: true,
         clearOnBlur: true,
         handleHomeEndKeys: true,
-        value: props.value,
         async onChange(event, newValue) {
-          if (typeof newValue === 'string')
-            props.setValue({
-              name: newValue,
-            });
-          else if (newValue && !newValue.id) {
-            const { data } = await supabase
+          if (newValue && !newValue.id) {
+            const { name: n } = newValue;
+            await supabase
               .from('large_categories')
               .insert({
-                name: newValue.name,
-                vector: await createEmbeddingVector(newValue.name)
-              })
-              .select('name, id');
+                name: n,
+                vector: await createEmbeddingVector(n),
+              });
+
             await getLargeCategories();
-            if (data && data[0])
-              props.setValue(data[0]);
-          } else {
-            props.setValue(newValue);
           }
         },
         async onOpen() {

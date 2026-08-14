@@ -1,4 +1,4 @@
-import { useForm, useWatch } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import supabase from "../../client.js";
 import { useEffect, useState } from "react";
 import { Alert, Button, Container, FormControl, FormLabel, Stack } from "@mui/material";
@@ -54,7 +54,7 @@ function ItemDetail({ id }) {
     setInfo('バーコードの読み取りが完了しました．');
   };
 
-  const { control, handleSubmit, setValue } = useForm({
+  const { control, handleSubmit, setValue, ...otherMethods } = useForm({
     async defaultValues() {
       if (!id)
         // Returns empty table.
@@ -128,203 +128,201 @@ function ItemDetail({ id }) {
     <>
       {err ? <Alert severity="error">{err}</Alert> : null}
       {info ? <Alert severity="info">{info}</Alert> : null}
-      <form
-        onSubmit={handleSubmit(async formData => {
-          let barcode_id = null;
+      <FormProvider control={control} setValue={setValue} handleSubmit={handleSubmit} {...otherMethods}>
+        <form
+          onSubmit={handleSubmit(async formData => {
+            let barcode_id = null;
 
-          // Upsert the barcode data table if needed.
-          if (formData.barcode) {
-            const { data } = await supabase
-              .from('barcode_data')
-              .upsert({
-                jan_code: formData.barcode,
-                name: formData.name,
-              }, {
-                onConflict: 'jan_code',
-              })
-              .select('id');
-
-            if (data?.[0]) barcode_id = data[0].id;
-          }
-
-          if (id)
-            await supabase
-              .from('items')
-              .update({
-                name: formData.name,
-                barcode_id,
-                description: formData.description,
-                small_category_id: formData.small_categories?.id,
-                location_id: formData.locations?.id,
-                life: formData.life ? new Date(formData.life).toISOString() : null,
-                purchase_timestamp: new Date(formData.purchase_date).toISOString(),
-                vector: await createEmbeddingVector(formData.name),
-              })
-              .eq('id', id);
-          else
-            await supabase
-              .from('items')
-              .insert({
-                vector: await createEmbeddingVector(formData.name),
-                name: formData.name,
-                description: formData.description,
-                small_category_id: formData.small_categories?.id ?? 0,
-                location_id: formData.locations?.id ?? 0,
-                life: formData.life ? new Date(formData.life).toISOString() : null,
-                purchase_timestamp: new Date(formData.purchase_date).toISOString(),
-                barcode_id,
-              });
-
-          navigate(-1);
-        })}
-      >
-        <Stack spacing={2}>
-          <FormControl>
-            <FormLabel htmlFor="barcode">バーコード画像をアップロード</FormLabel>
-            <TextFieldElement
-              name="barcode"
-              fullWidth
-              control={control}
-              placeholder="こちらに直接入力することもできます"
-            />
-            <input
-              id="barcode"
-              type="file"
-              style={{ display: 'none' }}
-              onChange={async event => {
-                if (event.currentTarget.files?.[0]) {
-                  setValue('barcode', '');
-                  setInfo('バーコードの読み取りが開始されました．');
-                  await autoFillFunc(event.currentTarget.files[0]);
-                  const reader = new FileReader();
-                  reader.addEventListener('load', () => {
-                    if (typeof reader.result === 'string')
-                      setImage(reader.result);
-                  });
-                  reader.readAsDataURL(event.currentTarget.files[0]);
-                }
-              }}
-            />
-          </FormControl>
-          <Container>
-            <img src={image} />
-          </Container>
-          <Button
-            type="button"
-            variant="contained"
-            color="secondary"
-            startIcon={<TaskIcon />}
-            onClick={async () => {
-              if (!barcodeText)
-                return;
-
+            // Upsert the barcode data table if needed.
+            if (formData.barcode) {
               const { data } = await supabase
                 .from('barcode_data')
-                .select('id, name')
-                .eq('jan_code', barcodeText);
+                .upsert({
+                  jan_code: formData.barcode,
+                  name: formData.name,
+                }, {
+                  onConflict: 'jan_code',
+                })
+                .select('id');
 
-              if (data?.[0]) {
-                setValue('name', data[0].name);
-              }
-            }}
-          >
-            バーコード情報を利用して自動入力
-          </Button>
-          <FormControl>
-            <FormLabel htmlFor="largeCategory">分類</FormLabel>
-            <SelectLargeCategories
-              name="largeCategory"
-              id="largeCategory"
-              value={largeCategory}
-              setValue={setLargeCategory}
+              if (data?.[0]) barcode_id = data[0].id;
+            }
+
+            if (id)
+              await supabase
+                .from('items')
+                .update({
+                  name: formData.name,
+                  barcode_id,
+                  description: formData.description,
+                  small_category_id: formData.small_categories?.id,
+                  location_id: formData.locations?.id,
+                  life: formData.life ? new Date(formData.life).toISOString() : null,
+                  purchase_timestamp: new Date(formData.purchase_date).toISOString(),
+                  vector: await createEmbeddingVector(formData.name),
+                })
+                .eq('id', id);
+            else
+              await supabase
+                .from('items')
+                .insert({
+                  vector: await createEmbeddingVector(formData.name),
+                  name: formData.name,
+                  description: formData.description,
+                  small_category_id: formData.small_categories?.id ?? 0,
+                  location_id: formData.locations?.id ?? 0,
+                  life: formData.life ? new Date(formData.life).toISOString() : null,
+                  purchase_timestamp: new Date(formData.purchase_date).toISOString(),
+                  barcode_id,
+                });
+
+            navigate(-1);
+          })}
+        >
+          <Stack spacing={2}>
+            <FormControl>
+              <FormLabel htmlFor="barcode">バーコード画像をアップロード</FormLabel>
+              <TextFieldElement
+                name="barcode"
+                fullWidth
+                control={control}
+                placeholder="こちらに直接入力することもできます"
+              />
+              <input
+                id="barcode"
+                type="file"
+                style={{ display: 'none' }}
+                onChange={async event => {
+                  if (event.currentTarget.files?.[0]) {
+                    setValue('barcode', '');
+                    setInfo('バーコードの読み取りが開始されました．');
+                    await autoFillFunc(event.currentTarget.files[0]);
+                    const reader = new FileReader();
+                    reader.addEventListener('load', () => {
+                      if (typeof reader.result === 'string')
+                        setImage(reader.result);
+                    });
+                    reader.readAsDataURL(event.currentTarget.files[0]);
+                  }
+                }}
+              />
+            </FormControl>
+            <Container>
+              <img src={image} />
+            </Container>
+            <Button
+              type="button"
+              variant="contained"
+              color="secondary"
+              startIcon={<TaskIcon />}
+              onClick={async () => {
+                if (!barcodeText)
+                  return;
+
+                const { data } = await supabase
+                  .from('barcode_data')
+                  .select('id, name')
+                  .eq('jan_code', barcodeText);
+
+                if (data?.[0]) {
+                  setValue('name', data[0].name);
+                }
+              }}
+            >
+              バーコード情報を利用して自動入力
+            </Button>
+            <FormControl>
+              <FormLabel htmlFor="largeCategory">分類</FormLabel>
+              <SelectLargeCategories
+                name="largeCategory"
+                id="largeCategory"
+                control={control}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="small_categories">名称</FormLabel>
+              <SelectSmallCategories
+                name="small_categories"
+                id="small_categories"
+                largeCategoryName="largeCategory"
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="locations">保管場所</FormLabel>
+              <SelectLocations
+                name="locations"
+                id="locations"
+                control={control}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="name">商品名</FormLabel>
+              <TextFieldElement
+                control={control}
+                name="name"
+                id="name"
+                required
+                fullWidth
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="purchase_date">購入日</FormLabel>
+              <TextFieldElement
+                type="date"
+                required
+                name="purchase_date"
+                id="purchase_date"
+                control={control}
+                fullWidth
+              />
+            </FormControl>
+            <SwitchElement
+              name="useLife"
+              label="期限を設定する．"
               control={control}
+              value="Use life"
             />
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="small_categories">名称</FormLabel>
-            <SelectSmallCategories
-              name="small_categories"
-              id="small_categories"
-              largeCategory={largeCategory}
-              setLargeCategory={setLargeCategory}
-              control={control}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="locations">保管場所</FormLabel>
-            <SelectLocations
-              name="locations"
-              id="locations"
-              control={control}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="name">商品名</FormLabel>
-            <TextFieldElement
-              control={control}
-              name="name"
-              id="name"
-              required
-              fullWidth
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="purchase_date">購入日</FormLabel>
-            <TextFieldElement
-              type="date"
-              required
-              name="purchase_date"
-              id="purchase_date"
-              control={control}
-              fullWidth
-            />
-          </FormControl>
-          <SwitchElement
-            name="useLife"
-            label="期限を設定する．"
-            control={control}
-            value="Use life"
-          />
-          <FormControl>
-            <FormLabel htmlFor="life">期限</FormLabel>
-            <TextFieldElement
-              id="life"
-              name="life"
-              disabled={!lifeSw}
-              fullWidth
-              type="date"
-              control={control}
-            />
-          </FormControl>
-          <Button
-            color="primary"
-            variant="contained"
-            startIcon={<UndoIcon />}
-            type="button"
-            onClick={() => navigate(-1)}
-          >
-            戻る
-          </Button>
-          <Button
-            color="success"
-            variant="contained"
-            startIcon={<SaveIcon />}
-            type="submit"
-          >
-            保存
-          </Button>
-          <Button
-            type="button"
-            variant="contained"
-            color="error"
-            disabled={!id}
-            startIcon={<DeleteForeverIcon />}
-            onClick={() => setOpen(true)}
-          >
-            削除
-          </Button>
-        </Stack>
-      </form>
+            <FormControl>
+              <FormLabel htmlFor="life">期限</FormLabel>
+              <TextFieldElement
+                id="life"
+                name="life"
+                disabled={!lifeSw}
+                fullWidth
+                type="date"
+                control={control}
+              />
+            </FormControl>
+            <Button
+              color="primary"
+              variant="contained"
+              startIcon={<UndoIcon />}
+              type="button"
+              onClick={() => navigate(-1)}
+            >
+              戻る
+            </Button>
+            <Button
+              color="success"
+              variant="contained"
+              startIcon={<SaveIcon />}
+              type="submit"
+            >
+              保存
+            </Button>
+            <Button
+              type="button"
+              variant="contained"
+              color="error"
+              disabled={!id}
+              startIcon={<DeleteForeverIcon />}
+              onClick={() => setOpen(true)}
+            >
+              削除
+            </Button>
+          </Stack>
+        </form>
+      </FormProvider>
       <RemoveConfirmDialog
         open={open}
         setOpen={setOpen}

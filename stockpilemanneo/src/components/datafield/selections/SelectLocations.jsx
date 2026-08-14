@@ -4,8 +4,6 @@ import { AutocompleteElement } from "react-hook-form-mui";
 import supabase from "../../../client.js";
 import { createEmbeddingVector } from "../../stockpile/stockpileVectors.js";
 
-const LOCATION_SEARCH_STRICTNESS_LEVEL = 0.5;
-
 const filter = createFilterOptions();
 
 /**
@@ -17,21 +15,14 @@ const filter = createFilterOptions();
 
 /**
  * The location selector.
- * @template T
+ * @template {import("react-hook-form").FieldValues} T
  * @param {object} props The props.
- * @param {string} props.name The name.
+ * @param {import("react-hook-form").Path<T>} props.name The name.
  * @param {string=} props.id The id.
  * @param {import("react-hook-form").Control<T>=} props.control The control of the element.
  * @returns
  */
 function SelectLocations({ name, id, control }) {
-  /**
-   * @type {[
-   *   ?LocationCandidate,
-   *   import("react").Dispatch.<import("react").SetStateAction.<?LocationCandidate>>
-   * ]}
-   */
-  const [value, setValue] = useState(null);
   /**
    * @type {[
    *   Array.<LocationCandidate>,
@@ -59,7 +50,6 @@ function SelectLocations({ name, id, control }) {
       control={control}
       autocompleteProps={{
         id,
-        value,
         fullWidth: true,
         handleHomeEndKeys: true,
         clearOnBlur: true,
@@ -81,36 +71,15 @@ function SelectLocations({ name, id, control }) {
           return option.name;
         },
         async onChange(event, newValue) {
-          if (typeof newValue === 'string') {
-            const { data, error } = await supabase
-              .from('locations')
-              .insert({
-                name: newValue,
-                vector: await createEmbeddingVector(newValue),
-              })
-              .select('id, name');
-
-            if (error) throw error;
-
-            await loadOptions();
-
-            if (data) setValue(data[0]);
-          } else if (!newValue || newValue.id) {
-            setValue(newValue);
-          } else {
-            const { data, error } = await supabase
+          if (newValue && !newValue.id) {
+            await supabase
               .from('locations')
               .insert({
                 name: newValue.name,
                 vector: await createEmbeddingVector(newValue.name),
-              })
-              .select('id, name');
-
-            if (error) throw error;
+              });
 
             await loadOptions();
-
-            if (data) setValue(data[0]);
           }
         },
         async onOpen() {

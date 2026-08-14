@@ -105,8 +105,6 @@ function SmallCategoryDetail({ id }) {
             <SelectLargeCategories
               id="large_categories"
               name="large_categories"
-              value={largeCategory}
-              setValue={setLargeCategory}
             />
           </FormControl>
           <FormControl>

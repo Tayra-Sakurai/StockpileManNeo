@@ -1,6 +1,6 @@
 import { createFilterOptions } from "@mui/material";
 import { useState } from "react";
-import { AutocompleteElement } from "react-hook-form-mui";
+import { AutocompleteElement, useFormContext, useWatch } from "react-hook-form-mui";
 import supabase from "../../../client.js";
 import { createEmbeddingVector } from "../../stockpile/stockpileVectors.js";
 
@@ -9,26 +9,21 @@ import { createEmbeddingVector } from "../../stockpile/stockpileVectors.js";
  * @typedef {object} SmallCategoryCandidate
  * @property {string} name The name.
  * @property {?number=} id The identifier.
- * @property {{
- *   name: string,
- *   id?: ?number,
- * }} large_categories The related large category.
+ * @property {import("./SelectLargeCategories.jsx").LargeCategoryCandidate} large_categories The related large category.
  */
 
 const filter = createFilterOptions();
 
 /**
  * The small category selector.
- * @template T
+ * @template {import("react-hook-form").FieldValues} T
  * @param {object} props The props.
- * @param {string} props.name The name of this element.
+ * @param {import("react-hook-form").Path<T>} props.name The name of this element.
  * @param {string=} props.id The id.
- * @param {?import("./SelectLargeCategories.jsx").LargeCategoryCandidate=} props.largeCategory The large category.
- * @param {import("react").Dispatch.<import("react").SetStateAction.<?{ name: string, id?: number }>>=} props.setLargeCategory The large category setter.
- * @param {import("react-hook-form").Control<T>=} props.control The control of the element.
+ * @param {import("react-hook-form").Path<T>} props.largeCategoryName The name of the large category selector.
  * @returns
  */
-function SelectSmallCategories({ name, id, largeCategory, setLargeCategory, control }) {
+function SelectSmallCategories({ name, id, largeCategoryName }) {
   /**
    * @type {[
    *   Array.<SmallCategoryCandidate>,
@@ -37,41 +32,23 @@ function SelectSmallCategories({ name, id, largeCategory, setLargeCategory, cont
    */
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
-  /**
-   * @type {[
-   *   ?SmallCategoryCandidate,
-   *   import("react").Dispatch.<import("react").SetStateAction.<?SmallCategoryCandidate>>
-   * ]}
-   */
-  const [value, setValue] = useState(null);
+
+  const { setValue, control } = useFormContext();
+
+  const largeCategory = useWatch({
+    name: largeCategoryName,
+    control,
+  });
 
   const loadOptions = async () => {
     setLoading(true);
 
-    if (!largeCategory || setLargeCategory) {
-      const { data, error } = await supabase
-        .from('small_categories')
-        .select('id, name, large_categories!inner(id, name)');
+    const { data } = await supabase
+      .from('small_categories')
+      .select('id, name, large_categories!inner(id, name)')
+      .order('large_categories.name', { ascending: true });
 
-      if (error) throw error;
-
-      if (data.length) {
-        data.sort((a, b) => a.name.localeCompare(b.name));
-        data.sort((a, b) => a.large_categories.name.localeCompare(b.large_categories.name));
-        setOptions(data);
-      }
-    } else if (largeCategory.id) {
-      const { data, error } = await supabase
-        .from('small_categories')
-        .select('id, name, large_categories!inner(id, name)')
-        .eq('large_category_id', largeCategory.id);
-
-      if (error) throw error;
-
-      if (data) setOptions(data.toSorted((a, b) => a.name.localeCompare(b.name)));
-    } else {
-      setOptions([]);
-    }
+    if (data) setOptions(data);
 
     setLoading(false);
   };
@@ -84,51 +61,25 @@ function SelectSmallCategories({ name, id, largeCategory, setLargeCategory, cont
       control={control}
       autocompleteProps={{
         id,
-        value,
         async onOpen() {
           await loadOptions();
         },
         async onChange(event, newValue) {
-          if (typeof newValue === 'string') {
-            if (largeCategory?.id) {
-              const { data, error } = await supabase
-                .from('small_categories')
-                .insert({
-                  large_category_id: largeCategory.id,
-                  name: newValue,
-                  vector: await createEmbeddingVector(newValue),
-                })
-                .select('id, name, large_categories(id, name)');
-
-              if (error) throw error;
-              if (data) setValue(data[0]);
-            } else {
-              throw new Error('The value is not valid.');
-            }
-          } else if (newValue?.id) {
-            setValue(newValue);
-
-            if (newValue.large_categories.id && setLargeCategory)
-              setLargeCategory(newValue.large_categories);
-          } else if (newValue && largeCategory?.id) {
-            const { data, error } = await supabase
+          if (newValue && !newValue.id) {
+            await supabase
               .from('small_categories')
               .insert({
                 name: newValue.name,
-                large_category_id: largeCategory.id,
+                large_category_id: newValue.large_categories.id ?? 0,
                 vector: await createEmbeddingVector(newValue.name),
-              })
-              .select('id, name, large_categories(id, name)');
-
-            if (error) throw error;
-            if (data) setValue(data[0]);
+              });
+            loadOptions();
           }
 
-          await loadOptions();
+          if (newValue && newValue.large_categories != largeCategory)
+            setValue(largeCategoryName, newValue.large_categories);
         },
         getOptionLabel(option) {
-          if (typeof option === 'string')
-            return option;
           return option.name;
         },
         filterOptions(options, params) {
@@ -143,9 +94,6 @@ function SelectSmallCategories({ name, id, largeCategory, setLargeCategory, cont
               name: inputValue,
               large_categories: largeCategory,
             });
-
-          if (largeCategory?.id && !setLargeCategory)
-            return filtered.filter(value => value.large_categories.id == largeCategory.id);
 
           return filtered;
         },
@@ -162,10 +110,7 @@ function SelectSmallCategories({ name, id, largeCategory, setLargeCategory, cont
           return option.large_categories.name;
         },
         getOptionKey(option) {
-          if (typeof option === 'string')
-            return option;
-
-          return option.name;
+          return option.id ? option.id : option.name;
         },
         handleHomeEndKeys: true,
         selectOnFocus: true,
