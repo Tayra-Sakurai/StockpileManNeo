@@ -46,9 +46,9 @@ function SelectSmallCategories({ name, id, largeCategoryName }) {
     const { data } = await supabase
       .from('small_categories')
       .select('id, name, large_categories!inner(id, name)')
-      .order('large_categories.name', { ascending: true });
+      .order('name', { ascending: true });
 
-    if (data) setOptions(data);
+    if (data) setOptions(data.toSorted((a, b) => a.large_categories.name.localeCompare(b.large_categories.name)));
 
     setLoading(false);
   };
