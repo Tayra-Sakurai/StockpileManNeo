@@ -177,6 +177,7 @@ function ItemDetail({ id }) {
                 qrbox={250}
                 fps={10}
                 disableFlip={false}
+                formatsToSupport={acceptedFormats}
                 onSuccess={(decodedText, result) => {
                   setInfo('読み取りに成功しました．');
                   if (result.result.format?.format && acceptedFormats.includes(result.result.format.format)) {
@@ -187,7 +188,6 @@ function ItemDetail({ id }) {
                     }
                   }
                 }}
-                onError={errorMessage => setErr(errorMessage)}
               />
             </Container>
             <Button
