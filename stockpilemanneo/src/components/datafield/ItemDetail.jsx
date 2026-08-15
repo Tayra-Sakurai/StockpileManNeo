@@ -1,7 +1,7 @@
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import supabase from "../../client.js";
 import { useState } from "react";
-import { Alert, Button, Container, FormControl, FormLabel, Stack } from "@mui/material";
+import { Alert, Button, CircularProgress, Container, FormControl, FormLabel, Stack } from "@mui/material";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
 import { useNavigate } from "react-router-dom";
 import { SwitchElement, TextFieldElement } from "react-hook-form-mui";
@@ -15,6 +15,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
 import BarcodeReader from "../barcode_detection/BarcodeReader.jsx";
 import { Html5QrcodeSupportedFormats } from "html5-qrcode";
+import asynchronousTimer from "../../timers/AsynchronousTimer.js";
 
 /**
  * The item detail editor.
@@ -27,6 +28,7 @@ function ItemDetail({ id }) {
   const [info, setInfo] = useState('');
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const acceptedFormats = [
     Html5QrcodeSupportedFormats.EAN_13,
@@ -113,6 +115,7 @@ function ItemDetail({ id }) {
       <FormProvider control={control} setValue={setValue} setValues={setValues} handleSubmit={handleSubmit} {...otherMethods}>
         <form
           onSubmit={handleSubmit(async formData => {
+            setLoading(true);
             let barcode_id = null;
 
             // Upsert the barcode data table if needed.
@@ -128,20 +131,22 @@ function ItemDetail({ id }) {
                   .update({
                     jan_code: formData.barcode,
                     name: formData.name,
-                    small_category_id: formData.small_categories.id,
+                    small_category_id: formData.small_categories?.id,
                   })
                   .eq('id', d[0].id)
                   .select('id');
 
                 if (data?.[0])
                   barcode_id = data[0].id;
+
+                await asynchronousTimer(10);
               } else {
                 const { data } = await supabase
                   .from('barcode_data')
                   .insert({
                     jan_code: formData.barcode,
                     name: formData.name,
-                    small_category_id: formData.small_categories.id,
+                    small_category_id: formData.small_categories?.id,
                   })
                   .select('id');
 
@@ -306,22 +311,24 @@ function ItemDetail({ id }) {
               startIcon={<UndoIcon />}
               type="button"
               onClick={() => navigate(-1)}
+              disabled={loading}
             >
               戻る
             </Button>
             <Button
               color="success"
               variant="contained"
-              startIcon={<SaveIcon />}
+              startIcon={loading ? undefined : <SaveIcon />}
               type="submit"
+              disabled={loading}
             >
-              保存
+              {loading ? <CircularProgress size="1rem" /> : "保存"}
             </Button>
             <Button
               type="button"
               variant="contained"
               color="error"
-              disabled={!id}
+              disabled={!id || loading}
               startIcon={<DeleteForeverIcon />}
               onClick={() => setOpen(true)}
             >
