@@ -44,34 +44,27 @@ export type Database = {
           created_at: string;
           id: number;
           jan_code: string;
-          location_id: number | null;
           name: string;
           small_category_id: number | null;
+          user_id: string;
         };
         Insert: {
           created_at?: string;
           id?: number;
           jan_code: string;
-          location_id?: number | null;
           name: string;
           small_category_id?: number | null;
+          user_id?: string;
         };
         Update: {
           created_at?: string;
           id?: number;
           jan_code?: string;
-          location_id?: number | null;
           name?: string;
           small_category_id?: number | null;
+          user_id?: string;
         };
         Relationships: [
-          {
-            foreignKeyName: "barcode_data_location_id_fkey";
-            columns: ["location_id"];
-            isOneToOne: false;
-            referencedRelation: "locations";
-            referencedColumns: ["id"];
-          },
           {
             foreignKeyName: "barcode_data_small_category_id_fkey";
             columns: ["small_category_id"];

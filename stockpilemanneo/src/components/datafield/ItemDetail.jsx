@@ -36,7 +36,7 @@ function ItemDetail({ id }) {
     Html5QrcodeSupportedFormats.UPC_EAN_EXTENSION,
   ];
 
-  const { control, handleSubmit, setValue, ...otherMethods } = useForm({
+  const { control, handleSubmit, setValue, setValues, ...otherMethods } = useForm({
     async defaultValues() {
       if (!id)
         // Returns empty table.
@@ -110,7 +110,7 @@ function ItemDetail({ id }) {
     <>
       {err ? <Alert severity="error">{err}</Alert> : null}
       {info ? <Alert severity="info">{info}</Alert> : null}
-      <FormProvider control={control} setValue={setValue} handleSubmit={handleSubmit} {...otherMethods}>
+      <FormProvider control={control} setValue={setValue} setValues={setValues} handleSubmit={handleSubmit} {...otherMethods}>
         <form
           onSubmit={handleSubmit(async formData => {
             let barcode_id = null;
@@ -122,6 +122,7 @@ function ItemDetail({ id }) {
                 .upsert({
                   jan_code: formData.barcode,
                   name: formData.name,
+                  small_category_id: formData.small_categories?.id,
                 }, {
                   onConflict: 'jan_code',
                 })
@@ -201,11 +202,18 @@ function ItemDetail({ id }) {
 
                 const { data } = await supabase
                   .from('barcode_data')
-                  .select('id, name')
+                  .select('id, name, small_categories(id, name, large_categories!inner(id, name))')
                   .eq('jan_code', barcodeText);
 
                 if (data?.[0]) {
-                  setValue('name', data[0].name);
+                  if (data[0].small_categories) {
+                    setValues({
+                      small_categories: data[0].small_categories,
+                      name: data[0].name,
+                    });
+                  } else {
+                    setValue('name', data[0].name);
+                  }
                 }
               }}
             >
