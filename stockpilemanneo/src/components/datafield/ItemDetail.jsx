@@ -117,18 +117,36 @@ function ItemDetail({ id }) {
 
             // Upsert the barcode data table if needed.
             if (formData.barcode) {
-              const { data } = await supabase
+              const { data: d } = await supabase
                 .from('barcode_data')
-                .upsert({
-                  jan_code: formData.barcode,
-                  name: formData.name,
-                  small_category_id: formData.small_categories?.id,
-                }, {
-                  onConflict: 'jan_code',
-                })
-                .select('id');
+                .select('id')
+                .eq('jan_code', formData.barcode);
 
-              if (data?.[0]) barcode_id = data[0].id;
+              if (d?.length) {
+                const { data } = await supabase
+                  .from('barcode_data')
+                  .update({
+                    jan_code: formData.barcode,
+                    name: formData.name,
+                    small_category_id: formData.small_categories.id,
+                  })
+                  .select('id');
+
+                if (data?.[0])
+                  barcode_id = data[0].id;
+              } else {
+                const { data } = await supabase
+                  .from('barcode_data')
+                  .insert({
+                    jan_code: formData.barcode,
+                    name: formData.name,
+                    small_category_id: formData.small_categories.id,
+                  })
+                  .select('id');
+
+                if (data?.[0])
+                  barcode_id = data[0].id;
+              }
             }
 
             if (id)
