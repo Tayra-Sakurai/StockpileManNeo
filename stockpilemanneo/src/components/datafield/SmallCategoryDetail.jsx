@@ -28,13 +28,6 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 function SmallCategoryDetail({ id }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  /**
-   * @type {[
-   *   ?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate,
-   *   import("react").Dispatch.<import("react").SetStateAction.<?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate>>
-   * ]}
-   */
-  const [largeCategory, setLargeCategory] = useState(null);
 
   /**
    * The upsert action.

@@ -1,6 +1,6 @@
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import supabase from "../../client.js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Alert, Button, Container, FormControl, FormLabel, Stack } from "@mui/material";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,8 @@ import UndoIcon from "@mui/icons-material/Undo";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
-import getBarcode from "../../detectors/getBarcode.js";
+import BarcodeReader from "../barcode_detection/BarcodeReader.jsx";
+import { Html5QrcodeSupportedFormats } from "html5-qrcode";
 
 /**
  * The item detail editor.
@@ -26,33 +27,6 @@ function ItemDetail({ id }) {
   const [info, setInfo] = useState('');
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-
-  const [image, setImage] = useState('');
-
-  /**
-   * @type {[
-   *   ?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate,
-   *   import("react").Dispatch.<import("react").SetStateAction.<?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate>>
-   * ]}
-   */
-  const [largeCategory, setLargeCategory] = useState(null);
-
-  /**
-   * File processing function.
-   * @param {File} file
-   */
-  const autoFillFunc = async file => {
-    const result = await getBarcode(file);
-
-    if (!result || /\D/.exec(result)) {
-      setErr(result);
-      setInfo('バーコードの読み取りに失敗しました．');
-      return;
-    }
-
-    setValue('barcode', result);
-    setInfo('バーコードの読み取りが完了しました．');
-  };
 
   const { control, handleSubmit, setValue, ...otherMethods } = useForm({
     async defaultValues() {
@@ -181,34 +155,38 @@ function ItemDetail({ id }) {
         >
           <Stack spacing={2}>
             <FormControl>
-              <FormLabel htmlFor="barcode">バーコード画像をアップロード</FormLabel>
+              <FormLabel htmlFor="barcode">JAN コード</FormLabel>
               <TextFieldElement
+                id="barcode"
                 name="barcode"
                 fullWidth
                 control={control}
                 placeholder="こちらに直接入力することもできます"
               />
-              <input
-                id="barcode"
-                type="file"
-                style={{ display: 'none' }}
-                onChange={async event => {
-                  if (event.currentTarget.files?.[0]) {
-                    setValue('barcode', '');
-                    setInfo('バーコードの読み取りが開始されました．');
-                    await autoFillFunc(event.currentTarget.files[0]);
-                    const reader = new FileReader();
-                    reader.addEventListener('load', () => {
-                      if (typeof reader.result === 'string')
-                        setImage(reader.result);
-                    });
-                    reader.readAsDataURL(event.currentTarget.files[0]);
+            </FormControl>
+            <Container>
+              <BarcodeReader
+                qrbox={250}
+                fps={10}
+                disableFlip={false}
+                onSuccess={(decodedText, result) => {
+                  setInfo('読み取りに成功しました．');
+                  const acceptedFormats = [
+                    Html5QrcodeSupportedFormats.EAN_13,
+                    Html5QrcodeSupportedFormats.EAN_8,
+                    Html5QrcodeSupportedFormats.UPC_A,
+                    Html5QrcodeSupportedFormats.UPC_E,
+                    Html5QrcodeSupportedFormats.UPC_EAN_EXTENSION,
+                  ];
+                  if (result.result.format?.format && acceptedFormats.includes(result.result.format.format)) {
+                    if (/^\d+$/.exec(decodedText)) {
+                      setValue('barcode', decodedText);
+                    } else {
+                      setErr('誤検知したようです．');
+                    }
                   }
                 }}
               />
-            </FormControl>
-            <Container>
-              <img src={image} />
             </Container>
             <Button
               type="button"
