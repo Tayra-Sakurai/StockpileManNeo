@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 /**
  * The barcode reader.
- * @param {import("html5-qrcode").Html5QrcodeCameraScanConfig & {onSuccess: import("html5-qrcode").QrcodeSuccessCallback, onError?: import("html5-qrcode").QrcodeErrorCallback, verbose?: boolean}} props The props.
+ * @param {import("html5-qrcode/html5-qrcode-scanner.d.ts").Html5QrcodeScannerConfig & {onSuccess: import("html5-qrcode").QrcodeSuccessCallback, onError?: import("html5-qrcode").QrcodeErrorCallback, verbose?: boolean}} props The props.
  * @returns
  */
 function BarcodeReader({ onSuccess, onError, verbose, ...config }) {

@@ -28,6 +28,14 @@ function ItemDetail({ id }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
+  const acceptedFormats = [
+    Html5QrcodeSupportedFormats.EAN_13,
+    Html5QrcodeSupportedFormats.EAN_8,
+    Html5QrcodeSupportedFormats.UPC_A,
+    Html5QrcodeSupportedFormats.UPC_E,
+    Html5QrcodeSupportedFormats.UPC_EAN_EXTENSION,
+  ];
+
   const { control, handleSubmit, setValue, ...otherMethods } = useForm({
     async defaultValues() {
       if (!id)
@@ -169,15 +177,9 @@ function ItemDetail({ id }) {
                 qrbox={250}
                 fps={10}
                 disableFlip={false}
+                formatsToSupport={acceptedFormats}
                 onSuccess={(decodedText, result) => {
                   setInfo('読み取りに成功しました．');
-                  const acceptedFormats = [
-                    Html5QrcodeSupportedFormats.EAN_13,
-                    Html5QrcodeSupportedFormats.EAN_8,
-                    Html5QrcodeSupportedFormats.UPC_A,
-                    Html5QrcodeSupportedFormats.UPC_E,
-                    Html5QrcodeSupportedFormats.UPC_EAN_EXTENSION,
-                  ];
                   if (result.result.format?.format && acceptedFormats.includes(result.result.format.format)) {
                     if (/^\d+$/.exec(decodedText)) {
                       setValue('barcode', decodedText);
@@ -186,6 +188,7 @@ function ItemDetail({ id }) {
                     }
                   }
                 }}
+                onError={errorMessage => setErr(errorMessage)}
               />
             </Container>
             <Button
