@@ -83,7 +83,7 @@ function ItemDetail({ id }) {
           small_categories: data[0].small_categories,
           largeCategory: data[0].small_categories.large_categories,
           locations: data[0].locations,
-          useLife: 'Use life',
+          useLife: data[0].life ? 'Use life' : null,
         };
       }
 
@@ -130,6 +130,7 @@ function ItemDetail({ id }) {
                     name: formData.name,
                     small_category_id: formData.small_categories.id,
                   })
+                  .eq('id', d[0].id)
                   .select('id');
 
                 if (data?.[0])
