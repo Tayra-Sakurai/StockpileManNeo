@@ -1,4 +1,4 @@
-import { Button, Container, MenuItem, Select, Stack } from "@mui/material";
+import { Button, Container, FormControl, InputLabel, MenuItem, Select, Stack } from "@mui/material";
 import { Html5Qrcode } from "html5-qrcode";
 import { useEffect, useRef, useState } from "react";
 import BarcodeReaderIcon from "@mui/icons-material/BarcodeReader";
@@ -101,14 +101,18 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
         <div id={readerId} />
       </Container>
 
-      <Select
-        value={camera}
-        onChange={event => setCamera(event.target.value)}
-        fullWidth
-        label="カメラ"
-      >
-        {cameras.map(({ id, label }) => <MenuItem key={id} value={id}>{label}</MenuItem>)}
-      </Select>
+      <FormControl>
+        <InputLabel id="qrscan-camera-label">カメラ</InputLabel>
+        <Select
+          labelId="qrscan-camera-label"
+          value={camera}
+          onChange={event => setCamera(event.target.value)}
+          fullWidth
+          label="カメラ"
+        >
+          {cameras.map(({ id, label }) => <MenuItem key={id} value={id}>{label}</MenuItem>)}
+        </Select>
+      </FormControl>
 
       <Button
         onClick={() => {
