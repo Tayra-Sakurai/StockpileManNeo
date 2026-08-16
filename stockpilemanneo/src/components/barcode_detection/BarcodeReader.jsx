@@ -58,16 +58,17 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
   };
 
   useEffect(() => {
-    qrScannerRef.current = new Html5Qrcode(readerId, config);
+    qrScannerRef.current ??= new Html5Qrcode(readerId, config);
 
-    Html5Qrcode
-      .getCameras()
-      .then(values => setCameras(values));
+    if (!cameras.length)
+      Html5Qrcode
+        .getCameras()
+        .then(values => setCameras(values));
 
     return () => {
       qrScannerRef.current?.clear();
     };
-  }, []);
+  }, [config, cameras]);
 
   return (
     <Stack spacing={2}>
