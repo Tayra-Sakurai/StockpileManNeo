@@ -54,7 +54,7 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
     return () => {
       qrScannerRef.current?.clear();
     };
-  });
+  }, [onSuccess, config, onError]);
 
   return (
     <Grid columns={12} container>
