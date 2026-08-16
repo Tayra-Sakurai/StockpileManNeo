@@ -1,4 +1,4 @@
-import { Button, Container, FormControl, Grid, MenuItem, Select, Stack } from "@mui/material";
+import { Button, Container, MenuItem, Select, Stack } from "@mui/material";
 import { Html5Qrcode } from "html5-qrcode";
 import { useEffect, useRef, useState } from "react";
 import BarcodeReaderIcon from "@mui/icons-material/BarcodeReader";
@@ -52,8 +52,8 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
    */
   const handleSuccess = (...params) => {
     if (qrScannerRef.current && isScanning && onSuccess) {
-      onSuccess(...params);
       qrScannerRef.current.stop();
+      onSuccess(...params);
       setIsScanning(false);
     }
   };
