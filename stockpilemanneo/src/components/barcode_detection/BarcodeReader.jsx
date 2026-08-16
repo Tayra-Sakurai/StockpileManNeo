@@ -60,7 +60,7 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
   useEffect(() => {
     qrScannerRef.current ??= new Html5Qrcode(readerId, config);
 
-    if (!cameras.length)
+    if (cameras.length == 0)
       Html5Qrcode
         .getCameras()
         .then(values => setCameras(values));
