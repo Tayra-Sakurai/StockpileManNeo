@@ -68,7 +68,7 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
     return () => {
       qrScannerRef.current?.clear();
     };
-  }, [config, cameras]);
+  }, []);
 
   return (
     <Stack spacing={2}>
