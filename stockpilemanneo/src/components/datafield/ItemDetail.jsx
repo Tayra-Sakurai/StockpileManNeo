@@ -212,7 +212,6 @@ function ItemDetail({ id }) {
                     }
                   }
                 }}
-                onError={message => setErr(message)}
               />
             </Container>
             <Button
