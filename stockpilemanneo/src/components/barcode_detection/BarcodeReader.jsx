@@ -53,7 +53,7 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
     return () => {
       qrScannerRef.current?.clear();
     };
-  }, [config]);
+  }, []);
 
   return (
     <Stack spacing={2}>
