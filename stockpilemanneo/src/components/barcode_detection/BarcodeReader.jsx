@@ -105,7 +105,7 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
         startIcon={<StopIcon />}
         disabled={!camera || !isScanning}
         onClick={() => {
-          qrScannerRef.current?.stop();
+          qrScannerRef.current?.pause(false);
           setIsScanning(false);
         }}
       >
