@@ -201,6 +201,7 @@ function ItemDetail({ id }) {
               <BarcodeReader
                 verbose
                 formatsToSupport={acceptedFormats}
+                useBarCodeDetectorIfSupported={false}
                 onSuccess={(decodedText, result) => {
                   setInfo('読み取りに成功しました．');
                   if (result.result.format?.format && acceptedFormats.includes(result.result.format.format)) {
