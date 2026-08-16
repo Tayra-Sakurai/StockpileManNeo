@@ -1,4 +1,4 @@
-import { Button, FormControl, Grid, MenuItem, Select } from "@mui/material";
+import { Button, Container, FormControl, Grid, MenuItem, Select, Stack } from "@mui/material";
 import { Html5Qrcode } from "html5-qrcode";
 import { useEffect, useRef, useState } from "react";
 import BarcodeReaderIcon from "@mui/icons-material/BarcodeReader";
@@ -45,46 +45,36 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
 
   useEffect(() => {
     qrScannerRef.current = new Html5Qrcode(readerId, config);
-    const load = async () => {
-      setCameras(await Html5Qrcode.getCameras());
-    };
 
-    load();
+    Html5Qrcode
+      .getCameras()
+      .then(values => setCameras(values));
 
     return () => {
       qrScannerRef.current?.clear();
     };
-  }, [onSuccess, config, onError]);
+  }, [config]);
 
   return (
-    <Grid columns={12} container>
-      <Grid size={12}>
-        <div id="qrcode-scan" />
-      </Grid>
-      <Grid size="auto">
-        <FormControl>
-          <Select
-            value={camera}
-            label="カメラ"
-            onChange={event => setCamera(event.target.value)}
-          >
-            {cameras.map(value => <MenuItem value={value.id}>value.label</MenuItem>)}
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid size="grow">
-        <Button
-          type="button"
-          variant="contained"
-          color="primary"
-          onClick={() => qrScannerRef.current?.start(camera, cameraScanConfig, onSuccess, onError)}
-          disabled={!camera}
-          startIcon={<BarcodeReaderIcon />}
-        >
-          スキャンを開始する．
-        </Button>
-      </Grid>
-    </Grid>
+    <Stack spacing={2}>
+      <Container>
+        <div id={readerId} />
+      </Container>
+
+      <Select
+        value={camera}
+        onChange={event => setCamera(event.target.value)}
+        fullWidth
+        label="カメラ"
+      >
+        {cameras.map(({ id, label }) => <MenuItem value={id}>{label}</MenuItem>)}
+      </Select>
+
+      <Button
+        onClick=
+      >
+      </Button>
+    </Stack>
   );
 }
 
