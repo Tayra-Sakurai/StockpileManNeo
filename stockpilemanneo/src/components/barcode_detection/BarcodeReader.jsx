@@ -2,6 +2,7 @@ import { Button, Container, FormControl, Grid, MenuItem, Select, Stack } from "@
 import { Html5Qrcode } from "html5-qrcode";
 import { useEffect, useRef, useState } from "react";
 import BarcodeReaderIcon from "@mui/icons-material/BarcodeReader";
+import StopIcon from "@mui/icons-material/Stop";
 
 /**
  * The camera scanning configurations.
@@ -38,10 +39,23 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
    */
   const [cameras, setCameras] = useState([]);
 
+  const [isScanning, setIsScanning] = useState(false);
+
   /**
    * @type {import("react").RefObject<?Html5Qrcode>}
    */
   const qrScannerRef = useRef(null);
+
+  /**
+   * @type {import("html5-qrcode").QrcodeSuccessCallback}
+   */
+  const handleSuccess = (...params) => {
+    if (qrScannerRef.current && isScanning && onSuccess) {
+      onSuccess(...params);
+      qrScannerRef.current.stop();
+      setIsScanning(false);
+    }
+  };
 
   useEffect(() => {
     qrScannerRef.current = new Html5Qrcode(readerId, config);
@@ -71,13 +85,31 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
       </Select>
 
       <Button
-        onClick={() => qrScannerRef.current?.start(camera, cameraScanConfig, onSuccess, onError)}
+        onClick={() => {
+          qrScannerRef.current?.start(camera, cameraScanConfig, handleSuccess, onError);
+          setIsScanning(true);
+        }}
         type="button"
         variant="contained"
         color="primary"
         startIcon={<BarcodeReaderIcon />}
+        disabled={!camera || isScanning}
       >
         スキャン開始
+      </Button>
+
+      <Button
+        type="button"
+        color="secondary"
+        variant="contained"
+        startIcon={<StopIcon />}
+        disabled={!camera || !isScanning}
+        onClick={() => {
+          qrScannerRef.current?.stop();
+          setIsScanning(false);
+        }}
+      >
+        スキャンを停止
       </Button>
     </Stack>
   );
