@@ -40,6 +40,7 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
   const [cameras, setCameras] = useState([]);
 
   const [isScanning, setIsScanning] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   /**
    * @type {import("react").RefObject<?Html5Qrcode>}
@@ -87,8 +88,12 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
 
       <Button
         onClick={() => {
-          qrScannerRef.current?.start(camera, cameraScanConfig, handleSuccess, onError);
+          if (!isPaused)
+            qrScannerRef.current?.start(camera, cameraScanConfig, handleSuccess, onError);
+          else
+            qrScannerRef.current?.resume();
           setIsScanning(true);
+          setIsPaused(false);
         }}
         type="button"
         variant="contained"
@@ -108,6 +113,7 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
         onClick={() => {
           qrScannerRef.current?.pause(false);
           setIsScanning(false);
+          setIsPaused(true);
         }}
       >
         スキャンを停止
