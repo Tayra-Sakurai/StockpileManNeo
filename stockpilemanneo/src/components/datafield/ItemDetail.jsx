@@ -199,9 +199,7 @@ function ItemDetail({ id }) {
             </FormControl>
             <Container>
               <BarcodeReader
-                qrbox={250}
-                fps={10}
-                disableFlip={false}
+                verbose
                 formatsToSupport={acceptedFormats}
                 onSuccess={(decodedText, result) => {
                   setInfo('読み取りに成功しました．');
