@@ -1,4 +1,4 @@
-import { Paper, Stack, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import LargeCategoryDetail from "../LargeCategoryDetail.jsx";
 
