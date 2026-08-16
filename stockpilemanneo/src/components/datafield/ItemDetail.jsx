@@ -204,9 +204,10 @@ function ItemDetail({ id }) {
                 useBarCodeDetectorIfSupported={false}
                 onSuccess={(decodedText, result) => {
                   setInfo('読み取りに成功しました．');
-                  if (result.result.format?.format && acceptedFormats.includes(result.result.format.format)) {
+                  const format = result?.result?.format?.format;
+                  if (format === undefined || acceptedFormats.includes(format)) {
                     if (/^\d+$/.exec(decodedText)) {
-                      setValue('barcode', decodedText);
+                      setValue('barcode', decodedText, { shouldValidate: true, shouldDirty: true });
                     } else {
                       setErr('誤検知したようです．');
                     }

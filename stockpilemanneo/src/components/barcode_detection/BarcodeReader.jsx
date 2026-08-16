@@ -46,15 +46,32 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
    * @type {import("react").RefObject<?Html5Qrcode>}
    */
   const qrScannerRef = useRef(null);
+  const onSuccessRef = useRef(onSuccess);
+  useEffect(() => {
+    onSuccessRef.current = onSuccess;
+  }, [onSuccess]);
 
   /**
    * @type {import("html5-qrcode").QrcodeSuccessCallback}
    */
   const handleSuccess = (...params) => {
-    if (qrScannerRef.current && isScanning && onSuccess) {
-      qrScannerRef.current.stop();
-      onSuccess(...params);
-      setIsScanning(false);
+    if (qrScannerRef.current && onSuccessRef.current) {
+      onSuccessRef.current(...params);
+      if (qrScannerRef.current.isScanning) {
+        qrScannerRef.current
+          .stop()
+          .then(() => {
+            setIsScanning(false);
+            setIsPaused(false);
+          })
+          .catch(err => {
+            console.error("Failed to stop qr scanner:", err);
+            setIsScanning(false);
+          });
+      } else {
+        setIsScanning(false);
+        setIsPaused(false);
+      }
     }
   };
 
@@ -64,10 +81,17 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
     if (cameras.length == 0)
       Html5Qrcode
         .getCameras()
-        .then(values => setCameras(values));
+        .then(values => setCameras(values))
+        .catch(err => console.error("Failed to get cameras:", err));
 
     return () => {
-      qrScannerRef.current?.clear();
+      if (qrScannerRef.current?.isScanning) {
+        qrScannerRef.current.stop().catch(() => {}).finally(() => {
+          qrScannerRef.current?.clear();
+        });
+      } else {
+        qrScannerRef.current?.clear();
+      }
     };
   }, []);
 
@@ -83,7 +107,7 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
         fullWidth
         label="カメラ"
       >
-        {cameras.map(({ id, label }) => <MenuItem value={id}>{label}</MenuItem>)}
+        {cameras.map(({ id, label }) => <MenuItem key={id} value={id}>{label}</MenuItem>)}
       </Select>
 
       <Button
