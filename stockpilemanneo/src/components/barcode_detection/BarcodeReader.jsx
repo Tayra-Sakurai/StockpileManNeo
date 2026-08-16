@@ -71,8 +71,13 @@ function BarcodeReader({ onSuccess, onError, ...config }) {
       </Select>
 
       <Button
-        onClick=
+        onClick={() => qrScannerRef.current?.start(camera, cameraScanConfig, onSuccess, onError)}
+        type="button"
+        variant="contained"
+        color="primary"
+        startIcon={<BarcodeReaderIcon />}
       >
+        スキャン開始
       </Button>
     </Stack>
   );
