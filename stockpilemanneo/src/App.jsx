@@ -21,6 +21,9 @@ import LocationsView from './components/views/Views/Locations/LocationsView.jsx'
 import ItemsView from './components/views/Views/Items/ItemsView.jsx';
 import SmallCategoriesView from './components/views/Views/SmallCategories/SmallCategoriesView.jsx';
 import PasswordReset from './components/signin/PasswordReset.tsx';
+import LargeLargeCategoryDetail from './components/datafield/LargeLargeCategoryDetail.jsx';
+import LargeLargeCategoriesView from './components/views/Views/LargeLargeCategories/LargeLargeCategoriesView.jsx';
+import LargeLargeCategoryEdit from './components/datafield/Editors/LargeLargeCategoryEdit.jsx';
 
 function App() {
   return (
@@ -35,13 +38,17 @@ function App() {
               <Route path="small_categories/:id" element={<SmallCategoryEdit />} />
               <Route path="locations/:id" element={<LocationEdit />} />
               <Route path="items/:id" element={<ItemEdit />} />
+              <Route path="large_large_categories/:id" element={<LargeLargeCategoryEdit />} />
             </Route>
             <Route path="Add" element={<AddBlock />}>
               <Route path="large_categories" element={<LargeCategoryDetail />} />
               <Route path="small_categories" element={<SmallCategoryDetail />} />
               <Route path="locations" element={<LocationDetail />} />
               <Route path="items" element={<ItemDetail />} />
+              <Route path="large_large_categories" element={<LargeLargeCategoryDetail />} />
             </Route>
+            <Route path="View/large_large_categories" element={<LargeLargeCategoriesView />} />
+            <Route path="View/large_categories/large_large_categories/:code" element={<LargeCategoriesView />} />
             <Route path="View/large_categories" element={<LargeCategoriesView />} />
             <Route path="View/locations" element={<LocationsView />} />
             <Route path="View/items/:table/:code" element={<ItemsView />} />

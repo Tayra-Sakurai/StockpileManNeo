@@ -21,8 +21,8 @@ const DESTINATIONS = [
   },
   {
     label: '分類',
-    to: '/View/large_categories',
-    expression: /^\/View\/(large|small)_categories/,
+    to: '/View/large_large_categories',
+    expression: /^\/View\/((large_){1,2}|small_)categories/,
     icon: <CategoryIcon />,
   },
   {

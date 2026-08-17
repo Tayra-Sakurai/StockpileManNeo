@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 function EditBlock() {
   return (
     <Paper
-      sx={{ width: '100%', height: '100%' }}
+      sx={{ width: '100%', height: '100%', boxSizing: 'border-box' }}
     >
       <Stack spacing="2">
         <Outlet />

@@ -4,6 +4,10 @@ import { useSearchParams } from "react-router-dom";
 
 const values = [
   {
+    label: '大分類',
+    value: 'large_large_categories',
+  },
+  {
     label: 'カテゴリ',
     value: 'large_categories',
   },

@@ -9,12 +9,13 @@ import LargeCategoryCard from "../datafield/cards/LargeCategoryCard.jsx";
 import SmallCategoryCard from "../datafield/cards/SmallCategoryCard.jsx";
 import itemCompare from "../../sortmodules/ItemSorter.js";
 import asynchronousTimer from "../../timers/AsynchronousTimer.js";
+import LargeLargeCategoryCard from "../datafield/cards/LargeLargeCategoryCard.jsx";
 
 /**
  * The search result display object.
  * @typedef {object} ResultMark
  * @property {number} id The identity of the result object.
- * @property {"large_categories" | "small_categories" | "locations" | "items"} table The table name.
+ * @property {"large_categories" | "small_categories" | "locations" | "items" | "large_large_categories"} table The table name.
  * @property {number} matchRate The matching rate.
  */
 
@@ -89,6 +90,40 @@ function SearchResults() {
 
       const searchingTables = searchParams.getAll('tables');
 
+      if (searchingTables.length === 0 || searchingTables.indexOf('large_large_categories') >= 0) {
+        const { data, error: err } = await supabase
+          .from('large_large_categories')
+          .select('id, name, vector')
+          .order('name', { ascending: true });
+
+        if (err) {
+          setError(err.message);
+          return;
+        }
+
+        for (const { id, name, vector } of data) {
+          const [matchRate, v] = await getMatchRate(searchVector, vector, name);
+
+          if (v) {
+            await supabase
+              .from('large_large_categories')
+              .update({
+                vector: v,
+              })
+              .eq('id', id);
+
+            setError('値が自動的に変更されました，');
+            await asynchronousTimer(10);
+          }
+
+          results.push({
+            id,
+            matchRate,
+            table: 'large_large_categories',
+          });
+        }
+      }
+
       if (searchingTables.length === 0 || searchingTables.indexOf('large_categories') >= 0) {
         const { data, error: err } = await supabase
           .from('large_categories')
@@ -96,34 +131,36 @@ function SearchResults() {
 
         if (err) {
           setError(err.message);
-          return;
+          doNotGoFlag = true;
         }
 
-        data.sort((a, b) => a.name.localeCompare(b.name));
+        if (data) {
+          data.sort((a, b) => a.name.localeCompare(b.name));
 
-        for (const { id, name, vector } of data) {
-          const [matchRate, v] = await getMatchRate(searchVector, vector, name);
-          if (v) {
-            await supabase
-              .from('large_categories')
-              .update({
-                vector: v,
-              })
-              .eq('id', id);
+          for (const { id, name, vector } of data) {
+            const [matchRate, v] = await getMatchRate(searchVector, vector, name);
+            if (v) {
+              await supabase
+                .from('large_categories')
+                .update({
+                  vector: v,
+                })
+                .eq('id', id);
 
-            setError('値が変更されました．');
-            await asynchronousTimer(10);
+              setError('値が変更されました．');
+              await asynchronousTimer(10);
+            }
+
+            results.push({
+              id,
+              matchRate,
+              table: 'large_categories',
+            });
           }
-
-          results.push({
-            id,
-            matchRate,
-            table: 'large_categories',
-          });
         }
       }
 
-      if (searchingTables.length === 0 || searchingTables.indexOf('small_categories') >= 0) {
+      if (!doNotGoFlag && (searchingTables.length === 0 || searchingTables.indexOf('small_categories') >= 0)) {
         const { data, error: err } = await supabase
           .from('small_categories')
           .select('id, name, vector, large_categories!inner(name, vector)');
@@ -264,6 +301,8 @@ function SearchResults() {
                   return <LargeCategoryCard number={id} />;
                 case 'small_categories':
                   return <SmallCategoryCard number={id} />;
+                case 'large_large_categories':
+                  return <LargeLargeCategoryCard itemId={id} />;
               }
             })
           ) :

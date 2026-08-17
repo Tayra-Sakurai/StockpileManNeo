@@ -4,7 +4,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import ClassIcon from '@mui/icons-material/Class';
 import LocationPinIcon from '@mui/icons-material/LocationPin';
 import { useNavigate } from "react-router-dom";
-
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
 function SpecialActions() {
   const navigate = useNavigate();
@@ -51,6 +51,15 @@ function SpecialActions() {
           },
         }}
         onClick={() => navigate('/Add/large_categories')}
+      />
+      <SpeedDialAction
+        icon={<AccountTreeIcon />}
+        slotProps={{
+          tooltip: {
+            title: '大分類',
+          },
+        }}
+        onClick={() => navigate('/Add/large_large_categories')}
       />
       <SpeedDialAction
         icon={<LocationPinIcon />}

@@ -179,18 +179,21 @@ export type Database = {
           id: number;
           name: string;
           user_id: string;
+          vector: number[];
         };
         Insert: {
           created_at?: string;
           id?: number;
           name?: string;
           user_id?: string;
+          vector?: number[];
         };
         Update: {
           created_at?: string;
           id?: number;
           name?: string;
           user_id?: string;
+          vector?: number[];
         };
         Relationships: [];
       };
