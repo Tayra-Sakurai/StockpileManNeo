@@ -11,8 +11,6 @@
     <TypeScriptModuleResolution>nodenext</TypeScriptModuleResolution>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="src\components\dashboard\" />
-    <Folder Include="src\aimodules\" />
     <Folder Include="src\components\signup\" />
   </ItemGroup>
   <ProjectExtensions>
