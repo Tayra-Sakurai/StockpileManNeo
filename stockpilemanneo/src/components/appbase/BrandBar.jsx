@@ -1,4 +1,4 @@
-import { AppBar, Button, Menu, MenuItem } from '@mui/material';
+import { AppBar, Button, Drawer, Menu, MenuItem } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -51,110 +51,121 @@ function BrandBar() {
   };
 
   return (
-    <Box component="header" sx={{ position: 'sticky', top: 0, zIndex: (theme) => theme.zIndex.appBar }}>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" color="inherit" elevation={0} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Toolbar>
-            <IconButton
-              type="button"
-              aria-label="menu"
-              onClick={toggleMenu}
-              edge="start"
-              sx={{ mr: 1 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Inventory2Icon color="primary" sx={{ mr: 1 }} />
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              StockpileMan&nbsp;neo
-            </Typography>
-            {userData ? (
-              <div>
-                <IconButton
-                  size="large"
-                  onClick={handleOpenMenu}
-                  color="inherit"
-                  aria-controls="menu-account"
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-account"
-                  open={!!anchorEl}
-                  onClose={handleCloseMenu}
-                  anchorOrigin={{
-                    horizontal: 'right',
-                    vertical: 'top',
-                  }}
-                  anchorEl={anchorEl}
-                  transformOrigin={{
-                    horizontal: 'right',
-                    vertical: 'top',
-                  }}
-                  keepMounted
-                >
-                  <MenuItem onClick={handleCloseMenu}>ようこそ，{userData.user_metadata.display_name ?? userData.email}さん</MenuItem>
-                  <MenuItem onClick={signOut}>
-                    <ListItemIcon>
-                      <LogoutIcon />
-                    </ListItemIcon>
-                    <ListItemText>ログアウト</ListItemText>
-                  </MenuItem>
-                </Menu>
-              </div>
-            ) : (
-              <Button color="inherit" onClick={() => navigate('/signin')} size="large" startIcon={<LoginIcon />}>
-                サインイン
-              </Button>
-            )}
-          </Toolbar>
-        </AppBar>
+    <>
+      <Box component="header" sx={{
+        position: 'sticky',
+        top: 0,
+        zIndex(theme) {
+          return theme.zIndex.drawer + 1;
+        },
+      }}>
+        <Box sx={{ flexGrow: 1 }}>
+          <AppBar position="static" color="inherit" elevation={0} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Toolbar>
+              <IconButton
+                type="button"
+                aria-label="menu"
+                onClick={toggleMenu}
+                edge="start"
+                sx={{ mr: 1 }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Inventory2Icon color="primary" sx={{ mr: 1 }} />
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                StockpileMan&nbsp;neo
+              </Typography>
+              {userData ? (
+                <div>
+                  <IconButton
+                    size="large"
+                    onClick={handleOpenMenu}
+                    color="inherit"
+                    aria-controls="menu-account"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-account"
+                    open={!!anchorEl}
+                    onClose={handleCloseMenu}
+                    anchorOrigin={{
+                      horizontal: 'right',
+                      vertical: 'top',
+                    }}
+                    anchorEl={anchorEl}
+                    transformOrigin={{
+                      horizontal: 'right',
+                      vertical: 'top',
+                    }}
+                    keepMounted
+                  >
+                    <MenuItem onClick={handleCloseMenu}>ようこそ，{userData.user_metadata.display_name ?? userData.email}さん</MenuItem>
+                    <MenuItem onClick={signOut}>
+                      <ListItemIcon>
+                        <LogoutIcon />
+                      </ListItemIcon>
+                      <ListItemText>ログアウト</ListItemText>
+                    </MenuItem>
+                  </Menu>
+                </div>
+              ) : (
+                <Button color="inherit" onClick={() => navigate('/signin')} size="large" startIcon={<LoginIcon />}>
+                  サインイン
+                </Button>
+              )}
+            </Toolbar>
+          </AppBar>
+        </Box>
       </Box>
-      <Collapse in={open}>
-        <List sx={{ bgcolor: 'background.paper', borderBottom: 1, borderColor: 'divider' }}>
-          <ListItem disablePadding>
-            <ListItemButton component={RouterLink} to="/" onClick={() => setOpen(false)}>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="ホーム在庫" secondary="在庫、分類、保管場所を管理" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component={RouterLink} to="/View/items" onClick={() => setOpen(false)}>
-              <ListItemIcon>
-                <Inventory2Icon />
-              </ListItemIcon>
-              <ListItemText primary="在庫一覧" secondary="在庫の一覧を表示します" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component={RouterLink} to="/View/large_large_categories" onClick={() => setOpen(false)}>
-              <ListItemIcon>
-                <CategoryIcon />
-              </ListItemIcon>
-              <ListItemText primary="分類別一覧" secondary="分類別に在庫数を確認します" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component={RouterLink} to="/View/locations" onClick={() => setOpen(false)}>
-              <ListItemIcon>
-                <LocationPinIcon />
-              </ListItemIcon>
-              <ListItemText primary="保管場所一覧" secondary="保管場所ごとの在庫状況を確認できます" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding sx={{ display: { xs: 'none', sm: 'none' } }}>
-            <ListItemButton onClick={signOut}>
-              <ListItemIcon>
-                <LogoutIcon />
-              </ListItemIcon>
-              <ListItemText primary="サインアウト" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </Collapse>
-    </Box>
+      <Drawer open={open} onClose={() => setOpen(false)} anchor="top">
+        <Toolbar />
+        <Box sx={{ width: '100%', boxSizing: 'border-box' }}>
+          <List sx={{ bgcolor: 'background.paper', borderBottom: 1, borderColor: 'divider' }}>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/" onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary="ホーム在庫" secondary="在庫、分類、保管場所を管理" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/View/items" onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <Inventory2Icon />
+                </ListItemIcon>
+                <ListItemText primary="在庫一覧" secondary="在庫の一覧を表示します" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/View/large_large_categories" onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <CategoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="分類別一覧" secondary="分類別に在庫数を確認します" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/View/locations" onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <LocationPinIcon />
+                </ListItemIcon>
+                <ListItemText primary="保管場所一覧" secondary="保管場所ごとの在庫状況を確認できます" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding sx={{ display: { xs: 'none', sm: 'none' } }}>
+              <ListItemButton onClick={signOut}>
+                <ListItemIcon>
+                  <LogoutIcon />
+                </ListItemIcon>
+                <ListItemText primary="サインアウト" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Box>
+      </Drawer>
+    </>
   );
 }
 
