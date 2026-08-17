@@ -152,6 +152,9 @@ function SelectLargeCategories(props) {
             </li>
           );
         },
+        groupBy(option) {
+          return option.large_large_categories?.name ?? '大分類なし';
+        },
       }}
     />
   );
