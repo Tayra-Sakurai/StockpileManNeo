@@ -33,7 +33,7 @@ function ItemCard({ number }) {
         .eq('id', number);
 
       if (error) throw error;
-      if (data) {
+      if (data[0]) {
         setTitle(data[0].name);
         setLife(data[0].life ? new Date(data[0].life).toLocaleDateString() : '');
         setNotes(data[0].description || '');

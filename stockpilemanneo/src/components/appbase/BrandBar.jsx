@@ -129,7 +129,7 @@ function BrandBar() {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={RouterLink} to="/View/large_categories" onClick={() => setOpen(false)}>
+            <ListItemButton component={RouterLink} to="/View/large_large_categories" onClick={() => setOpen(false)}>
               <ListItemIcon>
                 <CategoryIcon />
               </ListItemIcon>

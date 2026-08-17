@@ -18,9 +18,9 @@ const filter = createFilterOptions();
  * The small category selector.
  * @template {import("react-hook-form").FieldValues} T
  * @param {object} props The props.
- * @param {import("react-hook-form").Path<T>} props.name The name of this element.
+ * @param {import("react-hook-form").FieldPathByValue<T, SmallCategoryCandidate>} props.name The name of this element.
  * @param {string=} props.id The id.
- * @param {import("react-hook-form").Path<T>} props.largeCategoryName The name of the large category selector.
+ * @param {import("react-hook-form").FieldPathByValue<T, import("./SelectLargeCategories.jsx").LargeCategoryCandidate>} props.largeCategoryName The name of the large category selector.
  * @returns
  */
 function SelectSmallCategories({ name, id, largeCategoryName }) {
@@ -33,6 +33,9 @@ function SelectSmallCategories({ name, id, largeCategoryName }) {
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  /**
+   * @type {import("react-hook-form").UseFormReturn<T>}
+   */
   const { setValue, control } = useFormContext();
 
   const largeCategory = useWatch({
@@ -45,7 +48,7 @@ function SelectSmallCategories({ name, id, largeCategoryName }) {
 
     const { data } = await supabase
       .from('small_categories')
-      .select('id, name, large_categories!inner(id, name)')
+      .select('id, name, large_categories!inner(id, name, large_large_categories(id, name))')
       .order('name', { ascending: true });
 
     if (data) setOptions(data.toSorted((a, b) => a.large_categories.name.localeCompare(b.large_categories.name)));

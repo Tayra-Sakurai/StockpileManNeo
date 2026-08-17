@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import UndoIcon from "@mui/icons-material/Undo";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import SelectLargeLargeCategories from "./selections/SelectLargeLargeCategories.jsx";
 
 /**
  * The detail view component for details of categories.
@@ -23,26 +24,30 @@ function LargeCategoryDetail({ id = null }) {
     if (id == null) {
       return {
         name: '',
+        largeLargeCategory: null,
       };
     } else {
       const { data, error } = await supabase
         .from('large_categories')
-        .select('name, id')
+        .select('name, id, large_large_categories(id, name)')
         .eq('id', id);
       if (error) {
         console.error('Failed to fetch data.\n', error.message);
         return {
           name: '',
+          largeLargeCategory: null,
         };
       }
       if (!data || !data[0]) {
         console.error('Unknown error occurred.');
         return {
           name: '',
+          largeLargeCategory: null,
         };
       }
       return {
         name: data[0].name,
+        largeLargeCategory: data[0].large_large_categories,
       };
     }
   };
@@ -60,9 +65,9 @@ function LargeCategoryDetail({ id = null }) {
 
   /**
    * The success action.
-   * @param {{name:string}} event
+   * @param {{name:string, largeLargeCategory: ?import("./selections/SelectLargeLargeCategories.jsx").LargeLargeCategoryCandidate}} event
    */
-  const categoryUpsertAction = async ({ name }) => {
+  const categoryUpsertAction = async ({ name, largeLargeCategory }) => {
     const vector = await createEmbeddingVector(name);
 
     if (id)
@@ -71,6 +76,7 @@ function LargeCategoryDetail({ id = null }) {
         .update({
           name: name,
           vector: vector,
+          large_large_category_id: largeLargeCategory?.id,
         })
         .eq('id', id);
     else
@@ -79,6 +85,7 @@ function LargeCategoryDetail({ id = null }) {
         .insert({
           name: name,
           vector: vector,
+          large_large_category_id: largeLargeCategory?.id,
         });
 
     navigate(-1);
@@ -95,6 +102,13 @@ function LargeCategoryDetail({ id = null }) {
         }}
       >
         <Stack spacing="2">
+          <FormControl>
+            <FormLabel htmlFor="largeLargeCategory">大分類</FormLabel>
+            <SelectLargeLargeCategories
+              id="largeLargeCategory"
+              name="largeLargeCategory"
+            />
+          </FormControl>
           <FormControl>
             <FormLabel htmlFor="name">カテゴリ名</FormLabel>
             <TextFieldElement

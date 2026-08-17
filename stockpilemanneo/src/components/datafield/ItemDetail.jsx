@@ -16,11 +16,12 @@ import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
 import BarcodeReader from "../barcode_detection/BarcodeReader.jsx";
 import { Html5QrcodeSupportedFormats } from "html5-qrcode";
 import asynchronousTimer from "../../timers/AsynchronousTimer.js";
+import SelectLargeLargeCategories from "./selections/SelectLargeLargeCategories.jsx";
 
 /**
  * The item detail editor.
  * @param {object} props The props.
- * @param {number} props.id The item's id.
+ * @param {number=} props.id The item's id.
  * @returns
  */
 function ItemDetail({ id }) {
@@ -52,11 +53,12 @@ function ItemDetail({ id }) {
           largeCategory: null,
           locations: null,
           useLife: null,
+          largeLargeCategory: null,
         };
 
       const { data, error } = await supabase
         .from('items')
-        .select('name, description, life, purchase_timestamp, locations!inner(id, name), small_categories!inner(id, name, large_categories!inner(id, name)), barcode_data(jan_code)')
+        .select('name, description, life, purchase_timestamp, locations!inner(id, name), small_categories!inner(id, name, large_categories!inner(id, name, large_large_categories(id, name))), barcode_data(jan_code)')
         .eq('id', id);
 
       if (error) {
@@ -71,7 +73,8 @@ function ItemDetail({ id }) {
           small_categories: null,
           largeCategory: null,
           locations: null,
-          useLife: null
+          useLife: null,
+          largeLargeCategory: null,
         };
       }
 
@@ -86,6 +89,7 @@ function ItemDetail({ id }) {
           largeCategory: data[0].small_categories.large_categories,
           locations: data[0].locations,
           useLife: data[0].life ? 'Use life' : null,
+          largeLargeCategory: data[0].small_categories.large_categories.large_large_categories,
         };
       }
 
@@ -99,6 +103,7 @@ function ItemDetail({ id }) {
         largeCategory: null,
         locations: null,
         useLife: null,
+        largeLargeCategory: null,
       };
     },
   });
@@ -226,7 +231,7 @@ function ItemDetail({ id }) {
 
                 const { data } = await supabase
                   .from('barcode_data')
-                  .select('id, name, small_categories(id, name, large_categories!inner(id, name))')
+                  .select('id, name, small_categories(id, name, large_categories!inner(id, name, large_large_categories(id, name)))')
                   .eq('jan_code', barcodeText);
 
                 if (data?.[0]) {
@@ -244,11 +249,20 @@ function ItemDetail({ id }) {
               バーコード情報を利用して自動入力
             </Button>
             <FormControl>
-              <FormLabel htmlFor="largeCategory">分類</FormLabel>
+              <FormLabel htmlFor="largeLargeCategory">大分類</FormLabel>
+              <SelectLargeLargeCategories
+                id="largeLargeCategory"
+                name="largeLargeCategory"
+                required
+                control={control}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="largeCategory">小分類</FormLabel>
               <SelectLargeCategories
                 name="largeCategory"
                 id="largeCategory"
-                control={control}
+                largeLargeCategoryName="largeLargeCategory"
               />
             </FormControl>
             <FormControl>

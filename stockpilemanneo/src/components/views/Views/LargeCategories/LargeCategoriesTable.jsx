@@ -3,7 +3,13 @@ import { useEffect, useState } from "react";
 import supabase from "../../../../client.js";
 import LargeCategoryViewRow from "./LargeCategoryViewRow.jsx";
 
-function LargeCategoriesTable() {
+/**
+ * The large category listing table.
+ * @param {object} props The props.
+ * @param {number=} props.largeLargeCategoryId The largest category's id.
+ * @returns
+ */
+function LargeCategoriesTable({ largeLargeCategoryId }) {
   /**
    * @type {[
    *   {
@@ -30,17 +36,28 @@ function LargeCategoriesTable() {
 
   useEffect(() => {
     const load = async () => {
-      const { data: d, error } = await supabase
-        .from('large_categories')
-        .select('id, name, small_categories(items(count))')
-        .order('name', { ascending: true });
-      if (error) throw error;
+      if (!largeLargeCategoryId) {
+        const { data: d, error } = await supabase
+          .from('large_categories')
+          .select('id, name, small_categories(items(count))')
+          .order('name', { ascending: true });
+        if (error) throw error;
 
-      if (d) setData(d);
+        if (d) setData(d);
+      } else {
+        const { data: d, error } = await supabase
+          .from('large_categories')
+          .select('id, name, small_categories(items(count))')
+          .eq('large_large_category_id', largeLargeCategoryId)
+          .order('name', { ascending: true });
+
+        if (error) throw error;
+        if (d) setData(d);
+      }
     };
 
     load();
-  }, []);
+  }, [largeLargeCategoryId]);
 
   return (
     <TableContainer sx={{ width: '100%' }}>

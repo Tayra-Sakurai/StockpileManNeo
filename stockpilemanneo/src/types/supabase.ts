@@ -142,6 +142,7 @@ export type Database = {
         Row: {
           created_at: string;
           id: number;
+          large_large_category_id: number | null;
           name: string;
           user_id: string;
           vector: number[];
@@ -149,9 +150,43 @@ export type Database = {
         Insert: {
           created_at?: string;
           id?: number;
+          large_large_category_id?: number | null;
           name: string;
           user_id?: string;
           vector: number[];
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          large_large_category_id?: number | null;
+          name?: string;
+          user_id?: string;
+          vector?: number[];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "large_categories_large_large_category_id_fkey";
+            columns: ["large_large_category_id"];
+            isOneToOne: false;
+            referencedRelation: "large_large_categories";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      large_large_categories: {
+        Row: {
+          created_at: string;
+          id: number;
+          name: string;
+          user_id: string;
+          vector: number[];
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          name?: string;
+          user_id?: string;
+          vector?: number[];
         };
         Update: {
           created_at?: string;
