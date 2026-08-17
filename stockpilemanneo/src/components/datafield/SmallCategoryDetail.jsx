@@ -1,9 +1,7 @@
 /**
  * @typedef {object} SmallCategoryFormData The small category's form data object.
- * @property {?{
- *   name: string,
- *   id?: number,
- * }=} large_categories The large category related to the small category.
+ * @property {?import("./selections/SelectLargeLargeCategories.jsx").LargeLargeCategoryCandidate} large_large_categories The largest category.
+ * @property {?import("./selections/SelectLargeCategories.jsx").LargeCategoryCandidate} large_categories The large category related to the small category.
  * @property {string} name The small category name.
  */
 
@@ -18,6 +16,7 @@ import SelectLargeCategories from "./selections/SelectLargeCategories.jsx";
 import UndoIcon from "@mui/icons-material/Undo";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import SelectLargeLargeCategories from "./selections/SelectLargeLargeCategories.jsx";
 
 /**
  * Manage the small category.
@@ -64,18 +63,22 @@ function SmallCategoryDetail({ id }) {
     if (id) {
       const { data, error } = await supabase
         .from('small_categories')
-        .select('name, large_categories(id, name)')
+        .select('name, large_categories(id, name, large_large_categories(id, name))')
         .eq('id', id);
       if (error)
         throw error;
 
       if (data.length)
-        return data[0];
+        return {
+          ...data[0],
+          large_large_categories: data[0].large_categories.large_large_categories,
+        };
     }
 
     return {
       name: '',
       large_categories: null,
+      large_large_categories: null,
     };
   }
 
@@ -94,10 +97,18 @@ function SmallCategoryDetail({ id }) {
           }}
         >
           <FormControl>
+            <FormLabel htmlFor="large_large_categories">大分類</FormLabel>
+            <SelectLargeLargeCategories
+              name="large_large_categories"
+              id="large_large_categories"
+            />
+          </FormControl>
+          <FormControl>
             <FormLabel htmlFor="large_categories">カテゴリ</FormLabel>
             <SelectLargeCategories
               id="large_categories"
               name="large_categories"
+              largeLargeCategoryName="large_large_categories"
             />
           </FormControl>
           <FormControl>
