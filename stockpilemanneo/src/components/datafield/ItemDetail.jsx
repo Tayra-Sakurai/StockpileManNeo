@@ -212,7 +212,7 @@ function ItemDetail({ id }) {
                   const format = result?.result?.format?.format;
                   if (format === undefined || acceptedFormats.includes(format)) {
                     if (/^\d+$/.exec(decodedText)) {
-                      setValue('barcode', decodedText, { shouldValidate: true, shouldDirty: true });
+                      setValue('barcode', decodedText, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
                     } else {
                       setErr('誤検知したようです．');
                     }

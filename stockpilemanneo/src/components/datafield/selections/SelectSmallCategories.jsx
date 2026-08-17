@@ -80,7 +80,14 @@ function SelectSmallCategories({ name, id, largeCategoryName }) {
           }
 
           if (newValue && newValue.large_categories != largeCategory)
-            setValue(largeCategoryName, newValue.large_categories);
+            setValue(
+              largeCategoryName,
+              newValue.large_categories,
+              {
+                shouldDirty: true,
+                shouldTouch: true,
+                shouldValidate: true
+              });
         },
         getOptionLabel(option) {
           return option.name;

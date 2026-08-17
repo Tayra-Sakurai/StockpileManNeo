@@ -116,7 +116,14 @@ function SelectLargeCategories(props) {
           }
 
           if (newValue?.large_large_categories)
-            setValue(largeLargeCategoryName, newValue.large_large_categories);
+            setValue(
+              largeLargeCategoryName,
+              newValue.large_large_categories,
+              {
+                shouldDirty: true,
+                shouldTouch: true,
+                shouldValidate: true,
+              });
         },
         async onOpen() {
           await getLargeCategories();
