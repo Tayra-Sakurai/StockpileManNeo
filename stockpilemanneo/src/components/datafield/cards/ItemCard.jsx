@@ -21,15 +21,17 @@ function ItemCard({ number }) {
   const [location, setLocation] = useState('');
   const [smallCategory, setSmallCategory] = useState('');
   const [largeCategory, setLargeCategory] = useState('');
+  const [largeLargeCategory, setLargeLargeCategory] = useState('');
   const [smallCategoryId, setSmallCategoryId] = useState(0);
   const [largeCategoryId, setLargeCategoryId] = useState(0);
   const [locationId, setLocationId] = useState(0);
+  const [largeLargeCategoryId, setLargeLargeCategoryId] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
       const { data, error } = await supabase
         .from('items')
-        .select('name, life, description, locations!inner(id, name), small_categories!inner(id, name, large_categories!inner(id, name))')
+        .select('name, life, description, locations!inner(id, name), small_categories!inner(id, name, large_categories!inner(id, name, large_large_categories(id, name)))')
         .eq('id', number);
 
       if (error) throw error;
@@ -40,9 +42,11 @@ function ItemCard({ number }) {
         setLocation(data[0].locations.name);
         setSmallCategory(data[0].small_categories.name);
         setLargeCategory(data[0].small_categories.large_categories.name);
+        setLargeLargeCategory(data[0].small_categories.large_categories.large_large_categories?.name ?? '');
         setSmallCategoryId(data[0].small_categories.id);
         setLargeCategoryId(data[0].small_categories.large_categories.id);
         setLocationId(data[0].locations.id);
+        setLargeLargeCategoryId(data[0].small_categories.large_categories.large_large_categories?.id ?? 0);
       }
     };
 
@@ -64,6 +68,16 @@ function ItemCard({ number }) {
     >
       <>
         <Breadcrumbs>
+          {(largeLargeCategory && largeLargeCategoryId) ?
+            <Link
+              to={`View/large_categories/large_large_categories/${largeLargeCategoryId}`}
+              component={RouterLink}
+              color="inherit"
+            >
+              {largeLargeCategory}
+            </Link> :
+            null
+          }
           <Link
             to={`/View/small_categories/large_categories/${largeCategoryId}`}
             component={RouterLink}
