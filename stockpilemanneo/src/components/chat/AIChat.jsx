@@ -138,14 +138,14 @@ function AIChat() {
           width: '100%',
           position: 'sticky',
           bottom: {
-            xs: 60,
-            sm: 10,
-            md: 10,
+            xs: 120,
+            sm: 60,
+            md: 60,
           },
           left: 0,
           right: 0,
           zIndex(theme) {
-            return theme.zIndex.speedDial + 1;
+            return theme.zIndex.speedDial - 1;
           },
         }}>
           <PromptEditor setMessage={setMessage} interaction={interaction} setInteraction={setInteraction} setChatMessages={setChat} />
