@@ -11,9 +11,10 @@ import { GEMINI_MODEL } from "./constants.js";
  * @param {?import("@google/genai").Interactions.Interaction} props.interaction The interaction.
  * @param {import("react").Dispatch.<import("react").SetStateAction.<?import("@google/genai").Interactions.Interaction>>} props.setInteraction The interaction update setter.
  * @param {import("react").Dispatch.<import("react").SetStateAction.<{role: "model" | "user", markdown: string}[]>>} props.setChatMessages The chat message array.
+ * @param {import("react").Dispatch.<import("react").SetStateAction.<string>>} props.setMessage The error message setter.
  * @returns
  */
-function PromptEditor({ interaction, setChatMessages, setInteraction }) {
+function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage }) {
   return (
     <FormContainer
       defaultValues={{
@@ -27,25 +28,28 @@ function PromptEditor({ interaction, setChatMessages, setInteraction }) {
             markdown: formData.prompt,
           },
         ]);
+        try {
+          const interaction2 = await aimodel.interactions.create({
+            model: GEMINI_MODEL,
+            input: [
+              {
+                type: 'user_input',
+                content: [
+                  {
+                    type: 'text',
+                    text: formData.prompt,
+                  },
+                ],
+              },
+            ],
+            previous_interaction_id: interaction?.id,
+            tools,
+          });
 
-        const interaction2 = await aimodel.interactions.create({
-          model: GEMINI_MODEL,
-          input: [
-            {
-              type: 'user_input',
-              content: [
-                {
-                  type: 'text',
-                  text: formData.prompt,
-                },
-              ],
-            },
-          ],
-          previous_interaction_id: interaction?.id,
-          tools,
-        });
-
-        setInteraction(interaction2);
+          setInteraction(interaction2);
+        } catch (e) {
+          setMessage(e?.toString() ?? 'An unknown error occurred.');
+        }
       }}
       resetOptions={{
         keepIsSubmitSuccessful: true,
