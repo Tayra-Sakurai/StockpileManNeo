@@ -24,6 +24,7 @@ import PasswordReset from './components/signin/PasswordReset.tsx';
 import LargeLargeCategoryDetail from './components/datafield/LargeLargeCategoryDetail.jsx';
 import LargeLargeCategoriesView from './components/views/Views/LargeLargeCategories/LargeLargeCategoriesView.jsx';
 import LargeLargeCategoryEdit from './components/datafield/Editors/LargeLargeCategoryEdit.jsx';
+import AIChat from './components/chat/AIChat.jsx';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
             <Route path="View/items" element={<ItemsView />} />
             <Route path="View/small_categories" element={<SmallCategoriesView />} />
             <Route path="View/small_categories/large_categories/:code" element={<SmallCategoriesView />} />
+            <Route path="Chat" element={<AIChat />} />
           </Route>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
