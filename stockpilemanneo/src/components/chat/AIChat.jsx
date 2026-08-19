@@ -155,10 +155,10 @@ function AIChat() {
         </Box>
       </Paper>
       <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
-        <Alert severity="error">{message}</Alert>
+        <Alert severity="error" sx={{ width: '100%' }}>{message}</Alert>
       </Snackbar>
       <Snackbar open={open2} autoHideDuration={5000} onClose={handleClose2}>
-        <Alert severity="info">{message2}</Alert>
+        <Alert severity="info" sx={{ width: '100%' }}>{message2}</Alert>
       </Snackbar>
     </>
   );
