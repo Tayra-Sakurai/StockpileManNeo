@@ -24,7 +24,8 @@ function AIChat() {
 
   useEffect(() => {
     const loadChat = async () => {
-      if (interaction?.steps?.find(step => step.type === 'finction_call')) {
+      if (interaction?.steps?.find(step => step.type === 'function_call')) {
+        console.log('Calling function...');
         const result = await execFuncCall(interaction);
         const interaction2 = await aimodel.interactions.create({
           model: 'gemini-3-flash-preview',
@@ -34,6 +35,7 @@ function AIChat() {
         });
         setInteraction(interaction2);
       } else if (interaction?.steps?.find(step => step.type === 'model_output')) {
+        console.info('Program has gotten a response.');
         /**
          * The markdown output.
          * @type {string}
