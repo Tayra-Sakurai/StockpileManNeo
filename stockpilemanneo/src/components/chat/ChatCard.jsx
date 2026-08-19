@@ -1,7 +1,7 @@
 import { Avatar, Card, CardContent, CardHeader, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { MarkdownHooks } from "react-markdown";
+import Markdown from "react-markdown";
 
 /**
  * Displays the Gemini response and user's request.
@@ -24,7 +24,7 @@ function ChatCard({ markdown, role }) {
         title={role}
       />
       <CardContent>
-        <MarkdownHooks
+        <Markdown
           components={{
             table(options) {
               const { children } = options;
@@ -79,7 +79,7 @@ function ChatCard({ markdown, role }) {
               return <Link href={href}>{children}</Link>;
             },
           }}
-        >{markdown}</MarkdownHooks>
+        >{markdown}</Markdown>
       </CardContent>
     </Card>
   );

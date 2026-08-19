@@ -53,12 +53,12 @@ function AIChat() {
          * @type {string}
          */
         const markdown = interaction.output_text;
-        setChat(chat => {
-          chat.push({
+        setChat(chatMessages => {
+          chatMessages.push({
             role: 'model',
             markdown,
           });
-          return chat;
+          return chatMessages;
         });
       }
     };
