@@ -29,7 +29,7 @@ function AIChat() {
   const [message, setMessage] = useState('');
 
   const [message2, setMessage2] = useState('使用中のモデル: Gemini 3.5 Flash Lite');
-  const [open2, setOpen2] = useState(false);
+  const [open2, setOpen2] = useState(true);
 
   /**
    * The close action handler.
