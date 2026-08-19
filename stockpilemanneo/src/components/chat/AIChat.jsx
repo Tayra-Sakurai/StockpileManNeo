@@ -153,10 +153,28 @@ function AIChat() {
         }}>
           <PromptEditor setMessage={setMessage} interaction={interaction} setInteraction={setInteraction} setChatMessages={setChat} />
         </Box>
-        <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+        <Snackbar
+          open={open}
+          autoHideDuration={5000}
+          onClose={handleClose}
+          sx={{
+            zIndex(theme) {
+              return theme.zIndex.appBar + 1;
+            },
+          }}
+        >
           <Alert severity="error" sx={{ width: '100%' }}>{message}</Alert>
         </Snackbar>
-        <Snackbar open={open2} autoHideDuration={5000} onClose={handleClose2}>
+        <Snackbar
+          open={open2}
+          autoHideDuration={5000}
+          onClose={handleClose2}
+          sx={{
+            zIndex(theme) {
+              return theme.zIndex.appBar + 1;
+            },
+          }}
+        >
           <Alert severity="info" sx={{ width: '100%' }}>{message2}</Alert>
         </Snackbar>
       </Paper>
