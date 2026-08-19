@@ -28,7 +28,7 @@ function AIChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
 
-  const [message2, setMessage2] = useState('');
+  const [message2, setMessage2] = useState('使用中のモデル: Gemini 3.5 Flash Lite');
   const [open2, setOpen2] = useState(false);
 
   /**
@@ -59,7 +59,7 @@ function AIChat() {
     const loadChat = async () => {
       if (interaction?.steps?.find(step => step.type === 'function_call')) {
         try {
-          setMessage2('Calling function...');
+          setMessage2('データベースを検索しています．');
           /**
            * The results array.
            * @type {Array.<import("@google/genai").Interactions.FunctionResultStep>}
@@ -69,7 +69,7 @@ function AIChat() {
             if (result)
               results.push(result);
           }
-          await asynchronousTimer(20000);
+          await asynchronousTimer(10000);
           const interaction2 = await aimodel.interactions.create({
             model: GEMINI_MODEL,
             input: results,
@@ -77,13 +77,13 @@ function AIChat() {
             previous_interaction_id: interaction?.id,
             generation_config,
           });
-          setMessage2('Called the function!');
+          setMessage2('データベースの検索が完了しました！');
           setInteraction(interaction2);
         } catch (e) {
           setMessage(e?.message?.toString() ?? '不明なエラーが発生しました．');
         }
       } else if (interaction?.steps?.find(step => step.type === 'model_output')) {
-        setMessage2('Program has gotten a response.');
+        setMessage2(`AIによる回答が得られました．AIの回答は誤りを含む可能性があります．また，使用したトークンは${interaction.usage.total_input_tokens + interaction.usage.total_tool_tokens}です．利用可能なトークンの上限は1,048,576です．`);
         /**
          * The markdown output.
          * @type {string}
