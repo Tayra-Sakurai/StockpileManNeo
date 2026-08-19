@@ -32,7 +32,7 @@ function App() {
       <AppTheme>
         <Routes>
           <Route path="/" element={<AppBaseElement />}>
-            <Route path="/" element={<SearchPage />} />
+            <Route path="/" element={<AIChat />} />
             <Route path="Search" element={<SearchPage />} />
             <Route path="Edit" element={<EditBlock />}>
               <Route path="large_categories/:id" element={<LargeCategoryEdit />} />

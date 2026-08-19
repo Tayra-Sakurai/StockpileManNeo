@@ -27,11 +27,19 @@ function AIChat() {
     const loadChat = async () => {
       if (interaction?.steps?.find(step => step.type === 'function_call')) {
         console.log('Calling function...');
-        const result = await execFuncCall(interaction);
+        /**
+         * The results array.
+         * @type {Array.<import("@google/genai").Interactions.FunctionResultStep>}
+         */
+        const results = [];
+        for await (const result of execFuncCall(interaction)) {
+          if (result)
+            results.push(result);
+        }
         await asynchronousTimer(20000);
         const interaction2 = await aimodel.interactions.create({
           model: 'gemini-3-flash-preview',
-          input: [result],
+          input: results,
           tools,
           previous_interaction_id: interaction?.id,
         });

@@ -64,73 +64,76 @@ export async function getItems(smallCategoryId) {
 /**
  * Executes the function.
  * @param {import("@google/genai").Interactions.Interaction} response The interaction object to call function.
- * @returns {Promise<import("@google/genai").Interactions.FunctionResultStep>}
+ * @returns {AsyncGenerator<import("@google/genai").Interactions.FunctionResultStep | undefined>}
  */
-export async function execFuncCall(response) {
-  const step = response.steps?.findLast(value => value.type === 'function_call');
-  if (step) {
-    if (step.name === 'getLargeLargeCategories') {
-      const result = await getLargeLargeCategories();
-      return {
-        type: 'function_result',
-        call_id: step.id,
-        name: step.name,
-        result: [
-          {
-            type: 'text',
-            text: JSON.stringify(result),
-          },
-        ],
-      };
-    } else if (step.name === 'getLargeCategories') {
-      const result = await getLargeCategories(step.arguments.largeLargeCategoryId);
-      return {
-        type: 'function_result',
-        call_id: step.id,
-        name: step.name,
-        result: [
-          {
-            type: 'text',
-            text: JSON.stringify(result),
-          },
-        ],
-      };
-    } else if (step.name === 'getSmallCategories') {
-      const result = await getSmallCategories(step.arguments.largeCategoryId);
-      return {
-        type: 'function_result',
-        call_id: step.id,
-        name: step.name,
-        result: [
-          {
-            type: 'text',
-            text: JSON.stringify(result),
-          },
-        ],
-      };
-    } else if (step.name === 'getItems') {
-      const result = await getItems(step.arguments.smallCategoryId);
+export async function* execFuncCall(response) {
+  const steps = response.steps?.filter(value => value.type === 'function_call');
+  if (steps) {
+    for (const step of steps) {
+      if (step.name === 'getLargeLargeCategories') {
+        const result = await getLargeLargeCategories();
+        yield {
+          type: 'function_result',
+          call_id: step.id,
+          name: step.name,
+          result: [
+            {
+              type: 'text',
+              text: JSON.stringify(result),
+            },
+          ],
+        };
+      } else if (step.name === 'getLargeCategories') {
+        const result = await getLargeCategories(step.arguments.largeLargeCategoryId);
+        yield {
+          type: 'function_result',
+          call_id: step.id,
+          name: step.name,
+          result: [
+            {
+              type: 'text',
+              text: JSON.stringify(result),
+            },
+          ],
+        };
+      } else if (step.name === 'getSmallCategories') {
+        const result = await getSmallCategories(step.arguments.largeCategoryId);
+        yield {
+          type: 'function_result',
+          call_id: step.id,
+          name: step.name,
+          result: [
+            {
+              type: 'text',
+              text: JSON.stringify(result),
+            },
+          ],
+        };
+      } else if (step.name === 'getItems') {
+        const result = await getItems(step.arguments.smallCategoryId);
 
-      return {
-        type: 'function_result',
-        call_id: step.id,
-        name: step.name,
-        result: [
-          {
-            type: 'text',
-            text: JSON.stringify(result),
-          },
-        ],
-      };
-    } else {
-      return {
-        type: 'function_result',
-        call_id: step.id,
-        name: step.name,
-        is_error: true,
-        result: 'Such a function is not defined.',
-      };
+        yield {
+          type: 'function_result',
+          call_id: step.id,
+          name: step.name,
+          result: [
+            {
+              type: 'text',
+              text: JSON.stringify(result),
+            },
+          ],
+        };
+      } else {
+        return {
+          type: 'function_result',
+          call_id: step.id,
+          name: step.name,
+          is_error: true,
+          result: 'Such a function is not defined.',
+        };
+      }
     }
+    return;
   }
 
   throw new Error('The call is not defined.');

@@ -20,6 +20,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import LoginIcon from '@mui/icons-material/Login';
 import CategoryIcon from '@mui/icons-material/Category';
 import LocationPinIcon from '@mui/icons-material/LocationPin';
+import ChatIcon from '@mui/icons-material/Chat';
 
 function BrandBar() {
   const [open, setOpen] = useState(false);
@@ -122,7 +123,15 @@ function BrandBar() {
         <Box sx={{ width: '100%', boxSizing: 'border-box' }}>
           <List sx={{ bgcolor: 'background.paper', borderBottom: 1, borderColor: 'divider' }}>
             <ListItem disablePadding>
-              <ListItemButton component={RouterLink} to="/" onClick={() => setOpen(false)}>
+              <ListItemButton component={RouterLink} to="/Chat" onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <ChatIcon />
+                </ListItemIcon>
+                <ListItemText primary="チャット" secondary="Gemini とチャットで在庫を確認" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/Search" onClick={() => setOpen(false)}>
                 <ListItemIcon>
                   <HomeIcon />
                 </ListItemIcon>

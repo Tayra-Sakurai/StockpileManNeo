@@ -1,16 +1,17 @@
-import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
+import { BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
 import CategoryIcon from '@mui/icons-material/Category';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import SearchIcon from '@mui/icons-material/Search';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useEffect, useState } from "react";
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import { Link as RouterLink, useLocation } from 'react-router-dom';
+import ChatIcon from '@mui/icons-material/Chat';
 
 const DESTINATIONS = [
   {
     label: '検索',
     to: '/Search',
-    expression: /^\/(Search)?$/,
+    expression: /^\/Search$/,
     icon: <SearchIcon />,
   },
   {
@@ -18,6 +19,12 @@ const DESTINATIONS = [
     to: '/View/items',
     expression: /^\/View\/items(\/(small_categories|locations)\/\d+)?$/,
     icon: <Inventory2Icon />,
+  },
+  {
+    label: 'チャット',
+    to: '/Chat',
+    expression: /\/(Chat)?/,
+    icon: <ChatIcon />,
   },
   {
     label: '分類',
