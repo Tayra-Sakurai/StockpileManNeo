@@ -8,6 +8,7 @@ import asynchronousTimer from "../../timers/AsynchronousTimer.js";
 import { GEMINI_MODEL, generation_config } from "./constants.js";
 
 function AIChat() {
+  console.info(`Model: ${GEMINI_MODEL}`);
   /**
    * @type {[
    *   ?import("@google/genai").Interactions.Interaction,
