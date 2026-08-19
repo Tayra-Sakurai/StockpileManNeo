@@ -1,4 +1,4 @@
-export const GEMINI_MODEL = 'gemini-3-flash-preview';
+export const GEMINI_MODEL = 'gemini-3.7-flash';
 
 /**
  * The generation configuration for the Gemini agent.
