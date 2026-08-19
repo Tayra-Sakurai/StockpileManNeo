@@ -12,9 +12,13 @@ import EditIcon from '@mui/icons-material/Edit';
  *     count: number,
  *   }>,
  * }>} props.small_categories The small categories.
+ * @param {?{
+ *   id: number,
+ *   name: string,
+ * }} props.large_large_categories The largest category.
  * @returns
  */
-function LargeCategoryViewRow({ id, name, small_categories }) {
+function LargeCategoryViewRow({ id, name, small_categories, large_large_categories }) {
   /**
    * The number of items in the large category.
    * @type {number}
@@ -28,6 +32,16 @@ function LargeCategoryViewRow({ id, name, small_categories }) {
     <TableRow>
       <TableCell align="right">{id}</TableCell>
       <TableCell align="left">{name}</TableCell>
+      <TableCell>
+        {large_large_categories &&
+          <MuiLink
+            component={Link}
+            to={`/View/large_categories/large_large_categories/${large_large_categories.id}`}
+          >
+            {large_large_categories.name}
+          </MuiLink>
+        }
+      </TableCell>
       <TableCell align="right">
         <MuiLink component={Link} to={`/View/small_categories/large_categories/${id}`}>
           {itemCount}

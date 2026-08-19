@@ -20,6 +20,10 @@ function LargeCategoriesTable({ largeLargeCategoryId }) {
    *         count: number
    *       }[],
    *     }[],
+   *     large_large_categories: ?{
+   *       id: number,
+   *       name: string,
+   *     },
    *   }[],
    *   import ("react").Dispatch.<import ("react").SetStateAction.<{
    *     id: number,
@@ -29,6 +33,10 @@ function LargeCategoriesTable({ largeLargeCategoryId }) {
    *         count: number
    *       }[],
    *     }[],
+   *     large_large_categories: ?{
+   *       id: number,
+   *       name: string,
+   *     },
    *   }[]>>
    * ]}
    */
@@ -39,7 +47,7 @@ function LargeCategoriesTable({ largeLargeCategoryId }) {
       if (!largeLargeCategoryId) {
         const { data: d, error } = await supabase
           .from('large_categories')
-          .select('id, name, small_categories(items(count))')
+          .select('id, name, small_categories(items(count)), large_large_categories(id, name)')
           .order('name', { ascending: true });
         if (error) throw error;
 
@@ -47,7 +55,7 @@ function LargeCategoriesTable({ largeLargeCategoryId }) {
       } else {
         const { data: d, error } = await supabase
           .from('large_categories')
-          .select('id, name, small_categories(items(count))')
+          .select('id, name, small_categories(items(count)), large_large_categories(id, name)')
           .eq('large_large_category_id', largeLargeCategoryId)
           .order('name', { ascending: true });
 
@@ -66,6 +74,7 @@ function LargeCategoriesTable({ largeLargeCategoryId }) {
           <TableRow>
             <TableCell>番号</TableCell>
             <TableCell>カテゴリ名</TableCell>
+            <TableCell>大分類</TableCell>
             <TableCell>品目数</TableCell>
             <TableCell>操作</TableCell>
           </TableRow>

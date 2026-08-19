@@ -19,6 +19,10 @@ function SmallCategoriesView() {
    *     large_categories: {
    *       id: number,
    *       name: string,
+   *       large_large_categories: ?{
+   *         id: number,
+   *         name: string,
+   *       },
    *     }
    *   }[],
    *   import("react").Dispatch.<import("react").SetStateAction.<Array.<{
@@ -29,7 +33,11 @@ function SmallCategoriesView() {
    *     }[],
    *     large_categories: {
    *       id: number,
-   *       name: string
+   *       name: string,
+   *       large_large_categories: ?{
+   *         id: number,
+   *         name: string,
+   *       },
    *     },
    *   }>>>
    * ]}
@@ -41,7 +49,7 @@ function SmallCategoriesView() {
       if (code) {
         const { data, error } = await supabase
           .from('large_categories')
-          .select('small_categories!inner(id, name, items(count), large_categories!inner(id, name))')
+          .select('small_categories!inner(id, name, items(count), large_categories!inner(id, name, large_large_categories(id, name)))')
           .eq('id', parseInt(code));
 
         if (error) throw error;
@@ -49,7 +57,7 @@ function SmallCategoriesView() {
       } else {
         const { data, error } = await supabase
           .from('small_categories')
-          .select('id, name, items(count), large_categories!inner(id, name)')
+          .select('id, name, items(count), large_categories!inner(id, name, large_large_categories(id, name))')
           .order('name', { ascending: true });
 
         if (error) throw error;

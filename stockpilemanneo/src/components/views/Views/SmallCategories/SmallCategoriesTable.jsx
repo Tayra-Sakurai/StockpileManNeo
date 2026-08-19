@@ -10,6 +10,10 @@ import SmallCategoryRow from "./SmallCategoryRow.jsx";
  *   large_categories: {
  *     name: string,
  *     id: number,
+ *     large_large_categories: ?{
+ *       id: number,
+ *       name: string,
+ *     },
  *   },
  *   items: {
  *     count: number,
@@ -25,6 +29,7 @@ function SmallCategoriesTable({ smallCategories }) {
           <TableRow>
             <TableCell>番号</TableCell>
             <TableCell>名称</TableCell>
+            <TableCell>大分類</TableCell>
             <TableCell>分類</TableCell>
             <TableCell align="right">品目数</TableCell>
             <TableCell>操作</TableCell>

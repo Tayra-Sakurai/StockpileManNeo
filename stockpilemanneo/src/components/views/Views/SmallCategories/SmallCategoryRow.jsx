@@ -10,6 +10,10 @@ import EditIcon from "@mui/icons-material/Edit";
  * @param {{
  *   id: number,
  *   name: string,
+ *   large_large_categories: ?{
+ *     id: number,
+ *     name: string,
+ *   },
  * }} props.large_categories The related large category.
  * @param {{
  *   count: number,
@@ -21,6 +25,16 @@ function SmallCategoryRow({ itemId, name, large_categories, items }) {
     <TableRow>
       <TableCell>{itemId}</TableCell>
       <TableCell>{name}</TableCell>
+      <TableCell>
+        {large_categories.large_large_categories &&
+          <Link
+            component={RouterLink}
+            to={`/View/large_categories/large_large_categories/${large_categories.large_large_categories.id}`}
+          >
+            {large_categories.large_large_categories.name}
+          </Link>
+        }
+      </TableCell>
       <TableCell>
         <Link component={RouterLink} to={`/View/small_categories/large_categories/${large_categories.id}`}>
           {large_categories.name}

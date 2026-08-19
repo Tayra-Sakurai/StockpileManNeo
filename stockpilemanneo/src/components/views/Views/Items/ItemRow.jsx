@@ -14,7 +14,7 @@ const WARNING_PERIOD = 30;
  * @param {number} props.id The identity.
  * @param {string} props.name The name of the item.
  * @param {?string} props.life The life of the item.
- * @param {{name: string, id: number, large_categories: {id: number, name: string,}}} props.small_categories The small category.
+ * @param {{name: string, id: number, large_categories: {id: number, name: string, large_large_categories: ?{id: number, name: string,}}}} props.small_categories The small category.
  * @param {{name: string, id: number}} props.locations The location.
  * @returns
  */
@@ -88,6 +88,20 @@ function ItemRow({ id, name, life, small_categories, locations }) {
                       <TableCell component="th" scope="row">番号</TableCell>
                       <TableCell>{id}</TableCell>
                     </TableRow>
+                    {
+                      small_categories.large_categories.large_large_categories &&
+                      <TableRow>
+                        <TableCell component="th" scope="row">大分類</TableCell>
+                        <TableCell>
+                          <Link
+                            component={RouterLink}
+                            to={`/View/large_categories/large_large_categories/${small_categories.large_categories.large_large_categories.id}`}
+                          >
+                            {small_categories.large_categories.large_large_categories.name}
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    }
                     <TableRow>
                       <TableCell component="th" scope="row">分類</TableCell>
                       <TableCell>
