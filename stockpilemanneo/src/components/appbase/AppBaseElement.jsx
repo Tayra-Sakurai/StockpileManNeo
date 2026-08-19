@@ -27,8 +27,7 @@ function AppBaseElement() {
 
   return (
     <Box sx={{
-      height: '100dvh',
-      width: '100dvw',
+      minHeight: '100svh',
       display: 'flex',
       flexDirection: 'column',
       boxSizing: 'border-box',

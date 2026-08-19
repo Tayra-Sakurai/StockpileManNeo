@@ -130,11 +130,6 @@ function AIChat() {
           overflow: 'scroll',
           display: 'flex',
           flexDirection: 'column',
-          paddingBottom: {
-            xs: 8,
-            sm: 5,
-            md: 5,
-          },
         }}
       >
         <Stack spacing={2} sx={{ flexGrow: 1 }}>
@@ -145,9 +140,9 @@ function AIChat() {
           width: '100%',
           position: 'sticky',
           bottom: {
-            xs: 8,
-            sm: 5,
-            md: 5,
+            xs: 13,
+            sm: 10,
+            md: 10,
           },
           left: 0,
           right: 0,
