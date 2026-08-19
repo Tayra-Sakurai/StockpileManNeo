@@ -40,7 +40,6 @@ function AppBaseElement() {
       </UserViewContext.Provider>
       <Box component="div" sx={{
         flexGrow: 1,
-        zIndex: 1,
       }}>
         <Outlet />
       </Box>
