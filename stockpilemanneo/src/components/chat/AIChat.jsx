@@ -127,9 +127,11 @@ function AIChat() {
           width: '100%',
           height: '100%',
           overflow: 'scroll',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
-        <Stack spacing={2}>
+        <Stack spacing={2} sx={{ flexGrow: 1 }}>
           {chat.map(params => <ChatCard {...params} />)}
         </Stack>
         <Box sx={{ boxSizing: 'border-box', width: '100%', position: 'sticky', bottom: 0, left: 0, right: 0 }}>
