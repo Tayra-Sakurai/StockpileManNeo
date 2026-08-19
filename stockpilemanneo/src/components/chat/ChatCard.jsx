@@ -2,6 +2,7 @@ import { Avatar, Card, CardContent, CardHeader, Link, Table, TableBody, TableCel
 import { deepPurple } from "@mui/material/colors";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Markdown from "react-markdown";
+import GeminiLogo from "../../assets/gemini_logo.png";
 
 /**
  * Displays the Gemini response and user's request.
@@ -16,7 +17,7 @@ function ChatCard({ markdown, role }) {
       <CardHeader
         avatar={
           role === 'model' ?
-            <Avatar src="/assets/gemini_logo.png" /> :
+            <Avatar src={GeminiLogo} /> :
             <Avatar sx={{ bgcolor: deepPurple[500] }}>
               <AccountCircleIcon />
             </Avatar>
