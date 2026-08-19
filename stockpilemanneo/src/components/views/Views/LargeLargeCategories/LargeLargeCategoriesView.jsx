@@ -40,8 +40,20 @@ function LargeLargeCategoriesView() {
         .order('name', { ascending: true });
 
       if (error) console.error(error.message);
-      if (data?.length)
+      if (data?.length) {
+        data.sort((a, b) => {
+          let [aItems, bItems] = [0, 0];
+          for (const { small_categories } of a.large_categories)
+            for (const { items } of small_categories)
+              aItems += items[0].count;
+          for (const { small_categories } of b.large_categories)
+            for (const { items } of small_categories)
+              bItems += items[0].count;
+
+          return aItems - bItems;
+        })
         setDisplayData(data);
+      }
     };
 
     load();

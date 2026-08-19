@@ -53,7 +53,7 @@ function SmallCategoriesView() {
           .eq('id', parseInt(code));
 
         if (error) throw error;
-        if (data.length > 0) setSmallCategories(data[0].small_categories.toSorted((a, b) => a.name.localeCompare(b.name)));
+        if (data.length > 0) setSmallCategories(data[0].small_categories.toSorted((a, b) => a.name.localeCompare(b.name)).toSorted((a, b) => a.items[0].count - b.items[0].count));
       } else {
         const { data, error } = await supabase
           .from('small_categories')
@@ -61,7 +61,10 @@ function SmallCategoriesView() {
           .order('name', { ascending: true });
 
         if (error) throw error;
-        if (data.length > 0) setSmallCategories(data);
+        if (data.length > 0) {
+          data.sort((a, b) => a.items[0].count - b.items[0].count);
+          setSmallCategories(data);
+        }
       }
     };
     load();

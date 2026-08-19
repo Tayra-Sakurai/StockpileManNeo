@@ -4,6 +4,28 @@ import supabase from "../../../../client.js";
 import LargeCategoryViewRow from "./LargeCategoryViewRow.jsx";
 
 /**
+ * 
+ * @template {{
+ *   [x: string]: any,
+ *   small_categories: {
+ *     items: {
+ *       count: number
+ *     }[],
+ *     [y: string]: any,
+ *   }[],
+ * }} T
+ * @param {T} largeCategory The large category.
+ * @returns
+ */
+function countRelatedItems(largeCategory) {
+  let count = 0;
+  for (const { items } of largeCategory.small_categories)
+    count += items[0].count;
+
+  return count;
+}
+
+/**
  * The large category listing table.
  * @param {object} props The props.
  * @param {number=} props.largeLargeCategoryId The largest category's id.
@@ -51,7 +73,17 @@ function LargeCategoriesTable({ largeLargeCategoryId }) {
           .order('name', { ascending: true });
         if (error) throw error;
 
-        if (d) setData(d);
+        if (d) {
+          d.sort((a, b) => {
+            const [aItems, bItems] = [
+              countRelatedItems(a),
+              countRelatedItems(b),
+            ];
+
+            return aItems - bItems;
+          });
+          setData(d);
+        }
       } else {
         const { data: d, error } = await supabase
           .from('large_categories')
@@ -60,7 +92,10 @@ function LargeCategoriesTable({ largeLargeCategoryId }) {
           .order('name', { ascending: true });
 
         if (error) throw error;
-        if (d) setData(d);
+        if (d) {
+          d.sort((a, b) => countRelatedItems(a) - countRelatedItems(b));
+          setData(d);
+        }
       }
     };
 
