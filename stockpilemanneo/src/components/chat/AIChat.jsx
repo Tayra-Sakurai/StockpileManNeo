@@ -144,7 +144,11 @@ function AIChat() {
           boxSizing: 'border-box',
           width: '100%',
           position: 'sticky',
-          bottom: 0,
+          bottom: {
+            xs: 8,
+            sm: 5,
+            md: 5,
+          },
           left: 0,
           right: 0,
           zIndex(theme) {
