@@ -48,7 +48,7 @@ function PromptEditor({ interaction, setChatMessages, setInteraction }) {
         setInteraction(interaction2);
       }}
       resetOptions={{
-        keepIsSubmitSuccessful: false,
+        keepIsSubmitSuccessful: true,
       }}
     >
       <Grid container>
