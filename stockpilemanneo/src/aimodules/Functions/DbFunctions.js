@@ -195,7 +195,4 @@ export const tools = [
       required: ['smallCategoryId'],
     },
   },
-  {
-    type: 'google_search',
-  },
 ];
