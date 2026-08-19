@@ -5,6 +5,7 @@ import PromptEditor from "./PromptEditor.jsx";
 import { execFuncCall, tools } from "../../aimodules/Functions/DbFunctions.js";
 import aimodel from "../../aimodules/Gemini.jsx";
 import asynchronousTimer from "../../timers/AsynchronousTimer.js";
+import { GEMINI_MODEL } from "./constants.js";
 
 function AIChat() {
   /**
@@ -38,7 +39,7 @@ function AIChat() {
         }
         await asynchronousTimer(20000);
         const interaction2 = await aimodel.interactions.create({
-          model: 'gemini-3-flash-preview',
+          model: GEMINI_MODEL,
           input: results,
           tools,
           previous_interaction_id: interaction?.id,

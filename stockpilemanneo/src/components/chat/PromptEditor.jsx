@@ -3,6 +3,7 @@ import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import SendIcon from "@mui/icons-material/Send";
 import aimodel from "../../aimodules/Gemini.jsx";
 import { tools } from "../../aimodules/Functions/DbFunctions.js";
+import { GEMINI_MODEL } from "./constants.js";
 
 /**
  * The prompt editor.
@@ -28,7 +29,7 @@ function PromptEditor({ interaction, setChatMessages, setInteraction }) {
         });
 
         const interaction2 = await aimodel.interactions.create({
-          model: 'gemini-3-flash-preview',
+          model: GEMINI_MODEL,
           input: [
             {
               type: 'user_input',
