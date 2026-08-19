@@ -83,7 +83,7 @@ function AIChat() {
           setMessage(e?.message?.toString() ?? '不明なエラーが発生しました．');
         }
       } else if (interaction?.steps?.find(step => step.type === 'model_output')) {
-        setMessage2(`AIによる回答が得られました．AIの回答は誤りを含む可能性があります．また，使用したトークンは${interaction.usage.total_input_tokens + interaction.usage.total_tool_tokens}です．利用可能なトークンの上限は1,048,576です．`);
+        setMessage2(`AIによる回答が得られました．AIの回答は誤りを含む可能性があります．また，使用したトークンは${(interaction.usage.total_input_tokens || 0) + (interaction.usage.total_tool_tokens || 0)}です．利用可能なトークンの上限は1,048,576です．`);
         /**
          * The markdown output.
          * @type {string}
