@@ -32,7 +32,6 @@ function AppBaseElement() {
       flexDirection: 'column',
       boxSizing: 'border-box',
       padding: [0, 2],
-      overflow: 'scroll',
     }}>
       <UserViewContext.Provider value={userData}>
         <BrandBar />
