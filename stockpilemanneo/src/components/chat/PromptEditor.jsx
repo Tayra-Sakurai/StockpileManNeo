@@ -20,13 +20,13 @@ function PromptEditor({ interaction, setChatMessages, setInteraction }) {
         prompt: '',
       }}
       onSuccess={async formData => {
-        setChatMessages(chatMessages => {
-          chatMessages.push({
+        setChatMessages(chatMessages => [
+          ...chatMessages,
+          {
             role: 'user',
             markdown: formData.prompt,
-          });
-          return chatMessages;
-        });
+          },
+        ]);
 
         const interaction2 = await aimodel.interactions.create({
           model: GEMINI_MODEL,
