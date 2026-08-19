@@ -4,6 +4,7 @@ import ChatCard from "./ChatCard.jsx";
 import PromptEditor from "./PromptEditor.jsx";
 import { execFuncCall, tools } from "../../aimodules/Functions/DbFunctions.js";
 import aimodel from "../../aimodules/Gemini.jsx";
+import asynchronousTimer from "../../timers/AsynchronousTimer.js";
 
 function AIChat() {
   /**
@@ -27,12 +28,14 @@ function AIChat() {
       if (interaction?.steps?.find(step => step.type === 'function_call')) {
         console.log('Calling function...');
         const result = await execFuncCall(interaction);
+        await asynchronousTimer(20000);
         const interaction2 = await aimodel.interactions.create({
           model: 'gemini-3-flash-preview',
           input: [result],
           tools,
           previous_interaction_id: interaction?.id,
         });
+        console.log('Called the function!');
         setInteraction(interaction2);
       } else if (interaction?.steps?.find(step => step.type === 'model_output')) {
         console.info('Program has gotten a response.');
