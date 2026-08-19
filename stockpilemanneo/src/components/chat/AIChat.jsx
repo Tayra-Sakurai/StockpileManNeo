@@ -138,7 +138,7 @@ function AIChat() {
           width: '100%',
           position: 'sticky',
           bottom: {
-            xs: 13,
+            xs: 60,
             sm: 10,
             md: 10,
           },
