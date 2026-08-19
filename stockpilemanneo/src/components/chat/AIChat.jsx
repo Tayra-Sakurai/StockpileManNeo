@@ -5,7 +5,7 @@ import PromptEditor from "./PromptEditor.jsx";
 import { execFuncCall, tools } from "../../aimodules/Functions/DbFunctions.js";
 import aimodel from "../../aimodules/Gemini.jsx";
 import asynchronousTimer from "../../timers/AsynchronousTimer.js";
-import { GEMINI_MODEL } from "./constants.js";
+import { GEMINI_MODEL, generation_config } from "./constants.js";
 
 function AIChat() {
   /**
@@ -74,6 +74,7 @@ function AIChat() {
             input: results,
             tools,
             previous_interaction_id: interaction?.id,
+            generation_config,
           });
           setMessage2('Called the function!');
           setInteraction(interaction2);
@@ -101,10 +102,22 @@ function AIChat() {
   }, [interaction]);
 
   useEffect(() => {
-    setOpen(true);
+    const action = async () => {
+      if (message)
+        setOpen(true);
+    };
+
+    action();
   }, [message]);
 
-  useEffect(() => setOpen2(true), [message2]);
+  useEffect(() => {
+    const act = async () => {
+      if (message2)
+        setOpen2(true);
+    };
+
+    act();
+  }, [message2]);
 
   return (
     <>
