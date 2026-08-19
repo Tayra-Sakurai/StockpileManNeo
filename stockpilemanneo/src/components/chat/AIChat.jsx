@@ -129,15 +129,22 @@ function AIChat() {
           overflow: 'scroll',
           display: 'flex',
           flexDirection: 'column',
-          zIndex(theme) {
-            return theme.zIndex.speedDial + 1;
-          },
         }}
       >
         <Stack spacing={2} sx={{ flexGrow: 1 }}>
           {chat.map(params => <ChatCard {...params} />)}
         </Stack>
-        <Box sx={{ boxSizing: 'border-box', width: '100%', position: 'sticky', bottom: 0, left: 0, right: 0 }}>
+        <Box sx={{
+          boxSizing: 'border-box',
+          width: '100%',
+          position: 'sticky',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex(theme) {
+            return theme.zIndex.speedDial + 1;
+          },
+        }}>
           <PromptEditor setMessage={setMessage} interaction={interaction} setInteraction={setInteraction} setChatMessages={setChat} />
         </Box>
       </Paper>

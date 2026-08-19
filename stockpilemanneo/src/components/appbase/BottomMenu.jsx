@@ -23,7 +23,7 @@ const DESTINATIONS = [
   {
     label: 'チャット',
     to: '/Chat',
-    expression: /\/(Chat)?/,
+    expression: /\/(Chat)?$/,
     icon: <ChatIcon />,
   },
   {
