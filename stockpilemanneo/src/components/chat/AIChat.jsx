@@ -129,6 +129,9 @@ function AIChat() {
           overflow: 'scroll',
           display: 'flex',
           flexDirection: 'column',
+          zIndex(theme) {
+            return theme.zIndex.speedDial + 1;
+          },
         }}
       >
         <Stack spacing={2} sx={{ flexGrow: 1 }}>
