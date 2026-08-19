@@ -55,9 +55,10 @@ export async function getItems(smallCategoryId) {
     .eq('small_category_id', smallCategoryId);
 
   if (error) throw error;
-  return data.map(({ life, ...others }) => ({
+  return data.map(({ life, name, ...others }) => ({
     ...others,
     expireDate: life,
+    productName: name,
   }));
 }
 
