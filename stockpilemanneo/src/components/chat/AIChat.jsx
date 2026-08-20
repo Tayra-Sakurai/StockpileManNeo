@@ -28,13 +28,15 @@ function AIChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
 
-  const [message2, setMessage2] = useState('使用中のモデル: Gemini 3.5 Flash Lite');
-  const [open2, setOpen2] = useState(true);
+  const [message2, setMessage2] = useState('');
+  const [open2, setOpen2] = useState(false);
+
+  const [maxTokens, setMaxTokens] = useState(0);
 
   /**
    * The close action handler.
    * @param {import("react").SyntheticEvent<any> | Event} event The event object.
-   * @param {import("@mui/material").SnackbarCloseReason} reason The reason why the snackbar is closing.
+   * @param {import("@mui/material").SnackbarCloseReason=} reason The reason why the snackbar is closing.
    */
   const handleClose = (event, reason) => {
     if (reason === 'clickaway')
@@ -46,7 +48,7 @@ function AIChat() {
   /**
    * The second close action handler.
    * @param {import("react").SyntheticEvent<any> | Event} event The event object.
-   * @param {import("@mui/material").SnackbarCloseReason} reason The reason why the snackbar is closing.
+   * @param {import("@mui/material").SnackbarCloseReason=} reason The reason why the snackbar is closing.
    */
   const handleClose2 = (event, reason) => {
     if (reason === 'clickaway')
@@ -83,7 +85,7 @@ function AIChat() {
           setMessage(e?.message?.toString() ?? '不明なエラーが発生しました．');
         }
       } else if (interaction?.steps?.find(step => step.type === 'model_output')) {
-        setMessage2(`AIによる回答が得られました．AIの回答は誤りを含む可能性があります．また，使用したトークンは${(interaction.usage.total_input_tokens || 0) + (interaction.usage.total_tool_tokens || 0)}です．利用可能なトークンの上限は1,048,576です．`);
+        setMessage2(`AIによる回答が得られました．AIの回答は誤りを含む可能性があります．また，使用したトークンは${(interaction.usage.total_input_tokens || 0) + (interaction.usage.total_tool_tokens || 0)}です．利用可能なトークンの上限は${maxTokens}です．`);
         /**
          * The markdown output.
          * @type {string}
@@ -100,7 +102,7 @@ function AIChat() {
     };
 
     loadChat();
-  }, [interaction]);
+  }, [interaction, maxTokens]);
 
   useEffect(() => {
     const action = async () => {
@@ -120,6 +122,20 @@ function AIChat() {
     act();
   }, [message2]);
 
+  useEffect(() => {
+    const loadFunc = async () => {
+      const modelInfo = await aimodel.models.get({
+        model: GEMINI_MODEL,
+      });
+      if (modelInfo.inputTokenLimit) {
+        setMaxTokens(modelInfo.inputTokenLimit);
+        setMessage2(`使用中のモデルは${modelInfo.displayName}です．最大使用可能トークンは${modelInfo.inputTokenLimit}です．`);
+      }
+    };
+
+    loadFunc();
+  }, []);
+
   return (
     <>
       <Paper
@@ -128,6 +144,11 @@ function AIChat() {
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
+          paddingBottom: {
+            xs: 8,
+            sm: 5,
+            md: 5,
+          },
         }}
       >
         <Stack spacing={2} sx={{ flexGrow: 1 }}>
@@ -150,31 +171,31 @@ function AIChat() {
         }}>
           <PromptEditor setMessage={setMessage} interaction={interaction} setInteraction={setInteraction} setChatMessages={setChat} />
         </Box>
-        <Snackbar
-          open={open}
-          autoHideDuration={5000}
-          onClose={handleClose}
-          sx={{
-            zIndex(theme) {
-              return theme.zIndex.appBar + 1;
-            },
-          }}
-        >
-          <Alert severity="error" sx={{ width: '100%' }}>{message}</Alert>
-        </Snackbar>
-        <Snackbar
-          open={open2}
-          autoHideDuration={5000}
-          onClose={handleClose2}
-          sx={{
-            zIndex(theme) {
-              return theme.zIndex.appBar + 1;
-            },
-          }}
-        >
-          <Alert severity="info" sx={{ width: '100%' }}>{message2}</Alert>
-        </Snackbar>
       </Paper>
+      <Snackbar
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        sx={{
+          zIndex(theme) {
+            return theme.zIndex.appBar + 1;
+          },
+        }}
+      >
+        <Alert severity="error" sx={{ width: '100%' }} onClose={handleClose}>{message}</Alert>
+      </Snackbar>
+      <Snackbar
+        open={open2}
+        autoHideDuration={5000}
+        onClose={handleClose2}
+        sx={{
+          zIndex(theme) {
+            return theme.zIndex.appBar + 1;
+          },
+        }}
+      >
+        <Alert severity="info" sx={{ width: '100%' }} onClose={handleClose2}>{message2}</Alert>
+      </Snackbar>
     </>
   );
 }
