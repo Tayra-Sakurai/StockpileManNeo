@@ -3,7 +3,6 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import SignUp from './components/signup/SignUp.tsx';
 import SignIn from './components/signin/SignIn.tsx';
 import SessionCheck from './sessionman/SessionCheck.jsx';
-import AppTheme from './components/signin/theme/AppTheme.tsx';
 import AppBaseElement from './components/appbase/AppBaseElement.jsx';
 import SearchPage from './components/views/SearchPage.jsx';
 import EditBlock from './components/datafield/Editors/EditBlock.jsx';
