@@ -3,7 +3,7 @@ import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import SendIcon from "@mui/icons-material/Send";
 import aimodel from "../../aimodules/Gemini.jsx";
 import { tools } from "../../aimodules/Functions/DbFunctions.js";
-import { GEMINI_MODEL, generation_config } from "./constants.js";
+import { GEMINI_MODEL, generation_config, system_instruction } from "./constants.js";
 
 /**
  * The prompt editor.
@@ -29,11 +29,6 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
           },
         ]);
         try {
-          /**
-           * The system instruction.
-           * @type {string | undefined}
-           */
-          const system_instruction = interaction ? `You are a smart database searching agent. Please call the largest categories the large categories. And please call large and small categories small categories and name, respectively. Please note that the translations are among them. Please note that today is ${new Date().toDateString()}.` : undefined;
           const interaction2 = await aimodel.interactions.create({
             system_instruction,
             model: GEMINI_MODEL,
