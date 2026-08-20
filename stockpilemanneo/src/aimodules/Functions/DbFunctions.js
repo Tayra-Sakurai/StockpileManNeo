@@ -280,4 +280,7 @@ export const tools = [
       required: ['rangeStart'],
     },
   },
+  {
+    type: 'google_search',
+  },
 ];
