@@ -1,9 +1,10 @@
-import { Avatar, Typography } from "@mui/material";
+import { Avatar, Breadcrumbs, Link } from "@mui/material";
 import supabase from "../../../client.js";
 import CommonCard from "./CommonCard.jsx";
 import { useEffect, useState } from "react";
 import { amber } from "@mui/material/colors";
 import ClassIcon from "@mui/icons-material/Class";
+import { Link as RouterLink } from "react-router-dom";
 
 /**
  * The small category viewer.
@@ -14,18 +15,24 @@ import ClassIcon from "@mui/icons-material/Class";
 function SmallCategoryCard({ number }) {
   const [title, setTitle] = useState('');
   const [largeCategoryName, setLargeCategoryName] = useState('');
+  const [largeLargeCategoryName, setLargeLargeCategoryName] = useState('');
+  const [largeCategoryId, setLargeCategoryId] = useState(0);
+  const [largeLargeCategoryId, setLargeLargeCategoryId] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
       const { data, error } = await supabase
         .from('small_categories')
-        .select('name, large_categories(name)')
+        .select('name, large_categories(id, name, large_large_categories(id, name))')
         .eq('id', number);
 
       if (error) throw error;
-      if (data) {
+      if (data[0]) {
         setTitle(data[0].name);
         setLargeCategoryName(data[0].large_categories.name);
+        setLargeCategoryId(data[0].large_categories.id);
+        setLargeLargeCategoryId(data[0].large_categories.large_large_categories?.id ?? 0);
+        setLargeLargeCategoryName(data[0].large_categories.large_large_categories?.name ?? '');
       }
     };
 
@@ -45,11 +52,33 @@ function SmallCategoryCard({ number }) {
       }
       titleLink={`/View/items/small_categories/${number}`}
     >
-      <Typography
-        variant="body2"
-      >
-        分類：{largeCategoryName}
-      </Typography>
+      <Breadcrumbs>
+        {
+          (largeLargeCategoryId && largeLargeCategoryName) ?
+            <Link
+              component={RouterLink}
+              to={`/View/large_categories/large_large_categories/${largeLargeCategoryId}`}
+              color="inherit"
+            >
+              {largeLargeCategoryName}
+            </Link> :
+            null
+        }
+        <Link
+          component={RouterLink}
+          to={`/View/small_categories/large_categories/${largeCategoryId}`}
+          color="inherit"
+        >
+          {largeCategoryName}
+        </Link>
+        <Link
+          component={RouterLink}
+          to={`/View/items/small_categories/${number}`}
+          color="textPrimary"
+        >
+          {title}
+        </Link>
+      </Breadcrumbs>
     </CommonCard>
   );
 }
