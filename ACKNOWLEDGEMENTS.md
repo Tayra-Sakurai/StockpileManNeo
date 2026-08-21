@@ -1,4 +1,4 @@
-# Acknowledgemants
+# Acknowledgements
 
 This program is built thanks to the following open-source softwares.
 
