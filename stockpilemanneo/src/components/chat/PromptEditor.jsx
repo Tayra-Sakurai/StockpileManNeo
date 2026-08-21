@@ -65,6 +65,7 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
             placeholder="在庫が少ない名称を教えて．"
             required
             multiline
+            fullWidth
             rows={1}
           />
         </Grid>
