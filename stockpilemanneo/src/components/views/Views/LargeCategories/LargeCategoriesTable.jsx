@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import supabase from "../../../../client.js";
 import LargeCategoryViewRow from "./LargeCategoryViewRow.jsx";
@@ -64,6 +64,8 @@ function LargeCategoriesTable({ largeLargeCategoryId }) {
    */
   const [data, setData] = useState([]);
 
+  const isNarrow = useMediaQuery(theme => theme.breakpoints.down('sm'));
+
   useEffect(() => {
     const load = async () => {
       if (!largeLargeCategoryId) {
@@ -102,24 +104,40 @@ function LargeCategoriesTable({ largeLargeCategoryId }) {
     load();
   }, [largeLargeCategoryId]);
 
-  return (
-    <TableContainer sx={{ width: '100%' }}>
-      <Table sx={{ width: 'max-content', }}>
+  if (isNarrow)
+    return (
+      <TableContainer sx={{ width: '100%' }}>
         <TableHead>
           <TableRow>
-            <TableCell>番号</TableCell>
-            <TableCell>カテゴリ名</TableCell>
-            <TableCell>大分類</TableCell>
+            <TableCell />
+            <TableCell>分類名</TableCell>
             <TableCell>品目数</TableCell>
-            <TableCell>操作</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map(value => <LargeCategoryViewRow {...value} />)}
         </TableBody>
-      </Table>
-    </TableContainer>
-  );
+      </TableContainer>
+    );
+  else
+    return (
+      <TableContainer sx={{ width: '100%' }}>
+        <Table sx={{ width: 'max-content', }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>番号</TableCell>
+              <TableCell>カテゴリ名</TableCell>
+              <TableCell>大分類</TableCell>
+              <TableCell>品目数</TableCell>
+              <TableCell>操作</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map(value => <LargeCategoryViewRow {...value} />)}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
 }
 
 export default LargeCategoriesTable;
