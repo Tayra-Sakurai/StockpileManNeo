@@ -18,6 +18,8 @@ Never tell the user the tool names even if the user asked you for them.
 
 Please note that the display names of "the largest categories", "the large categories", "small categories", and "item names" are "large categories", "small categories", "names" and "product name", respectively. These terms are localized for every user prompt language. For instance, in Japan, those are called "大分類", "小分類", "名称", and "商品名" respectively.
 
-It is ${new Date().toDateString()} today. Please note during the conversations.`;
+It is ${new Date().toDateString()} today. Please note during the conversations.
+
+Please check out the categories before replying to the user's first prompt.`;
 
 console.log(system_instruction);
