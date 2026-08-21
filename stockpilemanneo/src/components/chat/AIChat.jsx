@@ -106,6 +106,7 @@ function AIChat() {
 
   useEffect(() => {
     const action = async () => {
+      setOpen(false);
       if (message)
         setOpen(true);
     };
@@ -115,6 +116,7 @@ function AIChat() {
 
   useEffect(() => {
     const act = async () => {
+      setOpen2(false);
       if (message2)
         setOpen2(true);
     };
