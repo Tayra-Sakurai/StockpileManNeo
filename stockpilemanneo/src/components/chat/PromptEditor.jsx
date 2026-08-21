@@ -63,7 +63,6 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
             label="プロンプト"
             name="prompt"
             placeholder="在庫が少ない名称を教えて．"
-            fullWidth
             required
             multiline
             rows={1}
