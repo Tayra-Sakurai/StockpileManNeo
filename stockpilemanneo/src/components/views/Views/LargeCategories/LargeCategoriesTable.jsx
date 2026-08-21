@@ -107,16 +107,18 @@ function LargeCategoriesTable({ largeLargeCategoryId }) {
   if (isNarrow)
     return (
       <TableContainer sx={{ width: '100%' }}>
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>分類名</TableCell>
-            <TableCell>品目数</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map(value => <LargeCategoryViewRow {...value} />)}
-        </TableBody>
+        <Table sx={{ width: 'fit-content' }}>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>分類名</TableCell>
+              <TableCell>品目数</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map(value => <LargeCategoryViewRow {...value} />)}
+          </TableBody>
+        </Table>
       </TableContainer>
     );
   else

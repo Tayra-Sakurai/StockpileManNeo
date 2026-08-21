@@ -46,6 +46,7 @@ function LargeCategoryViewRow({ id, name, small_categories, large_large_categori
               aria-label="expand detail"
               aria-controls={detailId}
               onClick={() => setOpen(val => !val)}
+              size="small"
             >
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
@@ -76,18 +77,25 @@ function LargeCategoryViewRow({ id, name, small_categories, large_large_categori
                   margin: 1,
                 }}
               >
-                <Typography component="div" variant="h6">詳細情報</Typography>
+                <Typography
+                  component="div"
+                  variant="h6"
+                  gutterBottom
+                >
+                  詳細情報
+                </Typography>
                 <TableContainer
                   sx={{
-                    width: 'fit-content(100%)',
+                    width: 'fit-content',
                     boxSizing: 'boder-box',
                   }}
                 >
                   <Table
                     sx={{
-                      width: 'fit-content(100%)',
+                      width: 'fit-content',
                       boxSizing: 'border-box',
                     }}
+                    size="small"
                   >
                     <TableHead>
                       <TableRow>
@@ -140,6 +148,7 @@ function LargeCategoryViewRow({ id, name, small_categories, large_large_categori
                             component={Link}
                             to={`/Edit/large_categories/${id}`}
                             startIcon={<EditIcon />}
+                            size="small"
                           >
                             編集
                           </Button>
