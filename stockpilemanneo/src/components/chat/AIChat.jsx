@@ -71,7 +71,7 @@ function AIChat() {
             if (result)
               results.push(result);
           }
-          await asynchronousTimer(5000);
+          await asynchronousTimer(4000);
           const interaction2 = await aimodel.interactions.create({
             model: GEMINI_MODEL,
             input: results,
@@ -169,7 +169,13 @@ function AIChat() {
             return theme.zIndex.speedDial - 1;
           },
         }}>
-          <PromptEditor setMessage={setMessage} interaction={interaction} setInteraction={setInteraction} setChatMessages={setChat} />
+          <PromptEditor
+            setMessage={setMessage}
+            interaction={interaction}
+            setInteraction={setInteraction}
+            setChatMessages={setChat}
+            setMessage2={setMessage2}
+          />
         </Box>
       </Paper>
       <Snackbar

@@ -12,15 +12,17 @@ import { GEMINI_MODEL, generation_config, system_instruction } from "./constants
  * @param {import("react").Dispatch.<import("react").SetStateAction.<?import("@google/genai").Interactions.Interaction>>} props.setInteraction The interaction update setter.
  * @param {import("react").Dispatch.<import("react").SetStateAction.<{role: "model" | "user", markdown: string}[]>>} props.setChatMessages The chat message array.
  * @param {import("react").Dispatch.<import("react").SetStateAction.<string>>} props.setMessage The error message setter.
+ * @param {import("react").Dispatch.<import("react").SetStateAction.<string>>} props.setMessage2 The information message setter.
  * @returns
  */
-function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage }) {
+function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage, setMessage2 }) {
   return (
     <FormContainer
       defaultValues={{
         prompt: '',
       }}
       onSuccess={async formData => {
+        setMessage2('入力内容を送信しました．回答が得られるまでしばらくお待ちください．');
         setChatMessages(chatMessages => [
           ...chatMessages,
           {
