@@ -57,7 +57,7 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
         keepIsSubmitSuccessful: true,
       }}
     >
-      <Grid container>
+      <Grid container sx={{ width: '100%', boxSizing: 'border-box' }}>
         <Grid size="grow">
           <TextFieldElement
             label="プロンプト"

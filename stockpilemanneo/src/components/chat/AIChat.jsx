@@ -61,7 +61,7 @@ function AIChat() {
     const loadChat = async () => {
       if (interaction?.steps?.find(step => step.type === 'function_call')) {
         try {
-          setMessage2('データベースを検索しています．');
+          setMessage2('データベースを検索しています．1回の検索につき，15～20秒ほどかかります．');
           /**
            * The results array.
            * @type {Array.<import("@google/genai").Interactions.FunctionResultStep>}
@@ -71,7 +71,7 @@ function AIChat() {
             if (result)
               results.push(result);
           }
-          await asynchronousTimer(20000);
+          await asynchronousTimer(5000);
           const interaction2 = await aimodel.interactions.create({
             model: GEMINI_MODEL,
             input: results,
