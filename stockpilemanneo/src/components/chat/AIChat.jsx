@@ -102,7 +102,7 @@ function AIChat() {
     };
 
     loadChat();
-  }, [interaction, maxTokens]);
+  }, [interaction]);
 
   useEffect(() => {
     const action = async () => {
