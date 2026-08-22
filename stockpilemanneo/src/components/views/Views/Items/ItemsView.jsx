@@ -62,6 +62,14 @@ function ItemsView() {
    */
   const [chips, setChips] = useState([]);
 
+  /**
+   * @type {[
+   *   number[],
+   *   import("react").Dispatch.<import("react").SetStateAction.<number[]>>
+   * ]}
+   */
+  const [searchV, setSearchV] = useState([]);
+
   const { table, code } = useParams();
   const [open, setOpen] = useState(true);
 
@@ -101,6 +109,7 @@ function ItemsView() {
 
       if (q) {
         const qVec = await createSearchVector(q);
+        setSearchV(qVec);
         data = data.filter(({ vector }) => calcInnerProduct(vector, qVec) > 0.5);
       }
 
@@ -172,7 +181,7 @@ function ItemsView() {
         >
           {chips.map(({ tableName, tableCode }) => <Chip label={`${il[tableName].label}: ${tableCode}`} icon={il[tableName].icon} />)}
         </Box>
-        <ItemsTable items={items} />
+        <ItemsTable searchVector={searchV} items={items} />
       </Stack>
     </Paper>
   );

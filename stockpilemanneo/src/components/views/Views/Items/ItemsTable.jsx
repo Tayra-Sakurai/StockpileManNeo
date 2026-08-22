@@ -3,6 +3,7 @@ import { useState } from "react";
 import supabase from "../../../../client.js";
 import ItemRow from "./ItemRow.jsx";
 import itemCompare from "../../../../sortmodules/ItemSorter.js";
+import { calcInnerProduct } from "../../../stockpile/stockpileVectors.js";
 
 /**
  * The item diplay data object.
@@ -18,9 +19,10 @@ import itemCompare from "../../../../sortmodules/ItemSorter.js";
  * The item display table.
  * @param {object} props The props
  * @param {number[]} props.items The items to be displayed.
+ * @param {number[]} props.searchVector The search vector used to search items.
  * @returns
  */
-function ItemsTable({ items }) {
+function ItemsTable({ items, searchVector }) {
   const isNarrow = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
   /**
@@ -33,13 +35,17 @@ function ItemsTable({ items }) {
 
   supabase
     .from('items')
-    .select('id, name, description, life, locations!inner(name, id), small_categories(name, id, large_categories!inner(id, name, large_large_categories(name, id)))')
+    .select('id, name, description, life, locations!inner(name, id), small_categories(name, id, large_categories!inner(id, name, large_large_categories(name, id))), vector')
     .in('id', items)
     .then(
       ({ data: d, error }) => {
         if (error) throw error;
-        if (d.length > 0)
-          setData(d.toSorted(itemCompare));
+        if (d.length > 0) {
+          d.sort(itemCompare);
+          if (searchVector.length)
+            d.sort((a, b) => calcInnerProduct(b.vector, searchVector) - calcInnerProduct(a.vector, searchVector));
+          setData(d.map(({ vector, ...others }) => ({ ...others })));
+        }
       },
       (error) => {
         console.error(error);
