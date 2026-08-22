@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Collapse, IconButton, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Alert, Box, Button, Collapse, IconButton, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
@@ -19,6 +19,8 @@ const WARNING_PERIOD = 30;
  * @returns
  */
 function ItemRow({ id, name, life, small_categories, locations }) {
+  const isNarrow = useMediaQuery(theme => theme.breakpoints.down('sm'));
+
   const dueDate = life ? new Date(life) : null;
   const [open, setOpen] = useState(false);
 
@@ -27,108 +29,155 @@ function ItemRow({ id, name, life, small_categories, locations }) {
 
   const dueDateVal = dueDate?.toLocaleDateString() ?? 'なし';
 
-  return (
-    <>
-      <TableRow sx={{ '& > .MuiCell-root': { borderBottom: 'unset' } }}>
-        <TableCell>
-          <IconButton
-            aria-label="expand detail"
-            type="button"
-            size="small"
-            onClick={() => setOpen(val => !val)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : ((dueDate && dueDate < warningDate) ? <WarningAmberIcon color="warning" /> : <KeyboardArrowDownIcon />)}
-          </IconButton>
-        </TableCell>
-        <TableCell>
-          <Link component={RouterLink} to={`/View/items/small_categories/${small_categories.id}`}>
-            {small_categories.name}
-          </Link>
-        </TableCell>
-        <TableCell>
-          <Link component={RouterLink} to={`/View/items/locations/${locations.id}`}>
-            {locations.name}
-          </Link>
-        </TableCell>
-        <TableCell>
-          <Button
-            component={RouterLink}
-            to={`/Edit/items/${id}`}
-            variant="contained"
-            color="primary"
-            startIcon={<EditIcon />}
-          >
-            編集
-          </Button>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingTop: 0, paddingBottom: 0 }} colSpan={4}>
-          <Collapse
-            in={open}
-            timeout="auto"
-            unmountOnExit
-          >
-            <Box sx={{ margin: 1 }}>
-              {(dueDate && dueDate < warningDate) ?
-                <Alert severity="warning">期限が間近です</Alert> :
-                null
-              }
-              <Typography component="div" variant="h6" gutterBottom>詳細</Typography>
-              <TableContainer sx={{ maxWidth: '100%' }}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>項目</TableCell>
-                      <TableCell>内容</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell component="th" scope="row">番号</TableCell>
-                      <TableCell>{id}</TableCell>
-                    </TableRow>
-                    {
-                      small_categories.large_categories.large_large_categories &&
+  if (isNarrow)
+    return (
+      <>
+        <TableRow sx={{ '& > .MuiCell-root': { borderBottom: 'unset' } }}>
+          <TableCell>
+            <IconButton
+              aria-label="expand detail"
+              type="button"
+              size="small"
+              onClick={() => setOpen(val => !val)}
+            >
+              {open ? <KeyboardArrowUpIcon /> : ((dueDate && dueDate < warningDate) ? <WarningAmberIcon color="warning" /> : <KeyboardArrowDownIcon />)}
+            </IconButton>
+          </TableCell>
+          <TableCell>
+            <Link component={RouterLink} to={`/View/items/small_categories/${small_categories.id}`}>
+              {small_categories.name}
+            </Link>
+          </TableCell>
+          <TableCell>
+            <Link component={RouterLink} to={`/View/items/locations/${locations.id}`}>
+              {locations.name}
+            </Link>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell style={{ paddingTop: 0, paddingBottom: 0 }} colSpan={3}>
+            <Collapse
+              in={open}
+              timeout="auto"
+              unmountOnExit
+            >
+              <Box sx={{ margin: 1 }}>
+                {(dueDate && dueDate < warningDate) ?
+                  <Alert severity="warning">期限が間近です</Alert> :
+                  null
+                }
+                <Typography component="div" variant="h6" gutterBottom>詳細</Typography>
+                <TableContainer sx={{ maxWidth: '100%' }}>
+                  <Table size="small">
+                    <TableHead>
                       <TableRow>
-                        <TableCell component="th" scope="row">大分類</TableCell>
+                        <TableCell>項目</TableCell>
+                        <TableCell>内容</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell component="th" scope="row">番号</TableCell>
+                        <TableCell>{id}</TableCell>
+                      </TableRow>
+                      {
+                        small_categories.large_categories.large_large_categories &&
+                        <TableRow>
+                          <TableCell component="th" scope="row">大分類</TableCell>
+                          <TableCell>
+                            <Link
+                              component={RouterLink}
+                              to={`/View/large_categories/large_large_categories/${small_categories.large_categories.large_large_categories.id}`}
+                            >
+                              {small_categories.large_categories.large_large_categories.name}
+                            </Link>
+                          </TableCell>
+                        </TableRow>
+                      }
+                      <TableRow>
+                        <TableCell component="th" scope="row">分類</TableCell>
                         <TableCell>
                           <Link
                             component={RouterLink}
-                            to={`/View/large_categories/large_large_categories/${small_categories.large_categories.large_large_categories.id}`}
+                            to={`/View/small_categories/large_categories/${small_categories.large_categories.id}`}
                           >
-                            {small_categories.large_categories.large_large_categories.name}
+                            {small_categories.large_categories.name}
                           </Link>
                         </TableCell>
                       </TableRow>
-                    }
-                    <TableRow>
-                      <TableCell component="th" scope="row">分類</TableCell>
-                      <TableCell>
-                        <Link
-                          component={RouterLink}
-                          to={`/View/small_categories/large_categories/${small_categories.large_categories.id}`}
+                      <TableRow>
+                        <TableCell component="th" scope="row">期限</TableCell>
+                        <TableCell>{dueDateVal}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell component="th" scope="row">商品名</TableCell>
+                        <TableCell>{name}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell
+                          component="th"
+                          scope="row"
                         >
-                          {small_categories.large_categories.name}
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell component="th" scope="row">期限</TableCell>
-                      <TableCell>{dueDateVal}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell component="th" scope="row">商品名</TableCell>
-                      <TableCell>{name}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </>
+                          操作
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            component={RouterLink}
+                            to={`/Edit/items/${id}`}
+                            variant="contained"
+                            color="primary"
+                            startIcon={<EditIcon />}
+                            size="small"
+                          >
+                            編集
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            </Collapse>
+          </TableCell>
+        </TableRow>
+      </>
+    );
+
+  return (
+    <TableRow>
+      <TableCell>{id}</TableCell>
+      <TableCell>
+        {
+          small_categories.large_categories.large_large_categories &&
+          <Link
+            component={RouterLink}
+            to={`/View/large_categories/large_large_categories/${small_categories.large_categories.large_large_categories.id}`}
+          >
+            {small_categories.large_categories.large_large_categories.name}
+          </Link>
+        }
+      </TableCell>
+      <TableCell>
+        <Link
+          component={RouterLink}
+          to={`/View/small_categories/large_categories/${small_categories.large_categories.id}`}
+        >
+          {small_categories.large_categories.name}
+        </Link>
+      </TableCell>
+      <TableCell>
+        <Link component={RouterLink} to={`/View/items/small_categories/${small_categories.id}`}>
+          {small_categories.name}
+        </Link>
+      </TableCell>
+      <TableCell>{name}</TableCell>
+      <TableCell>
+        <Link component={RouterLink} to={`/View/items/locations/${locations.id}`}>
+          {locations.name}
+        </Link>
+      </TableCell>
+      <TableCell>{dueDateVal}</TableCell>
+    </TableRow>
   );
 }
 

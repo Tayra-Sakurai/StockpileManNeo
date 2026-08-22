@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import supabase from "../../../../client.js";
 import LocationViewRow from "./LocationViewRow.jsx";
@@ -16,6 +16,8 @@ import LocationViewRow from "./LocationViewRow.jsx";
  * @returns
  */
 function LocationsTable() {
+  const isWide = useMediaQuery(theme => theme.breakpoints.up('md'));
+
   /**
    * @type {[
    *   Array.<LocationData>,
@@ -38,14 +40,34 @@ function LocationsTable() {
 
   loadData();
 
+  if (isWide)
+    return (
+      <TableContainer sx={{ width: '100%' }}>
+        <Table sx={{ width: 'max-content', }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>番号</TableCell>
+              <TableCell>名称</TableCell>
+              <TableCell>品目数</TableCell>
+              <TableCell>操作</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {locations.map(location => <LocationViewRow {...location} />)}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+
   return (
     <TableContainer sx={{ width: '100%' }}>
-      <Table sx={{ width: 'max-content', }}>
+      <Table sx={{ width: 'fit-content' }}>
         <TableHead>
-          <TableCell>番号</TableCell>
-          <TableCell>名称</TableCell>
-          <TableCell>品目数</TableCell>
-          <TableCell>操作</TableCell>
+          <TableRow>
+            <TableCell />
+            <TableCell>保管場所</TableCell>
+            <TableCell align="right">品目数</TableCell>
+          </TableRow>
         </TableHead>
         <TableBody>
           {locations.map(location => <LocationViewRow {...location} />)}

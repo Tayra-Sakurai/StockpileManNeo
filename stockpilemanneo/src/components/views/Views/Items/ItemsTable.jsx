@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import supabase from "../../../../client.js";
 import ItemRow from "./ItemRow.jsx";
@@ -21,6 +21,8 @@ import itemCompare from "../../../../sortmodules/ItemSorter.js";
  * @returns
  */
 function ItemsTable({ items }) {
+  const isNarrow = useMediaQuery(theme => theme.breakpoints.down('sm'));
+
   /**
    * @type {[
    *   ItemData[],
@@ -43,16 +45,35 @@ function ItemsTable({ items }) {
         console.error(error);
       });
 
+  if (isNarrow)
+    return (
+      <TableContainer sx={{ width: '100%', height: '100%', boxSizing: 'border-box' }}>
+        <Table sx={{ width: 'fit-content(100%)' }}>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>名称</TableCell>
+              <TableCell>保管場所</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map(value => <ItemRow {...value} />)}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+
   return (
-    <TableContainer sx={{ width: '100%', height: '100%', boxSizing: 'border-box' }}>
-      <Table sx={{ width: 'fit-content(100%)' }}>
+    <TableContainer sx={{ width: '100%', boxSizing: 'border-box' }}>
+      <Table sx={{ width: 'fit-content' }}>
         <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>名称</TableCell>
-            <TableCell>保管場所</TableCell>
-            <TableCell>操作</TableCell>
-          </TableRow>
+          <TableCell>番号</TableCell>
+          <TableCell>大分類</TableCell>
+          <TableCell>分類</TableCell>
+          <TableCell>名称</TableCell>
+          <TableCell>商品名</TableCell>
+          <TableCell>保管場所</TableCell>
+          <TableCell>期限</TableCell>
         </TableHead>
         <TableBody>
           {data.map(value => <ItemRow {...value} />)}
