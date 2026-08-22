@@ -24,7 +24,7 @@ The terms in the tool descriptions and this system instruction, and how you shou
 - **large category** and "小分類", and
 - **small category** and "名称".
 
-The names of items should be called "商品名".
+The brand names of items should be called "商品名".
 
 # Notes in Chats
 
