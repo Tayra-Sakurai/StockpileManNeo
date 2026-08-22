@@ -11,3 +11,9 @@
 
 This application software is the stockpile management system built with JavaScript and TypeScript.
 This application helps you find the place of things you has not used for a long time or what to use as soon as possible.
+
+## Supported OS versions
+
+This application is primary intended for iOS 18.0 or later. This application is tested on smartphones of iOS 18.7 and 26.6.
+
+This application's basic features are available for Windows, but the barcode reader is not available.
