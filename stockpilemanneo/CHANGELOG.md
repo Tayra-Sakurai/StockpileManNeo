@@ -7,3 +7,7 @@ The first stable version.
 Improvements of the table view pages. In narrow width displays, the tables are displayed in collapsed style.
 
 The reordering system installation on the item filtering.
+
+# Version 1.1.1
+
+The improvements of the system instructions for the AI agent of the chat functions.
