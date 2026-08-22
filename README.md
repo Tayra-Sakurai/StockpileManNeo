@@ -4,6 +4,7 @@
 ![GitHub Closed Pull Requests](https://img.shields.io/github/issues-pr-closed/Tayra-Sakurai/StockpileManNeo)
 [![GitHub License](https://img.shields.io/github/license/Tayra-Sakurai/StockpileManNeo)](./LICENSE.txt)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Tayra-Sakurai/StockpileManNeo)
+![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/Tayra-Sakurai/StockpileManNeo)
 ![GitHub contributors](https://img.shields.io/github/contributors-anon/Tayra-Sakurai/StockpileManNeo)
 ![GitHub Created At](https://img.shields.io/github/created-at/Tayra-Sakurai/StockpileManNeo)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Tayra-Sakurai/StockpileManNeo)
