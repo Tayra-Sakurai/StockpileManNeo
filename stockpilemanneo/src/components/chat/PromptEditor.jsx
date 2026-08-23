@@ -76,7 +76,10 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
               markdown: formData.prompt,
             },
           ]);
-          reset();
+          reset(({ model }) => ({
+            model,
+            prompt: '',
+          }));
           try {
             const interaction2 = await aimodel.interactions.create({
               system_instruction,

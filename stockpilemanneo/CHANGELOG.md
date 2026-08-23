@@ -15,3 +15,7 @@ The improvements of the system instructions for the AI agent of the chat functio
 # Version 1.2.0
 
 The installation of model selector. In chat page, you can select your favorite AI model in the prompt editor.
+
+# Version 1.2.1
+
+Bugfix. The AI model selection bugs were fixed.
