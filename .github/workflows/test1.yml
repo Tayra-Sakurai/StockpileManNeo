@@ -17,9 +17,6 @@ jobs:
       - name: Check out the repositoty
         uses: actions/checkout@v7
 
-      - name: Change the dir
-        run: cd ./stockpilemanneo
-
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
@@ -27,9 +24,11 @@ jobs:
 
       - name: Setup the packages.
         run: npm ci
+        working-directory: ./stockpilemanneo
 
       - name: Build in development mode
         run: npm run dev
+        working-directory: ./stockpilemanneo
 
       - name: Upload the artifacts.
         uses: actions/upload-artifact@v7
@@ -48,9 +47,6 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v7
 
-      - name: Change the directory
-        run: cd ./stockpilemanneo
-
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
@@ -58,10 +54,12 @@ jobs:
 
       - name: Collect packages
         run: npm ci
+        working-directory: ./stockpilemanneo
 
       - name: Build
         run: npm run build
+        working-directory: ./stockpilemanneo
 
       - uses: actions/upload-artifact@v7
         with:
-          path: dist/**
+          path: stockpilemanneo/dist/**
