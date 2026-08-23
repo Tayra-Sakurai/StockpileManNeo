@@ -3,6 +3,7 @@ description: Feature request form.
 title: "[Request]: "
 labels: ["enhancement"]
 assignees: ["Tayra-Sakurai"]
+projects: ["Tayra-Sakurai/1"]
 body:
   - type: markdown
     attributes:
