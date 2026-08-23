@@ -21,7 +21,17 @@ Please follow the following procedures.
 1. Please **fork** this repository.
 2. Please make a new branch (the name of the branch is free).
 3. Please edit in the branch.
-4. Please make the pull request.
+4. Please test the code on **at least** Windows 11 and iOS 18. Please test on local machine.
+5. Please loop the steps 3. and 4. while no bug is found.
+6. Please make the pull request.
+
+#### The Pull Request Message
+
+Please use the templates to make PR messages. Please make the messages as clear as you can.
+
+If your PR message is not clear and the collaborators cannot understand it, the PR may be rejected.
+
+When we receive a Pull Request, we test the branch on [Vercel](https://vercel.com/) Preview. It may take a long time.
 
 ## Contact
 
