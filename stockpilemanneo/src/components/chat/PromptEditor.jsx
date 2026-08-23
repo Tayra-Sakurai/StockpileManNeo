@@ -1,9 +1,10 @@
-import { Grid, IconButton } from "@mui/material";
-import { FormProvider, TextFieldElement, useForm } from "react-hook-form-mui";
+import { Box, FormControl, Grid, IconButton, InputLabel } from "@mui/material";
+import { FormProvider, SelectElement, TextFieldElement, useForm, useWatch } from "react-hook-form-mui";
 import SendIcon from "@mui/icons-material/Send";
 import aimodel from "../../aimodules/Gemini.jsx";
 import { tools } from "../../aimodules/Functions/DbFunctions.js";
 import { GEMINI_MODEL, generation_config, system_instruction } from "./constants.js";
+import { useEffect, useId, useState } from "react";
 
 /**
  * The prompt editor.
@@ -13,17 +14,53 @@ import { GEMINI_MODEL, generation_config, system_instruction } from "./constants
  * @param {import("react").Dispatch.<import("react").SetStateAction.<{role: "model" | "user", markdown: string}[]>>} props.setChatMessages The chat message array.
  * @param {import("react").Dispatch.<import("react").SetStateAction.<string>>} props.setMessage The error message setter.
  * @param {import("react").Dispatch.<import("react").SetStateAction.<string>>} props.setMessage2 The information message setter.
+ * @param {string} props.model The generative AI model.
+ * @param {import("react").Dispatch.<import("react").SetStateAction.<string>>} props.setModel The model setter.
  * @returns
  */
-function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage, setMessage2 }) {
-  const { reset, handleSubmit, ...otherMethods } = useForm({
+function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage, setMessage2, model, setModel }) {
+  const { reset, handleSubmit, control, ...otherMethods } = useForm({
     defaultValues: {
       prompt: '',
+      model,
     },
   });
 
+  const selectedModel = useWatch({
+    control,
+    name: 'model',
+  });
+
+  useEffect(() => {
+    const setter = async () => setModel(selectedModel);
+    setter();
+  }, [selectedModel, setModel]);
+
+  /**
+   * @type {[
+   *   import("@google/genai").Model[],
+   *   import("react").Dispatch.<import("react").SetStateAction.<import("@google/genai").Model[]>>
+   * ]}
+   */
+  const [models, setModels] = useState([]);
+
+  useEffect(() => {
+    const loadModels = async () => {
+      for await (const availableModel of await aimodel.models.list()) {
+        if (availableModel.supportedActions?.includes('generateContent'))
+          setModels(mdls => [
+            ...mdls,
+            availableModel,
+          ]);
+      }
+    };
+    loadModels();
+  }, []);
+
+  const selectId = useId();
+
   return (
-    <FormProvider reset={reset} handleSubmit={handleSubmit} {...otherMethods}>
+    <FormProvider reset={reset} handleSubmit={handleSubmit} control={control} {...otherMethods}>
       <form
         onSubmit={handleSubmit(async formData => {
           setMessage2('入力内容を送信しました．回答が得られるまでしばらくお待ちください．');
@@ -38,7 +75,7 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
           try {
             const interaction2 = await aimodel.interactions.create({
               system_instruction,
-              model: GEMINI_MODEL,
+              model,
               input: [
                 {
                   type: 'user_input',
@@ -61,28 +98,45 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
           }
         })}
       >
-        <Grid container sx={{ width: '100%', boxSizing: 'border-box' }}>
-          <Grid size="grow">
-            <TextFieldElement
-              label="プロンプト"
-              name="prompt"
-              placeholder="在庫が少ない名称を教えて．"
-              required
-              multiline
-              fullWidth
-              rows={1}
-            />
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container sx={{ width: '100%', boxSizing: 'border-box' }}>
+            <Grid container size={12}>
+              <Grid size="grow">
+                <TextFieldElement
+                  label="プロンプト"
+                  name="prompt"
+                  placeholder="在庫が少ない名称を教えて．"
+                  required
+                  multiline
+                  fullWidth
+                  rows={1}
+                />
+              </Grid>
+              <Grid size="auto">
+                <IconButton
+                  color="primary"
+                  aria-label="送信"
+                  type="submit"
+                >
+                  <SendIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid size="auto">
-            <IconButton
-              color="primary"
-              aria-label="送信"
-              type="submit"
-            >
-              <SendIcon />
-            </IconButton>
+          <Grid size={12} container>
+            <Grid size={12}>
+              <SelectElement
+                name="model"
+                options={models}
+                valueKey="name"
+                labelKey="displayName"
+                id={selectId}
+                label="AIモデル"
+                fullWidth
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </form>
     </FormProvider>
   );
