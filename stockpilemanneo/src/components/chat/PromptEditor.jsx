@@ -1,9 +1,9 @@
-import { Box, FormControl, Grid, IconButton, InputLabel } from "@mui/material";
+import { Box, Grid, IconButton } from "@mui/material";
 import { FormProvider, SelectElement, TextFieldElement, useForm, useWatch } from "react-hook-form-mui";
 import SendIcon from "@mui/icons-material/Send";
 import aimodel from "../../aimodules/Gemini.jsx";
 import { tools } from "../../aimodules/Functions/DbFunctions.js";
-import { GEMINI_MODEL, generation_config, system_instruction } from "./constants.js";
+import { generation_config, system_instruction } from "./constants.js";
 import { useEffect, useId, useState } from "react";
 
 /**
