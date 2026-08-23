@@ -1,0 +1,41 @@
+name: Feature Request
+description: Feature request form.
+title: "[Request]: "
+labels: ["enhancement"]
+assignees: ["Tayra-Sakurai"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for requesting for new featute.
+
+  - type: checkboxes
+    id: relatedtoproblem
+    attributes:
+      label: If the request is related to problem, please check the box.
+      options:
+        - label: This is related to a problem.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Summary of the Requested Feature
+      placeholder: e.g. Searching items with AI
+    validations:
+      required: true
+
+  - type: textarea
+    id: detail
+    attributes:
+      label: What feature do you want? Please explain it as clear and consice as possible.
+      description: What you want to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: additionalinfo
+    attributes:
+      label: Additional Information
+      description: Please tell us additional information about this request if you have one.
+    validations:
+      required: false
