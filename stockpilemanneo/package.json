@@ -1,7 +1,7 @@
 {
   "name": "stockpilemanneo",
   "private": true,
-  "version": "1.1.1",
+  "version": "1.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,14 +13,14 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@eslint/js": "^10.0.1",
-    "@google/genai": "^2.17.1",
+    "@google/genai": "^2.18.0",
     "@mui/icons-material": "^9.3.1",
     "@mui/material": "^9.3.1",
     "@supabase/supabase-js": "^2.112.3",
     "html5-qrcode": "^2.3.8",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-hook-form": "^7.85.0",
+    "react-hook-form": "^7.86.0",
     "react-hook-form-mui": "^9.0.1",
     "react-markdown": "^10.1.0",
     "react-router": "^8.3.0",
@@ -31,11 +31,11 @@
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
-    "@vitejs/plugin-react": "^6.0.5",
-    "eslint": "^10.8.1",
+    "@vitejs/plugin-react": "^6.1.0",
+    "eslint": "^10.9.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.4",
     "globals": "^17.11.0",
-    "vite": "^8.2.1"
+    "vite": "^8.2.2"
   }
 }

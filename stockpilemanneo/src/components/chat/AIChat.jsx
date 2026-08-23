@@ -170,9 +170,9 @@ function AIChat() {
           width: '100%',
           position: 'sticky',
           bottom: {
-            xs: 120,
-            sm: 60,
-            md: 60,
+            xs: 140,
+            sm: 80,
+            md: 80,
           },
           left: 0,
           right: 0,
