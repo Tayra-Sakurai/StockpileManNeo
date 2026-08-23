@@ -1,0 +1,45 @@
+name: 新機能の要望
+description: 欲しい機能のご要望をお寄せください．
+title: "[REQUEST]: "
+labels: ["enhancement"]
+assignees: ["Tayra-Sakurai"]
+projects: [Tayra-Sakurai/1]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ご要望をくださり，ありがとうございます．あなたのご要望に関して詳しくお聞かせください．
+
+  - type: checkboxes
+    id: relatedtoproblem
+    attributes:
+      label: 今回のご要望が問題に関するものでしたら，以下のチェックボックスにチェックを入れてください．
+      options:
+        - label: この要望は問題に関連するものです．
+
+  - type: input
+    id: summary
+    attributes:
+      label: 概要
+      description: この要望の概要を教えてください，
+      placeholder: 例）AI による検索機能など
+    validations:
+      required: true
+
+  - type: textarea
+    id: detail
+    attributes:
+      label: ご要望の詳細
+      description: ご要望の詳細をできるだけ詳細にお聞かせください．
+      placeholder: ご要望の詳細を入力
+    validations:
+      required: true
+
+  - type: textarea
+    id: additionalinfo
+    attributes:
+      label: その他
+      description: コメントなどをお寄せください．
+      placeholder: コメントなど
+    validations:
+      required: false
