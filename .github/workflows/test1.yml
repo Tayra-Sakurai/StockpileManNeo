@@ -17,13 +17,13 @@ jobs:
       - name: Check out the repositoty
         uses: actions/checkout@v7
 
+      - name: Change the dir
+        run: cd ./stockpilemanneo
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node_version }}
-
-      - name: Change the dir
-        run: cd ./stockpilemanneo
 
       - name: Setup the packages.
         run: npm ci
@@ -48,13 +48,13 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v7
 
+      - name: Change the directory
+        run: cd ./stockpilemanneo
+
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node_version }}
-
-      - name: Change the directory
-        run: cd ./stockpilemanneo
 
       - name: Collect packages
         run: npm ci
