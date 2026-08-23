@@ -19,7 +19,7 @@ import { useEffect, useId, useState } from "react";
  * @returns
  */
 function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage, setMessage2, model, setModel }) {
-  const { reset, handleSubmit, control, ...otherMethods } = useForm({
+  const { reset, handleSubmit, control, setValue, ...otherMethods } = useForm({
     defaultValues: {
       prompt: '',
       model,
@@ -57,10 +57,15 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
     loadModels();
   }, []);
 
+  useEffect(() => {
+    const action = async () => setValue('model', model);
+    action();
+  }, [model, setValue]);
+
   const selectId = useId();
 
   return (
-    <FormProvider reset={reset} handleSubmit={handleSubmit} control={control} {...otherMethods}>
+    <FormProvider reset={reset} handleSubmit={handleSubmit} control={control} setValue={setValue} {...otherMethods}>
       <form
         onSubmit={handleSubmit(async formData => {
           setMessage2('入力内容を送信しました．回答が得られるまでしばらくお待ちください．');
