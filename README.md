@@ -44,14 +44,18 @@ These pages display the locations or categories, and the number of items in the 
 
 ## License
 
-This is an application to manage the home stockpile of daily need items and food.
+### Application Source Code
+
+StockpileMan Neo is an application to manage the home stockpile of daily need items and food.
 
 Copyright &copy; 2026 Tayra Sakurai
-
-This file is part of StockpileMan Neo.
 
 StockpileMan Neo is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 StockpileMan Neo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License along with StockpileMan Neo. If not, see <https://www.gnu.org/licenses/>.
+
+### The Documentation Files
+
+The documentation files are licensed under the GNU Free Documentation License version 1.3 or later.
