@@ -22,11 +22,8 @@ jobs:
         with:
           node-version: ${{ matrix.node_version }}
 
-      - name: Change directory to the target
-        run: cd ./stockpilemanneo
-
       - name: Build in development mode
-        run: npm run dev
+        run: npm run dev --prefix stockpilemenneo
 
       - name: Upload the artifacts.
         uses: actions/upload-artifact@v7
@@ -54,7 +51,7 @@ jobs:
         run: cd ./stockpilemanneo
 
       - name: Build
-        run: npm run build
+        run: npm run build --prefix stockpilemanneo
 
       - uses: actions/upload-artifact@v7
         with:
