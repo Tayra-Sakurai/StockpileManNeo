@@ -19,3 +19,7 @@ The installation of model selector. In chat page, you can select your favorite A
 # Version 1.2.1
 
 Bugfix. The AI model selection bugs were fixed.
+
+# Version 1.2.2
+
+The integration of contact center function onto the AI agent. The AI agent can work as the front desk of the bug report and feature request.
