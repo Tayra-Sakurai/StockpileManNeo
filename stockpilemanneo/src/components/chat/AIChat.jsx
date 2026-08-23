@@ -32,6 +32,7 @@ function AIChat() {
   const [open2, setOpen2] = useState(false);
 
   const [maxTokens, setMaxTokens] = useState(0);
+  const [model, setModel] = useState(GEMINI_MODEL);
 
   /**
    * The close action handler.
@@ -73,7 +74,7 @@ function AIChat() {
           }
           await asynchronousTimer(4000);
           const interaction2 = await aimodel.interactions.create({
-            model: GEMINI_MODEL,
+            model,
             input: results,
             tools,
             previous_interaction_id: interaction?.id,
@@ -127,8 +128,9 @@ function AIChat() {
   useEffect(() => {
     const loadFunc = async () => {
       const modelInfo = await aimodel.models.get({
-        model: GEMINI_MODEL,
+        model,
       });
+      console.info(modelInfo);
       if (modelInfo.inputTokenLimit) {
         setMaxTokens(modelInfo.inputTokenLimit);
         setMessage2(`使用中のモデルは${modelInfo.displayName}です．最大使用可能トークンは${modelInfo.inputTokenLimit}です．`);
@@ -136,7 +138,7 @@ function AIChat() {
     };
 
     loadFunc();
-  }, []);
+  }, [model]);
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { Grid, IconButton } from "@mui/material";
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import { FormProvider, TextFieldElement, useForm } from "react-hook-form-mui";
 import SendIcon from "@mui/icons-material/Send";
 import aimodel from "../../aimodules/Gemini.jsx";
 import { tools } from "../../aimodules/Functions/DbFunctions.js";
@@ -16,72 +16,75 @@ import { GEMINI_MODEL, generation_config, system_instruction } from "./constants
  * @returns
  */
 function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage, setMessage2 }) {
-  return (
-    <FormContainer
-      defaultValues={{
-        prompt: '',
-      }}
-      onSuccess={async formData => {
-        setMessage2('入力内容を送信しました．回答が得られるまでしばらくお待ちください．');
-        setChatMessages(chatMessages => [
-          ...chatMessages,
-          {
-            role: 'user',
-            markdown: formData.prompt,
-          },
-        ]);
-        try {
-          const interaction2 = await aimodel.interactions.create({
-            system_instruction,
-            model: GEMINI_MODEL,
-            input: [
-              {
-                type: 'user_input',
-                content: [
-                  {
-                    type: 'text',
-                    text: formData.prompt,
-                  },
-                ],
-              },
-            ],
-            previous_interaction_id: interaction?.id,
-            tools,
-            generation_config,
-          });
+  const { reset, handleSubmit, ...otherMethods } = useForm({
+    defaultValues: {
+      prompt: '',
+    },
+  });
 
-          setInteraction(interaction2);
-        } catch (e) {
-          setMessage(e?.toString() ?? 'An unknown error occurred.');
-        }
-      }}
-      resetOptions={{
-        keepIsSubmitSuccessful: true,
-      }}
-    >
-      <Grid container sx={{ width: '100%', boxSizing: 'border-box' }}>
-        <Grid size="grow">
-          <TextFieldElement
-            label="プロンプト"
-            name="prompt"
-            placeholder="在庫が少ない名称を教えて．"
-            required
-            multiline
-            fullWidth
-            rows={1}
-          />
+  return (
+    <FormProvider reset={reset} handleSubmit={handleSubmit} {...otherMethods}>
+      <form
+        onSubmit={handleSubmit(async formData => {
+          setMessage2('入力内容を送信しました．回答が得られるまでしばらくお待ちください．');
+          setChatMessages(chatMessages => [
+            ...chatMessages,
+            {
+              role: 'user',
+              markdown: formData.prompt,
+            },
+          ]);
+          reset();
+          try {
+            const interaction2 = await aimodel.interactions.create({
+              system_instruction,
+              model: GEMINI_MODEL,
+              input: [
+                {
+                  type: 'user_input',
+                  content: [
+                    {
+                      type: 'text',
+                      text: formData.prompt,
+                    },
+                  ],
+                },
+              ],
+              previous_interaction_id: interaction?.id,
+              tools,
+              generation_config,
+            });
+
+            setInteraction(interaction2);
+          } catch (e) {
+            setMessage(e?.toString() ?? 'An unknown error occurred.');
+          }
+        })}
+      >
+        <Grid container sx={{ width: '100%', boxSizing: 'border-box' }}>
+          <Grid size="grow">
+            <TextFieldElement
+              label="プロンプト"
+              name="prompt"
+              placeholder="在庫が少ない名称を教えて．"
+              required
+              multiline
+              fullWidth
+              rows={1}
+            />
+          </Grid>
+          <Grid size="auto">
+            <IconButton
+              color="primary"
+              aria-label="送信"
+              type="submit"
+            >
+              <SendIcon />
+            </IconButton>
+          </Grid>
         </Grid>
-        <Grid size="auto">
-          <IconButton
-            color="primary"
-            aria-label="送信"
-            type="submit"
-          >
-            <SendIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-    </FormContainer>
+      </form>
+    </FormProvider>
   );
 }
 
