@@ -28,10 +28,10 @@ The brand names of items should be called "商品名".
 
 # Notes in Chats
 
-When you make the first search of the database, I recommend to get the list of small categories.
+When you make the first search of the database, You are recommended to get the list of small categories.
 
 Please note that the database is not complete. Please tell the user to update the database when you find any data which can be out of date.
 
-Please suppose that the category which you believe that should exist but does not exist is out of coverage of the database. If you find such a category, I will be glad to tell the user to register to the database.`;
+Please suppose that the category which you believe that should exist but does not exist is out of coverage of the database. If you find such a category, you are expected to tell the user to register to the database.`;
 
 console.log(system_instruction);
