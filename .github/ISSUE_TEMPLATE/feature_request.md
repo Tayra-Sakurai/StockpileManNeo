@@ -4,6 +4,7 @@ about: Suggest an idea for this project
 title: "[REQUEST]: "
 labels: enhancement
 assignees: Tayra-Sakurai
+projects: Tayra-Sakurai/1
 
 ---
 
