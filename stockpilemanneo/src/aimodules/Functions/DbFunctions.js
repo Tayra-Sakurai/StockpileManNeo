@@ -66,27 +66,29 @@ export async function getItems(smallCategoryId) {
   if (smallCategoryId) {
     const { data, error } = await supabase
       .from('items')
-      .select('id, name, life, description, small_category_id')
+      .select('id, name, life, description, small_category_id, location_id')
       .eq('small_category_id', smallCategoryId);
 
     if (error) throw error;
-    return data.map(({ life, name, small_category_id, ...others }) => ({
+    return data.map(({ life, name, small_category_id, location_id, ...others }) => ({
       ...others,
       expireDate: life,
       productName: name,
       smallCategoryId: small_category_id,
+      placeId: location_id,
     }));
   } else {
     const { data, error } = await supabase
       .from('items')
-      .select('id, name, life, description, small_category_id');
+      .select('id, name, life, description, small_category_id, location_id');
 
     if (error) throw error;
-    return data.map(({ life, name, small_category_id, ...others }) => ({
+    return data.map(({ life, name, small_category_id, location_id, ...others }) => ({
       ...others,
       expireDate: life,
       productName: name,
       smallCategoryId: small_category_id,
+      placeId: location_id,
     }));
   }
 }
@@ -101,31 +103,46 @@ export async function getItemsWithDateRange(rangeStart, rangeEnd) {
   if (rangeEnd) {
     const { data, error } = await supabase
       .from('items')
-      .select('id, name, life, description, small_category_id')
+      .select('id, name, life, description, small_category_id, location_id')
       .lte('life', rangeEnd)
       .gte('life', rangeStart);
 
     if (error) throw error;
-    return data.map(({ life, name, small_category_id, ...others }) => ({
+    return data.map(({ life, name, small_category_id, location_id, ...others }) => ({
       ...others,
       expireDate: life,
       productName: name,
       smallCategoryId: small_category_id,
+      placeId: location_id,
     }));
   } else {
     const { data, error } = await supabase
       .from('items')
-      .select('id, name, life, description, small_category_id')
+      .select('id, name, life, description, small_category_id, location_id')
       .lte('life', rangeStart);
 
     if (error) throw error;
-    return data.map(({ life, name, small_category_id, ...others }) => ({
+    return data.map(({ life, name, small_category_id, location_id, ...others }) => ({
       ...others,
       expireDate: life,
       smallCategoryId: small_category_id,
       productName: name,
+      placeId: location_id,
     }));
   }
+}
+
+/**
+ * Get the place data.
+ * @returns
+ */
+export async function getPlaces() {
+  const { data, error } = await supabase
+    .from('locations')
+    .select('id, name');
+
+  if (error) throw error;
+  return data;
 }
 
 /**
@@ -192,6 +209,20 @@ export async function* execFuncCall(response) {
         };
       } else if (step.name === 'getItemsWithDateRange') {
         const result = await getItemsWithDateRange(step.arguments.rangeStart, step.arguments.rangeEnd);
+
+        yield {
+          type: 'function_result',
+          call_id: step.id,
+          name: step.name,
+          result: [
+            {
+              type: 'text',
+              text: JSON.stringify(result),
+            },
+          ],
+        };
+      } else if (step.name === 'getPlaces') {
+        const result = await getPlaces();
 
         yield {
           type: 'function_result',
@@ -293,5 +324,10 @@ export const tools = [
       },
       required: ['rangeStart'],
     },
+  },
+  {
+    type: 'function',
+    name: 'getPlaces',
+    description: 'Retreives all places where the items are stored from the database.',
   },
 ];
