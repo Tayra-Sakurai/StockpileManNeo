@@ -1,7 +1,7 @@
 ---
 name: Bug Report
 about: バグに関する情報をお聞かせください．
-title: "[Bug]"
+title: "[Bug] "
 labels: bug
 assignees: Tayra-Sakurai
 
