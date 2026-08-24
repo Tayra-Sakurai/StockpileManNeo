@@ -3,6 +3,7 @@ description: Create a bug report from a form.
 labels: [bug]
 assignees: [Tayra-Sakurai]
 projects: [Tayra-Sakurai/1]
+title: "[BUG]: "
 body:
   - type: markdown
     attributes:
@@ -44,20 +45,28 @@ body:
     attributes:
       label: Your OS
       placeholder: e.g. iOS, Windows 11
+    validations:
+      required: true
 
   - type: input
     attributes:
       label: Your OS Version
       placeholder: e.g. 26.5, 25H2
+    validations:
+      required: true
 
   - type: input
     attributes:
       label: Your Browser and Version
       description: Please tell us the browser data.
       placeholder: Safari 26.6.1, Chrome 151.x.x.x
+    validations:
+      required: true
 
   - type: textarea
     attributes:
       label: Additional Infomation
       description: Please tell us additional information if needed.
       placeholder: Additional Infomarion.
+    validations:
+      required: false
