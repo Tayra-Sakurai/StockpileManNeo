@@ -1,0 +1,63 @@
+name: Bug Report
+description: Create a bug report from a form.
+labels: [bug]
+assignees: [Tayra-Sakurai]
+projects: [Tayra-Sakurai/1]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for your bug report. Please tell us as detailed description as possible for prompt improvement.
+
+  - type: input
+    attributes:
+      label: Summary
+      description: Please summarize the bug report
+      placeholder: Summary
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Detailed behaviors
+      description: The behaviors of the reporting bug
+      placeholder: Please explain here.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: The expected behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Reproduction process
+      description: How is the bug reproduced? Please tell us step by step.
+      placeholder: Step-by-step description.
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Your OS
+      placeholder: e.g. iOS, Windows 11
+
+  - type: input
+    attributes:
+      label: Your OS Version
+      placeholder: e.g. 26.5, 25H2
+
+  - type: input
+    attributes:
+      label: Your Browser and Version
+      description: Please tell us the browser data.
+      placeholder: Safari 26.6.1, Chrome 151.x.x.x
+
+  - type: textarea
+    attributes:
+      label: Additional Infomation
+      description: Please tell us additional information if needed.
+      placeholder: Additional Infomarion.
