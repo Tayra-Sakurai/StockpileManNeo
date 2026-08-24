@@ -21,9 +21,11 @@ No download or installation of this application is needed. You can use this appl
 
 ## Documentations
 
+Please see also the official [Wiki](https://github.com/Tayra-Sakurai/StockpileManNeo/wiki/Home).
+
 ### Chat Page
 
-This application's homepage is the chat page to talk with an AI agent powered by Gemini 3.5 Flash-Lite. This agent helps you search for your needs of items with accessing the API functions via tools.
+This application's homepage is the chat page to talk with an AI agent powered by some Gemini models (user selectable). This agent helps you search for your needs of items with accessing the API functions via tools.
 
 This chatbot is available for only the **free tier** rate limits. For every response, a snackbar tells you the remaining tokens.
 
