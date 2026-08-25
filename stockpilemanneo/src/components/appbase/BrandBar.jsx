@@ -39,7 +39,15 @@ import ChatIcon from '@mui/icons-material/Chat';
 function BrandBar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+
+  /**
+   * @type {[
+   *   ?EventTarget,
+   *   import('react').Dispatch.<import('react').SetStateAction.<?EventTarget>>
+   * ]}
+   */
   const [anchorEl, setAnchorEl] = useState(null);
+
   const userData = useContext(UserViewContext);
 
   const toggleMenu = () => {
@@ -48,8 +56,8 @@ function BrandBar() {
 
   /**
    * The menu opening function
-   * @param {Event} event
-   * @returns
+   * @param {import('react').MouseEvent<HTMLButtonElement, MouseEvent>} event The event arguments.
+   * @returns {void}
    */
   const handleOpenMenu = event => setAnchorEl(event.currentTarget);
 

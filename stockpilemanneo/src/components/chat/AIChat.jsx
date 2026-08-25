@@ -21,6 +21,8 @@ import aimodel from "../../aimodules/Gemini.jsx";
 import asynchronousTimer from "../../timers/AsynchronousTimer.js";
 import { GEMINI_MODEL, generation_config } from "./constants.js";
 import LoadingCard from "./LoadingCard.jsx";
+import { useNavigate } from "react-router-dom";
+import supabase from "../../client.js";
 
 function AIChat() {
   console.info(`Model: ${GEMINI_MODEL}`);
@@ -52,6 +54,20 @@ function AIChat() {
   const [timeoutLength, setTimeoutLength] = useState(4000);
 
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const navigation = async () => {
+      const { data: { user } } = await supabase
+        .auth
+        .getUser();
+      if (!user)
+        navigate('/signin');
+    };
+
+    navigation();
+  }, [navigate]);
 
   /**
    * The close action handler.
