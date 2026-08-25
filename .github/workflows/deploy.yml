@@ -15,6 +15,10 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   build-up:
     name: Build the documentation
@@ -22,8 +26,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-        with:
-          symlinks: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
