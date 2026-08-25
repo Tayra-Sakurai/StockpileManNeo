@@ -5,7 +5,7 @@ export default defineConfig({
   title: "StockpileMan Neo Documentation",
   description: "The documentation page for StockpileMan Neo.",
   cleanUrls: true,
-  // base: '/StockpileManNeo/',
+  base: '/StockpileManNeo/',
   locales: {
     root: {
       lang: 'en',
