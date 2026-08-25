@@ -20,6 +20,7 @@ import { execFuncCall, tools } from "../../aimodules/Functions/DbFunctions.js";
 import aimodel from "../../aimodules/Gemini.jsx";
 import asynchronousTimer from "../../timers/AsynchronousTimer.js";
 import { GEMINI_MODEL, generation_config } from "./constants.js";
+import LoadingCard from "./LoadingCard.jsx";
 
 function AIChat() {
   console.info(`Model: ${GEMINI_MODEL}`);
@@ -49,6 +50,8 @@ function AIChat() {
 
   const [model, setModel] = useState(GEMINI_MODEL);
   const [timeoutLength, setTimeoutLength] = useState(4000);
+
+  const [loading, setLoading] = useState(false);
 
   /**
    * The close action handler.
@@ -108,6 +111,7 @@ function AIChat() {
          * @type {string}
          */
         const markdown = interaction.output_text;
+        setLoading(false);
         setChat(chatMessages => [
           ...chatMessages,
           {
@@ -178,6 +182,7 @@ function AIChat() {
       >
         <Stack spacing={2} sx={{ flexGrow: 1 }}>
           {chat.map(params => <ChatCard {...params} />)}
+          {loading ? <LoadingCard /> : null}
         </Stack>
         <Box sx={{
           boxSizing: 'border-box',
@@ -202,6 +207,7 @@ function AIChat() {
             setMessage2={setMessage2}
             model={model}
             setModel={setModel}
+            setLoading={setLoading}
           />
         </Box>
       </Paper>

@@ -30,9 +30,10 @@ import { useEffect, useId, useState } from "react";
  * @param {import("react").Dispatch.<import("react").SetStateAction.<string>>} props.setMessage2 The information message setter.
  * @param {string} props.model The generative AI model.
  * @param {import("react").Dispatch.<import("react").SetStateAction.<string>>} props.setModel The model setter.
+ * @param {import("react").Dispatch.<import("react").SetStateAction.<boolean>>} props.setLoading The loading state setter.
  * @returns
  */
-function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage, setMessage2, model, setModel }) {
+function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage, setMessage2, model, setModel, setLoading }) {
   const formContext = useForm({
     defaultValues: {
       prompt: '',
@@ -85,6 +86,7 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
       formContext={formContext}
       onSuccess={async formData => {
         setMessage2('入力内容を送信しました．回答が得られるまでしばらくお待ちください．');
+        setLoading(true);
         setChatMessages(chatMessages => [
           ...chatMessages,
           {
