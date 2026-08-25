@@ -33,6 +33,8 @@ If your PR message is not clear and the collaborators cannot understand it, the 
 
 When we receive a Pull Request, we test the branch on [Vercel](https://vercel.com/) Preview. It may take a long time.
 
+The Pull Request message can be written in either English or Japanese. Please feel free to join and contribute to this repository.
+
 ### If You Contribute with non-Windows Environments
 
 We welcome your contributions on machines which is not Windows. However, since the collabolator use Windows machine to edit this repository, please use **CRLF** line delimiter.
