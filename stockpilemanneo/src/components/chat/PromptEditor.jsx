@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU Affero General Public License along with StockpileMan Neo. If not, see https://www.gnu.org/licenses/.
  */
 import { Box, Grid, IconButton } from "@mui/material";
-import { FormProvider, SelectElement, TextFieldElement, useForm, useWatch } from "react-hook-form-mui";
+import { FormContainer, SelectElement, TextFieldElement, useForm, useWatch } from "react-hook-form-mui";
 import SendIcon from "@mui/icons-material/Send";
 import aimodel from "../../aimodules/Gemini.jsx";
 import { tools } from "../../aimodules/Functions/DbFunctions.js";
@@ -33,12 +33,14 @@ import { useEffect, useId, useState } from "react";
  * @returns
  */
 function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage, setMessage2, model, setModel }) {
-  const { reset, handleSubmit, control, setValue, ...otherMethods } = useForm({
+  const formContext = useForm({
     defaultValues: {
       prompt: '',
       model,
     },
   });
+
+  const { reset, control, setValue } = formContext;
 
   const selectedModel = useWatch({
     control,
@@ -79,90 +81,87 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
   const selectId = useId();
 
   return (
-    <FormProvider reset={reset} handleSubmit={handleSubmit} control={control} setValue={setValue} {...otherMethods}>
-      <form
-        onSubmit={handleSubmit(async formData => {
-          setMessage2('入力内容を送信しました．回答が得られるまでしばらくお待ちください．');
-          setChatMessages(chatMessages => [
-            ...chatMessages,
-            {
-              role: 'user',
-              markdown: formData.prompt,
-            },
-          ]);
-          reset(({ model }) => ({
+    <FormContainer
+      formContext={formContext}
+      onSuccess={async formData => {
+        setMessage2('入力内容を送信しました．回答が得られるまでしばらくお待ちください．');
+        setChatMessages(chatMessages => [
+          ...chatMessages,
+          {
+            role: 'user',
+            markdown: formData.prompt,
+          },
+        ]);
+        reset(({ model }) => ({
+          model,
+          prompt: '',
+        }));
+        try {
+          const interaction2 = await aimodel.interactions.create({
+            system_instruction,
             model,
-            prompt: '',
-          }));
-          try {
-            const interaction2 = await aimodel.interactions.create({
-              system_instruction,
-              model,
-              input: [
-                {
-                  type: 'user_input',
-                  content: [
-                    {
-                      type: 'text',
-                      text: formData.prompt,
-                    },
-                  ],
-                },
-              ],
-              previous_interaction_id: interaction?.id,
-              tools,
-              generation_config,
-            });
+            input: [
+              {
+                type: 'user_input',
+                content: [
+                  {
+                    type: 'text',
+                    text: formData.prompt,
+                  },
+                ],
+              },
+            ],
+            previous_interaction_id: interaction?.id,
+            tools,
+            generation_config,
+          });
 
-            setInteraction(interaction2);
-          } catch (e) {
-            setMessage(e?.toString() ?? 'An unknown error occurred.');
-          }
-        })}
-      >
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container sx={{ width: '100%', boxSizing: 'border-box' }}>
-            <Grid container size={12}>
-              <Grid size="grow">
-                <TextFieldElement
-                  label="プロンプト"
-                  name="prompt"
-                  placeholder="在庫が少ない名称を教えて．"
-                  required
-                  multiline
-                  fullWidth
-                  rows={1}
-                  control={control}
-                />
-              </Grid>
-              <Grid size="auto">
-                <IconButton
-                  color="primary"
-                  aria-label="送信"
-                  type="submit"
-                >
-                  <SendIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid size={12} container>
-            <Grid size={12}>
-              <SelectElement
-                name="model"
-                options={models}
-                valueKey="name"
-                labelKey="displayName"
-                id={selectId}
-                label="AIモデル"
+          setInteraction(interaction2);
+        } catch (e) {
+          setMessage(e?.toString() ?? 'An unknown error occurred.');
+        }
+      }}
+    >
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container sx={{ width: '100%', boxSizing: 'border-box' }}>
+          <Grid container size={12}>
+            <Grid size="grow">
+              <TextFieldElement
+                label="プロンプト"
+                name="prompt"
+                placeholder="在庫が少ない名称を教えて．"
+                required
+                multiline
                 fullWidth
-                control={control}
+                rows={1}
               />
             </Grid>
+            <Grid size="auto">
+              <IconButton
+                color="primary"
+                aria-label="送信"
+                type="submit"
+              >
+                <SendIcon />
+              </IconButton>
+            </Grid>
           </Grid>
-        </Box>
-      </form>
-    </FormProvider>
+        </Grid>
+        <Grid size={12} container>
+          <Grid size={12}>
+            <SelectElement
+              name="model"
+              options={models}
+              valueKey="name"
+              labelKey="displayName"
+              id={selectId}
+              label="AIモデル"
+              fullWidth
+            />
+          </Grid>
+        </Grid>
+      </Box>
+    </FormContainer>
   );
 }
 
