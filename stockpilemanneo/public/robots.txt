@@ -1,0 +1,6 @@
+# Welcome to StockpileMan neo!
+User-agent: *
+Allow: /
+Disallow: /auth/callback
+Disallow: /Edit
+Disallow: /View
