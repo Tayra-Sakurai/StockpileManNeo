@@ -177,6 +177,18 @@ function ItemRow({ id, name, life, small_categories, locations }) {
         </Link>
       </TableCell>
       <TableCell>{dueDateVal}</TableCell>
+      <TableCell>
+        <Button
+          component={RouterLink}
+          to={`/Edit/items/${id}`}
+          variant="contained"
+          color="primary"
+          startIcon={<EditIcon />}
+          size="medium"
+        >
+          編集
+        </Button>
+      </TableCell>
     </TableRow>
   );
 }

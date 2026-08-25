@@ -80,6 +80,7 @@ function ItemsTable({ items, searchVector }) {
           <TableCell>商品名</TableCell>
           <TableCell>保管場所</TableCell>
           <TableCell>期限</TableCell>
+          <TableCell>操作</TableCell>
         </TableHead>
         <TableBody>
           {data.map(value => <ItemRow {...value} />)}
