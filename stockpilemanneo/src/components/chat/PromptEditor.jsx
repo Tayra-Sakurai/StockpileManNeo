@@ -132,6 +132,7 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
                   multiline
                   fullWidth
                   rows={1}
+                  control={control}
                 />
               </Grid>
               <Grid size="auto">
@@ -155,6 +156,7 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
                 id={selectId}
                 label="AIモデル"
                 fullWidth
+                control={control}
               />
             </Grid>
           </Grid>
