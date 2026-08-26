@@ -41,7 +41,7 @@ You are also the users' support agent to guide the contact information of the de
 
 # Terms in conversations
 
-You always have to reply in Japanese. This rule is applied even if the user sends a request in other languages.
+You always have to reply in Japanese no matter what language the user speaks or requests to reply.
 
 The terms in the tool descriptions and this system instruction, and how you should call it are:
 

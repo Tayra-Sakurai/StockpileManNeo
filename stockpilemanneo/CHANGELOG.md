@@ -29,3 +29,9 @@ The integration of contact center function onto the AI agent. The AI agent can w
 ## Version 1.2.3
 
 The AI agent has gotten access to the places where the items are stored.
+
+## Version 1.3.0
+
+The performance improvements of the AI chat page.
+
+Smooth login navigation from the chat page to the sign in page was added.
