@@ -21,6 +21,7 @@ import supabase from "../../client.js";
 import UserViewContext from "../../sessionman/UserViewContext.jsx";
 import SpecialActions from "./SpecialActions.jsx";
 import { Divider } from "@mui/material";
+import FooterNotes from "./FooterNotes.jsx";
 
 function AppBaseElement() {
   const [searchParams] = useSearchParams();
@@ -60,7 +61,7 @@ function AppBaseElement() {
       <Box
         component="footer"
       >
-        
+        <FooterNotes />
       </Box>
       <SpecialActions />
       <BottomMenu />
