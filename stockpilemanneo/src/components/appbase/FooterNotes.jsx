@@ -1,5 +1,5 @@
 /**
- * @fileoverview AI chat loading indicator.
+ * @fileoverview Application base footer component.
  * @author Tayra Sakurai <tayra_sakurai@icloud.com>
  * @copyright Copyright (C) 2026 Tayra Sakurai <tayra_sakurai@icloud.com>
  * @license Copyright (C) 2026 Tayra Sakurai
@@ -12,27 +12,15 @@
  *
  * You should have received a copy of the GNU Affero General Public License along with StockpileMan Neo. If not, see https://www.gnu.org/licenses/.
  */
-import { Avatar, Card, CardContent, CardHeader, Skeleton, Stack } from "@mui/material";
-import GeminiLogo from "../../assets/gemini_logo.png";
+import { Link } from "@mui/material";
 
-function LoadingCard() {
+function FooterNotes() {
   return (
-    <Card>
-      <CardHeader
-        avatar={<Avatar src={GeminiLogo} />}
-        title="model"
-        subheader="読み込み中..."
-      />
-      <CardContent>
-        <Stack spacing={2}>
-          <Skeleton
-            variant="rectangular"
-            height={64}
-          />
-        </Stack>
-      </CardContent>
-    </Card>
+    <>
+      <p>Copyright &copy; 2026 Tayra Sakurai</p>
+      <p>このアプリケーションは<Link href="https://www.gnu.org/licenses/agpl.html">AGPLのバージョン3.0またはそれ以降</Link>のライセンス規定により配布されています．</p>
+    </>
   );
 }
 
-export default LoadingCard;
+export default FooterNotes;

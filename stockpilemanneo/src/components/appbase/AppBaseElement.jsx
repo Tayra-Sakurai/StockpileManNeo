@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import supabase from "../../client.js";
 import UserViewContext from "../../sessionman/UserViewContext.jsx";
 import SpecialActions from "./SpecialActions.jsx";
+import { Divider } from "@mui/material";
 
 function AppBaseElement() {
   const [searchParams] = useSearchParams();
@@ -54,6 +55,12 @@ function AppBaseElement() {
         flexGrow: 1,
       }}>
         <Outlet />
+      </Box>
+      <Divider />
+      <Box
+        component="footer"
+      >
+        
       </Box>
       <SpecialActions />
       <BottomMenu />
