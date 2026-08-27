@@ -8,5 +8,8 @@ hero:
     - theme: brand
       text: 始めに
       link: /ja/user-guide/get-start
+    - theme: brand
+      text: データベースガイド
+      link: /ja/user-guide/database-guide
 
 ---
