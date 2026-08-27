@@ -1,4 +1,0 @@
----
-layout: doc
----
-# API Reference
