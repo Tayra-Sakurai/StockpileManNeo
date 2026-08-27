@@ -10,6 +10,4 @@ The official website only offers the latest version of this application.
 
 ## If You Find Vulnerabilities on This Repository
 
-If you find a vulnerability of this application, please send an email to <b4151069@edu.kit.ac.jp> with subject of **"[Vulnerability] Report of (Summary of Vulnerability)"**.
-
-The report email must have the summary and the detailed descriptions of the vulnerability.
+Please tell us the findings by using the GitHub's Private Reporting function. Please do not report the vulnerabilities on Issues page.
