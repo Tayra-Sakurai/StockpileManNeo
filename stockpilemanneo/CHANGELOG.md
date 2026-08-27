@@ -35,3 +35,7 @@ The AI agent has gotten access to the places where the items are stored.
 The performance improvements of the AI chat page.
 
 Smooth login navigation from the chat page to the sign in page was added.
+
+## Version 1.3.1
+
+Security improvements.
