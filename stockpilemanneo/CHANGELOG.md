@@ -39,3 +39,7 @@ Smooth login navigation from the chat page to the sign in page was added.
 ## Version 1.3.1
 
 Security improvements.
+
+## Version 1.3.2
+
+Installation of `babel-plugin-react-compiler` for improved performance.
