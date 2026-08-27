@@ -43,3 +43,7 @@ Security improvements.
 ## Version 1.3.2
 
 Installation of `babel-plugin-react-compiler` for improved performance.
+
+## Version 1.3.3
+
+Improvements of the autofill performance.

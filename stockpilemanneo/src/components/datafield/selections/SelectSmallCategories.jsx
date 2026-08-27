@@ -35,9 +35,10 @@ const filter = createFilterOptions();
  * @param {import("react-hook-form").FieldPathByValue<T, SmallCategoryCandidate>} props.name The name of this element.
  * @param {string=} props.id The id.
  * @param {import("react-hook-form").FieldPathByValue<T, import("./SelectLargeCategories.jsx").LargeCategoryCandidate>} props.largeCategoryName The name of the large category selector.
+ * @param {import("react-hook-form").FieldPathByValue<T, ?import("./SelectLargeLargeCategories.jsx").LargeLargeCategoryCandidate>} props.largeLargecategoryName The name of the largest category selector.
  * @returns
  */
-function SelectSmallCategories({ name, id, largeCategoryName }) {
+function SelectSmallCategories({ name, id, largeCategoryName, largeLargecategoryName }) {
   /**
    * @type {[
    *   Array.<SmallCategoryCandidate>,
@@ -50,7 +51,7 @@ function SelectSmallCategories({ name, id, largeCategoryName }) {
   /**
    * @type {import("react-hook-form").UseFormReturn<T>}
    */
-  const { setValue, control } = useFormContext();
+  const { setValues, control } = useFormContext();
 
   const largeCategory = useWatch({
     name: largeCategoryName,
@@ -94,14 +95,10 @@ function SelectSmallCategories({ name, id, largeCategoryName }) {
           }
 
           if (newValue && newValue.large_categories != largeCategory)
-            setValue(
-              largeCategoryName,
-              newValue.large_categories,
-              {
-                shouldDirty: true,
-                shouldTouch: true,
-                shouldValidate: true
-              });
+            setValues({
+              [largeCategoryName]: newValue.large_categories,
+              [largeLargecategoryName]: newValue.large_categories.large_large_categories ?? undefined,
+            });
         },
         getOptionLabel(option) {
           return option.name;

@@ -253,6 +253,12 @@ function ItemDetail({ id }) {
                     setValues({
                       small_categories: data[0].small_categories,
                       name: data[0].name,
+                      largeCategory: data[0].small_categories.large_categories,
+                      largeLargeCategory: data[0].small_categories.large_categories.large_large_categories,
+                    }, {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                      shouldValidate: true,
                     });
                   } else {
                     setValue('name', data[0].name);
@@ -285,6 +291,7 @@ function ItemDetail({ id }) {
                 name="small_categories"
                 id="small_categories"
                 largeCategoryName="largeCategory"
+                largeLargecategoryName="largeLargeCategory"
               />
             </FormControl>
             <FormControl>
