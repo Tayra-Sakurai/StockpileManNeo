@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU Affero General Public License along with StockpileMan Neo. If not, see https://www.gnu.org/licenses/.
  */
 
-export const DEFAULT_LIVE_MODEL = "models/gemini-2.0-flash-exp";
+export const DEFAULT_LIVE_MODEL = "models/gemini-3.1-flash-live-preview";
 
 export const FALLBACK_LIVE_MODELS = [
   {

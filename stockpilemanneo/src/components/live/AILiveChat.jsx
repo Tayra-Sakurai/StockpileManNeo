@@ -81,6 +81,13 @@ function AILiveChat() {
   useEffect(() => {
     const loadModels = async () => {
       try {
+        /**
+         * The list of loaded models.
+         * @type {Array.<{
+         *   name: string,
+         *   displayName: string,
+         * }>}
+         */
         const loadedModels = [];
         for await (const availableModel of await aimodel.models.list()) {
           if (
