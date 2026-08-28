@@ -1,6 +1,6 @@
 {
   "name": "stockpilemanneo-docs",
-  "version": "1.3.3",
+  "version": "1.4.1",
   "description": "The documentations for StockpileMan Neo.",
   "main": "docs/index.js",
   "directories": {

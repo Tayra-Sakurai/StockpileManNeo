@@ -51,3 +51,7 @@ Improvements of the autofill performance.
 ## Version 1.4.0
 
 Installation of Live API (Test).
+
+## Version 1.4.1
+
+Rollback of Live chat.
