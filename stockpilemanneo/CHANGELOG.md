@@ -55,3 +55,7 @@ Installation of Live API (Test).
 ## Version 1.4.1
 
 Rollback of Live chat.
+
+## Version 1.4.2
+
+Taken back the Live Chat.
