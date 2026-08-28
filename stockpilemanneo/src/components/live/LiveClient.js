@@ -239,12 +239,10 @@ export class LiveClient {
 
     const audioMessage = {
       realtimeInput: {
-        audio: [
-          {
-            mimeType: 'audio/pcm;rate=16000',
-            data: base64Chunk,
-          },
-        ],
+        audio: {
+          mimeType: 'audio/pcm;rate=16000',
+          data: base64Chunk,
+        },
       },
     };
 
