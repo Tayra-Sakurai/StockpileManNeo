@@ -4,8 +4,13 @@
   "icons": [
     {
       "src": "/favicon.svg",
-      "type": "image/svg",
-      "sizes": "any"
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
     }
   ],
   "start_url": "https://stockpile-man-neo.vercel.app/",
