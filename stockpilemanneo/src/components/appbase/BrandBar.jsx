@@ -35,6 +35,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import CategoryIcon from '@mui/icons-material/Category';
 import LocationPinIcon from '@mui/icons-material/LocationPin';
 import ChatIcon from '@mui/icons-material/Chat';
+import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
 
 function BrandBar() {
   const [open, setOpen] = useState(false);
@@ -144,6 +145,14 @@ function BrandBar() {
         <Toolbar />
         <Box sx={{ width: '100%', boxSizing: 'border-box' }}>
           <List sx={{ bgcolor: 'background.paper', borderBottom: 1, borderColor: 'divider' }}>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/Live" onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <RecordVoiceOverIcon />
+                </ListItemIcon>
+                <ListItemText primary="ライブ通話" secondary="Gemini とリアルタイム音声で通話" />
+              </ListItemButton>
+            </ListItem>
             <ListItem disablePadding>
               <ListItemButton component={RouterLink} to="/Chat" onClick={() => setOpen(false)}>
                 <ListItemIcon>

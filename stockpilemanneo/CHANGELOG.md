@@ -47,3 +47,7 @@ Installation of `babel-plugin-react-compiler` for improved performance.
 ## Version 1.3.3
 
 Improvements of the autofill performance.
+
+## Version 1.4.0
+
+Installation of Live API (Test).

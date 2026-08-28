@@ -38,6 +38,7 @@ import LargeLargeCategoryDetail from './components/datafield/LargeLargeCategoryD
 import LargeLargeCategoriesView from './components/views/Views/LargeLargeCategories/LargeLargeCategoriesView.jsx';
 import LargeLargeCategoryEdit from './components/datafield/Editors/LargeLargeCategoryEdit.jsx';
 import AIChat from './components/chat/AIChat.jsx';
+import LiveTalking from './components/live/LiveTalking.jsx';
 import AppTheme from './components/signup/theme/AppTheme.tsx';
 
 function App() {
@@ -71,6 +72,8 @@ function App() {
             <Route path="View/small_categories" element={<SmallCategoriesView />} />
             <Route path="View/small_categories/large_categories/:code" element={<SmallCategoriesView />} />
             <Route path="Chat" element={<AIChat />} />
+            <Route path="Live" element={<LiveTalking />} />
+            <Route path="live" element={<LiveTalking />} />
           </Route>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
