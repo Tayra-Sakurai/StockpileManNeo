@@ -15,7 +15,7 @@
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties tsconfig_1json__JsonSchema="https://www.schemastore.org/tsconfig.json" />
+      <UserProperties public_4manifest_1json__JsonSchema="https://www.schemastore.org/web-manifest-combined.json" tsconfig_1json__JsonSchema="https://www.schemastore.org/tsconfig.json" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

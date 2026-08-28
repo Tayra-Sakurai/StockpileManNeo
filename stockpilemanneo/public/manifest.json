@@ -1,0 +1,15 @@
+{
+  "name": "StockpileMan neo",
+  "short_name": "SpileMan neo",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg",
+      "sizes": "any"
+    }
+  ],
+  "start_url": "https://stockpile-man-neo.vercel.app/",
+  "display": "standalone",
+  "lang": "ja-JP",
+  "description": "家庭向けの在庫管理ソフトです．"
+}
