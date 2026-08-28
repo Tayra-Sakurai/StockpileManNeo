@@ -146,6 +146,14 @@ function BrandBar() {
         <Box sx={{ width: '100%', boxSizing: 'border-box' }}>
           <List sx={{ bgcolor: 'background.paper', borderBottom: 1, borderColor: 'divider' }}>
             <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/Live" onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <RecordVoiceOverIcon />
+                </ListItemIcon>
+                <ListItemText primary="ライブチャット（テスト版）" secondary="Gemini Live API によるリアルタイム在庫検索エージェント" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
               <ListItemButton component={RouterLink} to="/Chat" onClick={() => setOpen(false)}>
                 <ListItemIcon>
                   <ChatIcon />
