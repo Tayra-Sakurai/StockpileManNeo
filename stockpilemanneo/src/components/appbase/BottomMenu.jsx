@@ -70,24 +70,20 @@ function BottomMenu() {
   return (
     <Box
       component="nav"
-      sx={{
+      sx={theme => ({
         position: 'sticky',
         bottom: 0,
         left: 0,
         right: 0,
         borderTop: 1,
         borderColor: 'divider',
-        display(theme) {
-          return {
-            [theme.breakpoints.up('md')]: 'none',
-            [theme.breakpoints.down('md')]: 'block',
-          };
-        },
+        display: 'block',
         paddingBottom: 'env(safe-area-inset-bottom)',
-        zIndex(theme) {
-          return theme.zIndex.appBar;
+        zIndex: theme.zIndex.appBar,
+        [theme.breakpoints.up('md')]: {
+          display: 'none',
         },
-      }}
+      })}
     >
       <BottomNavigation showLabels value={value} onChange={(event, newValue) => setValue(newValue)}>
         {DESTINATIONS.map(({ expression, ...props }) => (

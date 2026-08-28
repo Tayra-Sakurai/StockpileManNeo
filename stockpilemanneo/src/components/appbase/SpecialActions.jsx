@@ -26,17 +26,15 @@ function SpecialActions() {
   return (
     <SpeedDial
       ariaLabel="追加"
-      sx={{
+      sx={theme => ({
         position: 'fixed',
-        bottom: {
-          xs: 'calc(env(safe-area-inset-bottom) + 60px)',
-          md: 'calc(env(safe-area-inset-bottom) + 16px)',
-        },
+        bottom: 'calc(env(safe-area-inset-bottom) + 16px)',
         right: 16,
-        zIndex(theme) {
-          return theme.zIndex.speedDial;
+        zIndex: theme.zIndex.speedDial,
+        [theme.breakpoints.down('md')]: {
+          bottom: 'calc(env(safe-area-inset-bottom) + 60px)',
         },
-      }}
+      })}
       icon={<SpeedDialIcon />}
     >
       <SpeedDialAction
