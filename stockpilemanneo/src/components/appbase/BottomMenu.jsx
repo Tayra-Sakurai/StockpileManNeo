@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License along with StockpileMan Neo. If not, see https://www.gnu.org/licenses/.
  */
-import { BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
 import CategoryIcon from '@mui/icons-material/Category';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import SearchIcon from '@mui/icons-material/Search';
@@ -68,9 +68,8 @@ function BottomMenu() {
   }, [path]);
 
   return (
-    <Paper
+    <Box
       component="nav"
-      elevation={0}
       sx={{
         position: 'sticky',
         bottom: 0,
@@ -81,7 +80,7 @@ function BottomMenu() {
         display(theme) {
           return {
             [theme.breakpoints.up('md')]: 'none',
-            [theme.breakpoints.down('sm')]: 'block',
+            [theme.breakpoints.down('md')]: 'block',
           };
         },
         paddingBottom: 'env(safe-area-inset-bottom)',
@@ -95,7 +94,7 @@ function BottomMenu() {
           <BottomNavigationAction component={RouterLink} {...props} />
         ))}
       </BottomNavigation>
-    </Paper>
+    </Box>
   );
 }
 
