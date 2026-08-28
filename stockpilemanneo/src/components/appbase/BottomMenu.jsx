@@ -78,7 +78,12 @@ function BottomMenu() {
         right: 0,
         borderTop: 1,
         borderColor: 'divider',
-        display: { xs: 'block', md: 'none' },
+        display(theme) {
+          return {
+            [theme.breakpoints.up('md')]: 'none',
+            [theme.breakpoints.down('sm')]: 'block',
+          };
+        },
         paddingBottom: 'env(safe-area-inset-bottom)',
         zIndex(theme) {
           return theme.zIndex.appBar;
