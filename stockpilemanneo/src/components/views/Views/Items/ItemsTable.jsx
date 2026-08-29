@@ -132,6 +132,8 @@ function ItemsTable({ items, searchVector }) {
             if (searchVector.length)
               d.sort((a, b) => calcInnerProduct(b.vector, searchVector) - calcInnerProduct(a.vector, searchVector));
             setData(d.map(({ vector, ...others }) => ({ ...others })));
+            setOrderBy('life');
+            setOrder('asc');
           }
         },
         (error) => {
