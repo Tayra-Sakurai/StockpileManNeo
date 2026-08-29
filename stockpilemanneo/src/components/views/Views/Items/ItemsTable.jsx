@@ -137,7 +137,7 @@ function ItemsTable({ items, searchVector }) {
         (error) => {
           console.error(error);
         });
-  }, []);
+  }, [items, searchVector]);
 
   useEffect(() => {
     const action = async () => {
