@@ -48,11 +48,13 @@ function ThanksData(props) {
             </>
           }{
             props.publisher &&
+            (
               props.email ?
-              <>
-                <Link href={`mailto:${props.email}`}>{props.publisher}</Link>により，
-              </> :
-              `${props.publisher}により，`
+                <>
+                  <Link href={`mailto:${props.email}`}>{props.publisher}</Link>により，
+                </> :
+                `${props.publisher}により，`
+            )
           }{
             props.repository &&
             <><Link href={props.repository}>{props.repository}</Link>上で</>
@@ -61,7 +63,7 @@ function ThanksData(props) {
         {
           props.publisher &&
           <Typography>
-              Copyright &copy; {props.publisher} 
+            Copyright &copy; {props.publisher}
           </Typography>
         }
       </AccordionDetails>
