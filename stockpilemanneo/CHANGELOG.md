@@ -63,3 +63,7 @@ Taken back the Live Chat.
 ## Version 1.5.0
 
 Enabled table sorting by label name.
+
+## Version 1.5.1
+
+Added auto focus feature on chat and search page.

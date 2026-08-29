@@ -136,6 +136,7 @@ function PromptEditor({ interaction, setChatMessages, setInteraction, setMessage
                 multiline
                 fullWidth
                 rows={1}
+                autoFocus
               />
             </Grid>
             <Grid size="auto">

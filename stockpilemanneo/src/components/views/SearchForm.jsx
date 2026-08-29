@@ -50,6 +50,8 @@ function SearchForm() {
                 type="search"
                 id="q"
                 fullWidth
+                autoFocus
+                placeholder="検索ワードを入力"
               />
             </FormControl>
             <MultiSelectElement
