@@ -59,3 +59,7 @@ Rollback of Live chat.
 ## Version 1.4.2
 
 Taken back the Live Chat.
+
+## Version 1.5.0
+
+Enabled table sorting by label name.

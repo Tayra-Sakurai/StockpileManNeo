@@ -1,7 +1,7 @@
 {
   "name": "stockpilemanneo",
   "private": false,
-  "version": "1.4.2",
+  "version": "1.5.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -23,8 +23,8 @@
     "react-hook-form": "^7.86.0",
     "react-hook-form-mui": "^9.0.1",
     "react-markdown": "^10.1.0",
-    "react-router": "^8.3.0",
-    "react-router-dom": "^7.18.2",
+    "react-router": "^8.3.1",
+    "react-router-dom": "^7.18.3",
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {

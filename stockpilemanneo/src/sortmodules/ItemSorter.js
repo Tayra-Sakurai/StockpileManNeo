@@ -36,3 +36,57 @@ export default function itemCompare(itemA, itemB) {
 
   return itemA.name.localeCompare(itemB.name) || itemA.id - itemB.id;
 }
+
+/**
+ * The `typeof` value mapper.
+ * @template T
+ * @typedef {T extends string ? "string"
+ *         : T extends number ? "number"
+ *         : T extends boolean ? "boolean"
+ *         : T extends bigint ? "bigint"
+ *         : T extends symbol ? "symbol"
+ *         : T extends (...args: any[]) => any ? "function"
+ *         : T extends undefined ? "undefined"
+ *         : "object"} TypeMapper
+ */
+
+/**
+ * The comparison callback.
+ * @template T
+ * @callback Predicate
+ * @param {T} a
+ * @param {T} b
+ * @returns {number}
+ */
+
+/**
+ * Returns the function to compare the property values.
+ * @template {Object.<string, any>} TObject The compared object type.
+ * @template {keyof TObject} TKey The key to compare.
+ * @template {TObject[TKey]} TProperty The property type.
+ * @param {TKey} propertyName The property name to compare.
+ * @param {boolean} order The order direction of the comparison.
+ * @param {TypeMapper<TProperty>} propertyType The property type string.
+ * @returns {Predicate<TObject>}
+ */
+export function compareProperty(propertyName, order, propertyType) {
+  if (propertyType === 'string') {
+    /**
+     * @type {Predicate<TObject>}
+     */
+    const comparison = (a, b) => a[propertyName].localeCompare(b[propertyName]);
+    return order ? comparison : (a, b) => -comparison(a, b);
+  } else {
+    return order ?
+      (a, b) => {
+        if (a[propertyName] > b[propertyName]) return 1;
+        if (a[propertyName] == b[propertyName]) return 0;
+        return -1;
+      } :
+      (a, b) => {
+        if (a[propertyName] < b[propertyName]) return 1;
+        if (a[propertyName] == b[propertyName]) return 0;
+        return -1;
+      };
+  }
+}
