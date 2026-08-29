@@ -40,6 +40,7 @@ import LargeLargeCategoryEdit from './components/datafield/Editors/LargeLargeCat
 import AIChat from './components/chat/AIChat.jsx';
 import AppTheme from './components/signup/theme/AppTheme.tsx';
 import AILiveChat from './components/live/AILiveChat.jsx';
+import Thanks from './components/thanks/Thanks.jsx';
 
 function App() {
   return (
@@ -73,6 +74,7 @@ function App() {
             <Route path="View/small_categories/large_categories/:code" element={<SmallCategoriesView />} />
             <Route path="Chat" element={<AIChat />} />
             <Route path="Live" element={<AILiveChat />} />
+            <Route path="Thanks" element={<Thanks />} />
           </Route>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />

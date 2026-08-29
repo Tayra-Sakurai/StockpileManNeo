@@ -36,6 +36,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import LocationPinIcon from '@mui/icons-material/LocationPin';
 import ChatIcon from '@mui/icons-material/Chat';
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
+import InfoIcon from '@mui/icons-material/Info';
 
 function BrandBar() {
   const [open, setOpen] = useState(false);
@@ -191,6 +192,14 @@ function BrandBar() {
                   <LocationPinIcon />
                 </ListItemIcon>
                 <ListItemText primary="保管場所一覧" secondary="保管場所ごとの在庫状況を確認できます" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/Thanks" onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <InfoIcon />
+                </ListItemIcon>
+                <ListItemText primary="謝辞" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding sx={{ display: { xs: 'none', sm: 'none' } }}>

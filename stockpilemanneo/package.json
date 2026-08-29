@@ -1,7 +1,7 @@
 {
   "name": "stockpilemanneo",
   "private": false,
-  "version": "1.5.1",
+  "version": "1.5.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -37,6 +37,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.5",
     "globals": "^17.11.0",
+    "rollup-plugin-license": "^3.7.1",
     "vite": "^8.2.2"
   }
 }

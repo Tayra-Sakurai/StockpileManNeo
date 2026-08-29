@@ -67,3 +67,7 @@ Enabled table sorting by label name.
 ## Version 1.5.1
 
 Added auto focus feature on chat and search page.
+
+## Version 1.5.2
+
+Added the thanks file.
