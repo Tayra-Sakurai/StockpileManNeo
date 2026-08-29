@@ -11,7 +11,6 @@ export default defineConfig({
       sourcemap: true,
       thirdParty: {
         includePrivate: true,
-        includeSelf: true,
         multipleVersions: true,
         output: {
           file: path.join(import.meta.dirname, 'dist', 'dependencies.txt'),
