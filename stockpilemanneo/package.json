@@ -4,6 +4,10 @@
   "version": "1.5.2",
   "type": "module",
   "license": "AGPL-3.0-or-later",
+  "author": {
+    "name": "Tayra Sakurai",
+    "email": "tayra_sakurai@icloud.com"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
