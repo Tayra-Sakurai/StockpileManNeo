@@ -12,7 +12,7 @@ export default defineConfig({
       banner: {
         commentStyle: 'regular',
         content: {
-          file: path.join(__dirname, 'LICENSE.txt'),
+          file: path.join(import.meta.dirname, 'LICENSE.txt'),
           encoding: 'utf-8',
         },
       },
@@ -21,7 +21,7 @@ export default defineConfig({
         includeSelf: true,
         multipleVersions: true,
         output: {
-          file: path.join(__dirname, 'dist', 'dependencies.txt'),
+          file: path.join(import.meta.dirname, 'dist', 'dependencies.txt'),
           encoding: 'utf-8',
         },
       },
