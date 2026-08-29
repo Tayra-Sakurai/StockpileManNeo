@@ -9,9 +9,6 @@ export default defineConfig({
     plugin(),
     license({
       sourcemap: true,
-      banner: {
-        commentStyle: 'regular',
-      },
       thirdParty: {
         includePrivate: true,
         includeSelf: true,
