@@ -119,23 +119,25 @@ function ItemsTable({ items, searchVector }) {
    */
   const [data, setData] = useState([]);
 
-  supabase
-    .from('items')
-    .select('id, name, description, life, locations!inner(name, id), small_categories(name, id, large_categories!inner(id, name, large_large_categories(name, id))), vector')
-    .in('id', items)
-    .then(
-      ({ data: d, error }) => {
-        if (error) throw error;
-        if (d.length > 0) {
-          d.sort(itemCompare);
-          if (searchVector.length)
-            d.sort((a, b) => calcInnerProduct(b.vector, searchVector) - calcInnerProduct(a.vector, searchVector));
-          setData(d.map(({ vector, ...others }) => ({ ...others })));
-        }
-      },
-      (error) => {
-        console.error(error);
-      });
+  useEffect(() => {
+    supabase
+      .from('items')
+      .select('id, name, description, life, locations!inner(name, id), small_categories(name, id, large_categories!inner(id, name, large_large_categories(name, id))), vector')
+      .in('id', items)
+      .then(
+        ({ data: d, error }) => {
+          if (error) throw error;
+          if (d.length > 0) {
+            d.sort(itemCompare);
+            if (searchVector.length)
+              d.sort((a, b) => calcInnerProduct(b.vector, searchVector) - calcInnerProduct(a.vector, searchVector));
+            setData(d.map(({ vector, ...others }) => ({ ...others })));
+          }
+        },
+        (error) => {
+          console.error(error);
+        });
+  }, []);
 
   useEffect(() => {
     const action = async () => {
