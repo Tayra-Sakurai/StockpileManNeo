@@ -30,6 +30,22 @@ import { calcInnerProduct } from "../../../stockpile/stockpileVectors.js";
  * @returns {Comparison}
  */
 function compareByProperty(propertyName, direction) {
+  /**
+   * Abstract comparison.
+   * @type {Comparison}
+   */
+  const comparison = (a, b) => {
+    if (!a.small_categories.large_categories.large_large_categories && b.small_categories.large_categories.large_large_categories) {
+      return 1;
+    } else if (a.small_categories.large_categories.large_large_categories && !b.small_categories.large_categories.large_large_categories) {
+      return -1;
+    } else if (a.small_categories.large_categories.large_large_categories && b.small_categories.large_categories.large_large_categories) {
+      return a.small_categories.large_categories.large_large_categories.name.localeCompare(b.small_categories.large_categories.large_large_categories.name);
+    } else {
+      return itemCompare(a, b);
+    }
+  };
+
   switch (propertyName) {
     case 'id':
       return direction === 'asc' ?
@@ -62,22 +78,6 @@ function compareByProperty(propertyName, direction) {
         (a, b) => b.small_categories.large_categories.name.localeCompare(a.small_categories.large_categories.name);
 
     default:
-      /**
-       * Abstract comparison.
-       * @type {Comparison}
-       */
-      const comparison = (a, b) => {
-        if (!a.small_categories.large_categories.large_large_categories && b.small_categories.large_categories.large_large_categories) {
-          return 1;
-        } else if (a.small_categories.large_categories.large_large_categories && !b.small_categories.large_categories.large_large_categories) {
-          return -1;
-        } else if (a.small_categories.large_categories.large_large_categories && b.small_categories.large_categories.large_large_categories) {
-          return a.small_categories.large_categories.large_large_categories.name.localeCompare(b.small_categories.large_categories.large_large_categories.name);
-        } else {
-          return itemCompare(a, b);
-        }
-      };
-
       return direction === 'asc' ?
         comparison :
         (a, b) => comparison(b, a);
@@ -156,9 +156,9 @@ function ItemsTable({ items, searchVector }) {
               <TableCell />
               <TableCell>
                 <TableSortLabel
-                  active={orderBy === 'name'}
-                  direction={orderBy === 'name' ? order : 'asc'}
-                  onClick={() => requestOrder('name')}
+                  active={orderBy === 'small_categories'}
+                  direction={orderBy === 'small_categories' ? order : 'asc'}
+                  onClick={() => requestOrder('small_categories')}
                 >
                   名称
                 </TableSortLabel>
