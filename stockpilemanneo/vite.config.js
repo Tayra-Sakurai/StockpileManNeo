@@ -11,10 +11,6 @@ export default defineConfig({
       sourcemap: true,
       banner: {
         commentStyle: 'regular',
-        content: {
-          file: path.join(import.meta.dirname, 'LICENSE.txt'),
-          encoding: 'utf-8',
-        },
       },
       thirdParty: {
         includePrivate: true,
