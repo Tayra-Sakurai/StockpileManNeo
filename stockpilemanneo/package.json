@@ -1,16 +1,22 @@
 {
   "name": "stockpilemanneo",
   "private": false,
-  "version": "1.5.2",
+  "version": "1.5.3",
   "type": "module",
   "license": "AGPL-3.0-or-later",
   "author": {
     "name": "Tayra Sakurai",
     "email": "tayra_sakurai@icloud.com"
   },
+  "repository": {
+    "type": "GitHub",
+    "directory": "stockpilemanneo",
+    "url": "https://github.com/Tayra-Sakurai/StockpileManNeo"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "generate-license": "license-checker-rseidelsohn --json --out ./src/assets/dependencies.json",
+    "build": "npm run generate-license && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -42,7 +48,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.5",
     "globals": "^17.11.0",
-    "rollup-plugin-license": "^3.7.1",
+    "license-checker-rseidelsohn": "^5.0.1",
     "vite": "^8.2.2"
   }
 }

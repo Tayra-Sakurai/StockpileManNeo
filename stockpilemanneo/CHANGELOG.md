@@ -71,3 +71,7 @@ Added auto focus feature on chat and search page.
 ## Version 1.5.2
 
 Added the thanks file.
+
+## Version 1.5.3
+
+Improvements on stability.
