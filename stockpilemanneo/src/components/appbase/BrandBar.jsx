@@ -37,6 +37,7 @@ import LocationPinIcon from '@mui/icons-material/LocationPin';
 import ChatIcon from '@mui/icons-material/Chat';
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
 import InfoIcon from '@mui/icons-material/Info';
+import PolicyIcon from '@mui/icons-material/Policy';
 
 function BrandBar() {
   const [open, setOpen] = useState(false);
@@ -202,12 +203,12 @@ function BrandBar() {
                 <ListItemText primary="謝辞" />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding sx={{ display: { xs: 'none', sm: 'none' } }}>
-              <ListItemButton onClick={signOut}>
+            <ListItem disablePadding>
+              <ListItemButton component={RouterLink} to="/Terms" onClick={() => setOpen(false)}>
                 <ListItemIcon>
-                  <LogoutIcon />
+                  <PolicyIcon />
                 </ListItemIcon>
-                <ListItemText primary="サインアウト" />
+                <ListItemText primary="利用規約" />
               </ListItemButton>
             </ListItem>
           </List>

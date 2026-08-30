@@ -28,6 +28,7 @@ import { styled } from '@mui/material/styles';
 import { FormContainer, TextFieldElement, PasswordElement } from 'react-hook-form-mui';
 import AppTheme from './theme/AppTheme.tsx';
 import supabase from '../../client.js';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -156,6 +157,22 @@ export default function SignUp() {
                 variant="outlined"
               />
             </FormControl>
+            <Typography
+              component="div"
+              variant="body2"
+              sx={{
+                alignSelf: 'center',
+              }}
+            >
+              アカウントを登録することにより,
+              <Link
+                component={RouterLink}
+                to="/Terms"
+              >
+                利用規約
+              </Link>
+              に同意したものとみなされます．
+            </Typography>
             <Button
               type="submit"
               fullWidth
@@ -173,7 +190,8 @@ export default function SignUp() {
             <Typography sx={{ textAlign: 'center' }}>
               アカウントをお持ちの場合{' '}
               <Link
-                href="/signin"
+                component={RouterLink}
+                to="/signin"
                 variant="body2"
                 sx={{ alignSelf: 'center' }}
               >

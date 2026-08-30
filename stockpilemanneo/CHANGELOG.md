@@ -75,3 +75,7 @@ Added the thanks file.
 ## Version 1.5.3
 
 Improvements on stability.
+
+## Version 1.5.4
+
+Added the Terms of Service and their display component.

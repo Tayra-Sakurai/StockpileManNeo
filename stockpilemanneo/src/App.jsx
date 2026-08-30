@@ -41,6 +41,7 @@ import AIChat from './components/chat/AIChat.jsx';
 import AppTheme from './components/signup/theme/AppTheme.tsx';
 import AILiveChat from './components/live/AILiveChat.jsx';
 import Thanks from './components/thanks/Thanks.jsx';
+import Terms from './components/terms/Terms.jsx';
 
 function App() {
   return (
@@ -75,6 +76,7 @@ function App() {
             <Route path="Chat" element={<AIChat />} />
             <Route path="Live" element={<AILiveChat />} />
             <Route path="Thanks" element={<Thanks />} />
+            <Route path="Terms" element={<Terms />} />
           </Route>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
