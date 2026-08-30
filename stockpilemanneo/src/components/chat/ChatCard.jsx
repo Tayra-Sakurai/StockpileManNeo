@@ -17,6 +17,7 @@ import { deepPurple } from "@mui/material/colors";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Markdown from "react-markdown";
 import GeminiLogo from "../../assets/gemini_logo.png";
+import remarkGfm from "remark-gfm";
 
 /**
  * Displays the Gemini response and user's request.
@@ -40,6 +41,7 @@ function ChatCard({ markdown, role }) {
       />
       <CardContent>
         <Markdown
+          remarkPlugins={[remarkGfm]}
           components={{
             table(options) {
               const { children } = options;

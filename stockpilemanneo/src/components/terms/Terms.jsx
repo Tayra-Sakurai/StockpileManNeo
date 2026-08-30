@@ -1,6 +1,7 @@
-import { Box } from "@mui/material";
+import { Box, Link } from "@mui/material";
 import TermsOfService from "../../assets/terms.md?raw";
 import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function Terms() {
 
@@ -11,7 +12,14 @@ function Terms() {
         boxSizing: 'border-box',
       }}
     >
-      <Markdown>{TermsOfService}</Markdown>
+      <Markdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          a({ href, children }) {
+            return <Link href={href}>{children}</Link>;
+          }
+        }}
+      >{TermsOfService}</Markdown>
     </Box>
   );
 }
