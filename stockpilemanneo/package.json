@@ -1,7 +1,7 @@
 {
   "name": "stockpilemanneo",
   "private": false,
-  "version": "1.5.3",
+  "version": "1.5.5",
   "type": "module",
   "license": "AGPL-3.0-or-later",
   "author": {
@@ -31,7 +31,7 @@
     "html5-qrcode": "^2.3.8",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-hook-form": "^7.86.0",
+    "react-hook-form": "^7.87.0",
     "react-hook-form-mui": "^9.0.1",
     "react-markdown": "^10.1.0",
     "react-router": "^8.3.1",

@@ -79,3 +79,7 @@ Improvements on stability.
 ## Version 1.5.4
 
 Added the Terms of Service and their display component.
+
+## Version 1.5.5
+
+Implementation of sorting modules.
