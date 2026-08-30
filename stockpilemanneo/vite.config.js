@@ -10,6 +10,6 @@ export default defineConfig({
     plugin(),
   ],
   define: {
-    "import.meta.env.VITE_APP_VERSION": pkg.version,
+    __APP_VERSION__: pkg.version,
   },
 });
