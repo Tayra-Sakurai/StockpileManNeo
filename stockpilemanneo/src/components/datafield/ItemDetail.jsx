@@ -17,7 +17,7 @@ import supabase from "../../client.js";
 import { useState } from "react";
 import { Alert, Button, CircularProgress, Container, FormControl, FormLabel, Stack } from "@mui/material";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { SwitchElement, TextFieldElement } from "react-hook-form-mui";
 import SelectLargeCategories from "./selections/SelectLargeCategories.jsx";
 import TaskIcon from "@mui/icons-material/Task";

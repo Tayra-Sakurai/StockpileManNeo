@@ -22,7 +22,7 @@
 import { useState } from "react";
 import supabase from "../../client.js";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
 import { Box, Button, FormControl, FormLabel, Stack } from "@mui/material";

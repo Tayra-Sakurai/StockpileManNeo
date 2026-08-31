@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, FormLabel, Paper, Stack } from "@mui/material";
 import { FormContainer, MultiSelectElement, TextFieldElement } from "react-hook-form-mui";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 
 const values = [
   {

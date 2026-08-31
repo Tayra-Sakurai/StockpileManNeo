@@ -1,6 +1,6 @@
 import { Box, Card, Chip, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import supabase from "../../../../client.js";
 import SmallCategoriesTable from "./SmallCategoriesTable.jsx";
 import CategoryIcon from "@mui/icons-material/Category";

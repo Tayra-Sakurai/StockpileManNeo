@@ -1,6 +1,6 @@
 import { Box, Chip, Typography } from "@mui/material";
 import LargeCategoriesTable from "./LargeCategoriesTable.jsx";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 
 function LargeCategoriesView() {

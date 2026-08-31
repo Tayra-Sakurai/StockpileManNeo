@@ -1,6 +1,6 @@
-import { Alert, Card, CardContent, CardHeader, Grid, Paper, Skeleton, Stack } from "@mui/material";
+import { Alert, Card, CardContent, Grid, Paper, Skeleton, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import supabase from "../../client.js";
 import { calcInnerProduct, createEmbeddingVector, createSearchVector } from "../stockpile/stockpileVectors.js";
 import ItemCard from "../datafield/cards/ItemCard.jsx";

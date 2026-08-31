@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import supabase from "../../../client.js";
 import CommonCard from "./CommonCard.jsx";
 import { Avatar, Breadcrumbs, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { indigo } from "@mui/material/colors";

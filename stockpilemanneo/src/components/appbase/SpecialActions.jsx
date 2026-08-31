@@ -17,7 +17,7 @@ import Inventory2Icon from '@mui/icons-material/Inventory2';
 import CategoryIcon from '@mui/icons-material/Category';
 import ClassIcon from '@mui/icons-material/Class';
 import LocationPinIcon from '@mui/icons-material/LocationPin';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
 function SpecialActions() {

@@ -1,6 +1,6 @@
 import { Box, Chip, Collapse, IconButton, Paper, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router";
 import supabase from "../../../../client.js";
 import LocationPinIcon from "@mui/icons-material/LocationPin";
 import ClassIcon from "@mui/icons-material/Class";

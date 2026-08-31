@@ -14,7 +14,7 @@
  */
 import { Typography } from "@mui/material";
 import LargeLargeCategoryDetail from "../LargeLargeCategoryDetail.jsx";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 
 function LargeLargeCategoryEdit() {
   const { id } = useParams();

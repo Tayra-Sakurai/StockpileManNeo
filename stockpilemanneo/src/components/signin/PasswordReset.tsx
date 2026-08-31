@@ -28,7 +28,7 @@ import { styled } from '@mui/material/styles';
 import { FormContainer, PasswordElement } from 'react-hook-form-mui';
 import AppTheme from './theme/AppTheme.tsx';
 import supabase from '../../client.js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',

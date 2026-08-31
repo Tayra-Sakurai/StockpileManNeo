@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU Affero General Public License along with StockpileMan Neo. If not, see https://www.gnu.org/licenses/.
  */
 import './App.css';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router';
 import SignUp from './components/signup/SignUp.tsx';
 import SignIn from './components/signin/SignIn.tsx';
 import SessionCheck from './sessionman/SessionCheck.jsx';

@@ -1,6 +1,6 @@
 import { Button, Link, TableCell, TableRow } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
 
 /**

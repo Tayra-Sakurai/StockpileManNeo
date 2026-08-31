@@ -18,7 +18,7 @@ import CommonCard from "./CommonCard.jsx";
 import { useEffect, useState } from "react";
 import { deepPurple } from "@mui/material/colors";
 import CategoryIcon from "@mui/icons-material/Category";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router";
 
 /**
  * The large category displayer.

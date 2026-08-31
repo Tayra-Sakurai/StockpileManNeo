@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU Affero General Public License along with StockpileMan Neo. If not, see https://www.gnu.org/licenses/.
  */
 import { Paper, Stack, Typography } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 
 function AddBlock() {
   return (

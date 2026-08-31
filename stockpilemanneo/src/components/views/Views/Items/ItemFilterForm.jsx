@@ -1,6 +1,6 @@
 import { Button, FormControl, FormLabel, Stack } from "@mui/material";
 import { SwitchElement, TextFieldElement, useForm, useWatch } from "react-hook-form-mui";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import SearchIcon from "@mui/icons-material/Search";
 
 function ItemFilterForm() {

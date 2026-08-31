@@ -14,7 +14,7 @@
  */
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link as RouterLink, useParams } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router";
 import supabase from "../../../client.js";
 import SmallCategoryDetail from "../SmallCategoryDetail.jsx";
 

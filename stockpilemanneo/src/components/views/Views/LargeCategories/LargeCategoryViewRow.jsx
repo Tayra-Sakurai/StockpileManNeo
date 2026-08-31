@@ -1,5 +1,5 @@
 import { Box, Button, Collapse, IconButton, Link as MuiLink, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import EditIcon from '@mui/icons-material/Edit';
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";

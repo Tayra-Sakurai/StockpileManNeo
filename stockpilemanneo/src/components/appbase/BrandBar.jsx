@@ -27,7 +27,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import Box from '@mui/material/Box';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router';
 import supabase from '../../client.js';
 import UserViewContext from '../../sessionman/UserViewContext.jsx';
 import AccountCircle from '@mui/icons-material/AccountCircle';

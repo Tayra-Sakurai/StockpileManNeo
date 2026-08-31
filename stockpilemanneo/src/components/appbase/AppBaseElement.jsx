@@ -12,7 +12,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License along with StockpileMan Neo. If not, see https://www.gnu.org/licenses/.
  */
-import { Outlet, useSearchParams } from "react-router-dom";
+import { Outlet, useSearchParams } from "react-router";
 import BottomMenu from "./BottomMenu.jsx";
 import BrandBar from "./BrandBar.jsx";
 import Box from "@mui/material/Box";

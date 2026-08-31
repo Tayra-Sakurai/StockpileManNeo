@@ -20,7 +20,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import RemoveConfirmDialog from "./dialogs/RemoveConfirmDialog.jsx";
 import supabase from "../../client.js";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
 
 

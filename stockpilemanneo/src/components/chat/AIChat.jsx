@@ -21,7 +21,7 @@ import aimodel from "../../aimodules/Gemini.jsx";
 import asynchronousTimer from "../../timers/AsynchronousTimer.js";
 import { GEMINI_MODEL, generation_config } from "./constants.js";
 import LoadingCard from "./LoadingCard.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import supabase from "../../client.js";
 
 function AIChat() {

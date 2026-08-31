@@ -83,3 +83,7 @@ Added the Terms of Service and their display component.
 ## Version 1.5.5
 
 Implementation of sorting modules.
+
+## Version 1.5.6
+
+Updated the routing.

@@ -18,7 +18,7 @@ import Inventory2Icon from '@mui/icons-material/Inventory2';
 import SearchIcon from '@mui/icons-material/Search';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useEffect, useState } from "react";
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router';
 import ChatIcon from '@mui/icons-material/Chat';
 
 const DESTINATIONS = [

@@ -17,7 +17,7 @@ import supabase from "../../client.js";
 import { useState } from "react";
 import { Alert, Button, FormControl, FormLabel, Stack } from "@mui/material";
 import { createEmbeddingVector } from "../stockpile/stockpileVectors.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import UndoIcon from "@mui/icons-material/Undo";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";

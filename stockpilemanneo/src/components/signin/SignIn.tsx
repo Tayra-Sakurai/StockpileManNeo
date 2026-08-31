@@ -29,7 +29,7 @@ import { FormContainer, TextFieldElement, PasswordElement } from 'react-hook-for
 import ForgotPassword from './components/ForgotPassword.tsx';
 import AppTheme from './theme/AppTheme.tsx';
 import supabase from '../../client.js';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -181,7 +181,8 @@ export default function SignIn() {
             <Typography sx={{ textAlign: 'center' }}>
               アカウントを持っていない場合{' '}
               <Link
-                href="/signup"
+                component={RouterLink}
+                to="/signup"
                 variant="body2"
                 sx={{ alignSelf: 'center' }}
               >

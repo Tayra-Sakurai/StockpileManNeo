@@ -18,7 +18,7 @@ import CommonCard from "./CommonCard.jsx";
 import { useEffect, useState } from "react";
 import { amber } from "@mui/material/colors";
 import ClassIcon from "@mui/icons-material/Class";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router";
 
 /**
  * The small category viewer.
