@@ -87,3 +87,7 @@ Implementation of sorting modules.
 ## Version 1.5.6
 
 Updated the routing.
+
+## Version 1.5.7
+
+Bugfix and added the sorter.
