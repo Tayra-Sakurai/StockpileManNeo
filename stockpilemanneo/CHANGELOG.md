@@ -91,3 +91,7 @@ Updated the routing.
 ## Version 1.5.7
 
 Bugfix and added the sorter.
+
+## Version 1.5.8
+
+Added a sorter on the small categories table.
