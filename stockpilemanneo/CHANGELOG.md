@@ -95,3 +95,7 @@ Bugfix and added the sorter.
 ## Version 1.5.8
 
 Added a sorter on the small categories table.
+
+## Version 1.5.9
+
+Dependency updates.
