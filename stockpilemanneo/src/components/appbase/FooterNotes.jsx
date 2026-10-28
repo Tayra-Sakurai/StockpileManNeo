@@ -17,7 +17,7 @@ import { Link } from "@mui/material";
 function FooterNotes() {
   return (
     <>
-      <p>StockpileMan&nbsp;neo Version 1.5.9.</p>
+      <p>StockpileMan&nbsp;neo Version 1.5.10.</p>
       <p>Copyright &copy; 2026 Tayra Sakurai</p>
       <p>このアプリケーションは<Link href="https://www.gnu.org/licenses/agpl.html">AGPLのバージョン3.0またはそれ以降</Link>のライセンス規定により配布されています．</p>
     </>
